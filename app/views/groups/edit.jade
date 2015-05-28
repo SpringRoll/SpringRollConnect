@@ -1,0 +1,86 @@
+extend ../templates/normal
+
+append title
+	| Edit Group - 
+
+append content
+	#userTemplate.hidden
+		span.search-result
+			input(type="hidden" name="user" value="%id%")
+			button.btn.btn-sm.btn-default(type="button") %name% &times;
+	.col-md-8.col-md-offset-2.col-sm-10.col-sm-offset-1
+		.panel.panel-default
+			.panel-heading
+				h3.panel-title Edit Group
+			form.panel-body.form-horizontal(method="post" action=url)
+				include ../partials/feedback
+				.form-group
+					label.col-sm-3.control-label(for="name") Name
+					.col-sm-9
+						input.form-control#name(type="text" name="name" value=group.name required)
+				.form-group(data-unique="/groups/search" data-ignore=group.slug)
+					label.col-sm-3.control-label(for="slug") Slug
+					.col-sm-9
+						input.form-control#slug(type="text" name="slug" value=group.slug required)
+						span.yes.glyphicon.glyphicon-ok.form-control-feedback
+						span.no.glyphicon.glyphicon-remove.form-control-feedback
+				.form-group
+					label.col-sm-3.control-label(for="privilege") Privilege
+					.col-sm-9
+						.radio: label
+							input(type="radio" name="privilege" value="0" checked=(group.privilege == 0)) 
+							|  Normal 
+							span.help-inline Default user privilege
+						.radio: label
+							input(type="radio" name="privilege" value="1" checked=(group.privilege == 1)) 
+							|  Producer
+							span.help-inline Ability to manage games
+						.radio: label
+							input(type="radio" name="privilege" value="2" checked=(group.privilege == 2)) 
+							|  Admin
+							span.help-inline Ability to manage games, users and groups
+				.form-group
+					label.col-sm-3.control-label Access
+					.col-sm-9
+						p: .input-group
+							input.select-all.form-control(readonly type="text" value=group.token)
+							.input-group-addon
+								input(type="checkbox" name="refreshToken" value="1" checked=false)
+								|  Refresh
+						p
+							strong Expires: 
+							if group.tokenExpires
+								span=moment(group.tokenExpires).fromNow()
+							else
+								span never
+						.radio: label
+							input(type="radio" name="tokenExpiresRefresh" value="0"  checked=!!group.tokenExpires) 
+							| No change
+						.radio: label
+							input(type="radio" name="tokenExpiresRefresh" value="1") 
+							| Expires
+							span.help-inline Token expires in a year
+						.radio: label
+							input(type="radio" name="tokenExpiresRefresh" value="-1" checked=!group.tokenExpires) 
+							| Forever
+							span.help-inline Token doesn't expire
+				.form-group
+					label.col-sm-3.control-label(for="user") Add Users
+					.col-sm-9
+						ul.list-group.search-results
+							for u in users
+								li.list-group-item.search-result=u.name
+									input(type="hidden" name="user" value=u.id)
+									button.close &times;
+						input.form-control#userSearch(type="text" data-search="/users/search" data-list="#userSearchDisplay" autocomplete="off")
+						.dropdown.search#userSearchDisplay
+							ul.dropdown-menu
+						.search-results#users
+				.form-group.text-center
+					.col-sm-9.col-sm-offset-3
+						input(type='hidden', value=group._id, name='groupId')
+						button.btn.btn-lg.btn-primary(type="submit" name="action" value="save") Save
+						|  
+						button.btn.btn-lg.btn-danger(data-toggle="confirm" type="submit" name="action" value="delete") Delete
+						|  
+						a.btn.btn-lg.btn-default(href="/groups") Cancel

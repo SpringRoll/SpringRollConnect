@@ -1,0 +1,63 @@
+extend ../templates/normal
+
+append title
+	| Add Group - 
+
+append content
+	#userTemplate.hidden
+		span.search-result
+			input(type="hidden" name="user" value="%id%")
+			button.btn.btn-sm.btn-default(type="button") %name% &times;
+	.col-md-8.col-md-offset-2.col-sm-10.col-sm-offset-1
+		.panel.panel-default
+			.panel-heading
+				h3.panel-title Add New Group
+			form.panel-body.form-horizontal(method="post" action="/groups/add")
+				include ../partials/feedback
+				.form-group
+					label.col-sm-3.control-label(for="name") Name
+					.col-sm-9
+						input.form-control#name(type="text" name="name" data-uri="#slug" required)
+				.form-group(data-unique="/groups/search")
+					label.col-sm-3.control-label(for="slug") Slug
+					.col-sm-9
+						input.form-control#slug(type="text" name="slug" required)
+						span.yes.glyphicon.glyphicon-ok.form-control-feedback
+						span.no.glyphicon.glyphicon-remove.form-control-feedback
+				.form-group
+					label.col-sm-3.control-label(for="privilege") Privilege
+					.col-sm-9
+						.radio: label
+							input(type="radio" name="privilege" value="0" checked) 
+							|  Normal 
+							span.help-inline Default user privilege
+						.radio: label
+							input(type="radio" name="privilege" value="1") 
+							|  Producer
+							span.help-inline Ability to manage games
+						.radio: label
+							input(type="radio" name="privilege" value="2") 
+							|  Admin
+							span.help-inline Ability to manage games, users and groups
+				.form-group
+					label.col-sm-3.control-label(for="tokenExpires") Access
+					.col-sm-9
+						.radio: label
+							input(type="radio" name="tokenExpires" value="1" checked=true) 
+							| Expires
+							span.help-inline Token expires in a year
+						.radio: label
+							input(type="radio" name="tokenExpires" value="-1") 
+							| Forever
+							span.help-inline Token doesn't expire
+				.form-group
+					label.col-sm-3.control-label(for="user") Add Users
+					.col-sm-9
+						input.form-control#userSearch(type="text" data-search="/users/search" data-list="#userSearchDisplay" autocomplete="off")
+						.dropdown.search#userSearchDisplay
+							ul.dropdown-menu
+						.search-results#users
+				.form-group.text-center
+					.col-sm-9.col-sm-offset-3
+						.btn-group
+							button.btn.btn-lg.btn-primary(type="submit") Add Group

@@ -1,0 +1,18 @@
+extend ../templates/normal
+
+append title
+	| #{game.title} - Game - 
+
+append content
+	.col-sm-3
+		.list-group
+			a.list-group-item(href='/games/game/#{game.slug}' class=isActive('/games/game/#{game.slug}')) Home
+			a.list-group-item(href='/games/game/#{game.slug}/releases' class=isActive(/releases?$/)) Releases
+				span.badge=game.releases.length
+			if isAdmin
+				a.list-group-item(href='/games/game/#{game.slug}/privileges' class=isActive(/privileges$/)) Privileges
+	.col-sm-9
+		h2=game.title
+		if isEditor
+			include ../partials/feedback
+		block gameContent

@@ -1,0 +1,94 @@
+extend templates/normal
+
+append title
+	| Install - 
+
+block body
+	body.install
+		.container
+			.row
+				.col-md-8.col-md-offset-2.col-sm-10.col-sm-offset-1
+					.panel.panel-default
+						.panel-heading
+							h1.panel-title Install SpringRoll API
+						if completed
+							.panel-body
+								.alert.alert-success Environment settings have been saved. Please manually restart the Express server.
+								.text-center
+									a.btn.btn-lg.btn-primary(href="/") Continue
+						else
+							form.panel-body.form-horizontal(method="post" action="/")
+								include partials/feedback
+								.form-group
+									label.control-label.col-sm-3(for="env") Deployment
+									.col-sm-9
+										select.form-control#env(name="env")
+											option(value="development" selected) Development
+											option(value="production") Production
+								.form-group
+									label.control-label.col-sm-3(for="port") Port
+									.col-sm-9
+										input.form-control(type="number" id="port" value=port name="port") 
+								.form-group
+									label.control-label.col-sm-3(for="outputLog") Log File
+									.col-sm-9
+										input.form-control#outputLog(type="text" name="outputLog" required value="/tmp/springroll.log")
+								.form-group
+									label.control-label.col-sm-3(for="mongoDatabase") Database
+									.col-sm-9
+										input.form-control(type="text" id="mongoDatabase" name="mongoDatabase" placeholder="mongodb://localhost/springroll")
+										p.help-block The MongoDB connection, 
+											a(href="http://docs.mongodb.org/manual/reference/connection-string/") see docs 
+											| for more info.
+								.form-group
+									label.control-label.col-sm-3(for="secretKey") Session Secret
+									.col-sm-9
+										input.form-control(type="text" id="secretKey" name="secretKey")
+										p.help-block Session cookie is signed with this secret to prevent tampering.
+								.form-group
+									label.control-label.col-sm-3(for="gmailUser") Gmail User
+									.col-sm-9
+										input.form-control#gmailUser(type="text" name="gmailUser" placeholder="user@gmail.com")
+										p.help-block Gmail account for sending site emails.
+								.form-group
+									label.control-label.col-sm-3(for="gmailPassword") Gmail Password
+									.col-sm-9
+										input.form-control#gmailPassword(type="password" name="gmailPassword")
+										p.help-block Gmail account password for sending emails.
+								.form-group
+									label.control-label.col-sm-3(for="adminToggle") Account
+									.col-sm-9
+										.checkbox
+											label
+												if admin
+													input(type="checkbox" name="admin" data-toggle="collapse" data-target="#adminUser" checked)
+												else
+													input(type="checkbox" name="admin" data-toggle="collapse" data-target="#adminUser")
+												| Create the administrator account.
+								#adminUser.collapse(class=(admin ? 'in' : ''))
+									.form-group
+										.col-sm-12
+											.well
+												.form-group
+													label.control-label.col-sm-3(for="name") Name
+													.col-sm-9
+														input.form-control#admin(type='text', name='name' value="Administrator")
+												.form-group
+													label.control-label.col-sm-3(for="username") Username
+													.col-sm-9
+														input.form-control#username(type='text' name='username' value="admin")
+												.form-group
+													label.control-label.col-sm-3(for="email") Email
+													.col-sm-9
+														input.form-control#email(type='text' name='email')
+												.form-group
+													label.control-label.col-sm-3(for="password") Password
+													.col-sm-9
+														input.form-control#password(type='password' name='password' placeholder='******')
+												.form-group
+													label.control-label.col-sm-3(for="confirm") Confirm
+													.col-sm-9
+														input.form-control#confirm(type='password' name='confirm' placeholder='******')
+								.form-group.form-actions.text-center
+									.col-sm-9.col-sm-offset-3
+										button.btn.btn-lg.btn-primary(type='submit') Install

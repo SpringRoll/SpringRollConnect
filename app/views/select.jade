@@ -1,0 +1,24 @@
+extend templates/normal
+
+append title
+	| Edit #{itemName} -
+
+append content
+	.col-md-6.col-md-offset-3.col-sm-8.col-sm-offset-2
+		.panel.panel-default
+			.panel-heading
+				a.pull-right.btn.btn-sm.btn-default(href="#{url}/add") 
+					span.glyphicon.glyphicon-plus 
+					|  Add
+				h2.panel-title #{itemName}s
+			form.panel-body.form-horizontal(action=url, method='post')
+				if !items.length
+					.alert.alert-warning No items to edit.
+				else
+					include partials/feedback
+					.form-group
+						.col-sm-12
+							select.content-select.form-control(name=itemProperty, required, autofocus)
+								option Edit #{itemName}...
+								for i in items
+									option(value=i[itemKey || '_id'])=i[itemValue || 'name']

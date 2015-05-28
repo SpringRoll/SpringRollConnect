@@ -1,0 +1,43 @@
+.modal.fade#addRelease
+	.modal-dialog
+		form.modal-content.form-horizontal(method="post" action="/api/release/#{game.slug}")
+			.modal-header
+				button.close(data-dismiss="modal") &times;
+				h4.modal-title Add Release
+			.modal-body
+				.form-group
+					label.col-sm-3.control-label(for="commitId") Commit ID
+					.col-sm-9
+						input.form-control#commitId(type="text" name="commitId" required)
+				.form-group
+					label.col-sm-3.control-label(for="version") Version
+					.col-sm-9
+						input.form-control#version(type="text" name="version" placeholder="1.0.0")
+				.form-group
+					label.col-sm-3.control-label(for="status") Status
+					.col-sm-9
+						table.table.table-bordered.table-striped.no-margin.text-center
+							thead: tr
+								th.text-center: label(for="statusDev") Dev
+								th.text-center: label(for="statusQA") QA
+								th.text-center: label(for="statusStage") Stage
+								th.text-center: label(for="statusProd") Prod
+							tbody: tr
+								td: input#statusDev(type="radio" name="status" value="dev" checked=true)
+								td: input#statusQA(type="radio" name="status" value="qa")
+								td: input#statusStage(type="radio" name="status" value="stage")
+								td: input#statusProd(type="radio" name="status" value="prod")
+				.form-group
+					label.col-sm-3.control-label(for="notes") Notes
+					.col-sm-9
+						textarea.form-control.md#notes(name="notes")
+						p.help-block Notes input supports 
+							a(href="https://en.wikipedia.org/wiki/Markdown") markdown 
+							| syntax.
+				include capabilities
+			.modal-footer
+				input(type="hidden" name="redirect" value=url)
+				input(type="hidden" name="token" value=token)
+				button.btn.btn-primary(type="submit") Add Release
+				|  
+				button.btn.btn-default(type="button" data-dismiss="modal") Cancel

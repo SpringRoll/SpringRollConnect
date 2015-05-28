@@ -1,0 +1,61 @@
+extend ../templates/normal
+
+append title
+	| #{group.name} - Groups - 
+
+append content
+	.col-sm-12
+		if user.privilege == privilege.admin
+			form.pull-right(method="post" action="/groups/edit")
+				button.btn.btn-sm.btn-default.pull-right(type="submit" name="groupId" value=group._id) 
+					span.glyphicon.glyphicon-pencil
+					|  Edit
+		h2=group.name
+		include ../partials/feedback
+		form.panel.panel-default(method="post" action=url)
+			.panel-heading
+				h3.panel-title Access Token
+			.panel-body 
+				p An acces token is required to have access to non-production releases of games (i.e., Development, QA, and Staging). For more information about the access token, see the 
+					a(href="/docs") documentation
+					|.
+				.input-group
+					input.monospace.select-all.form-control(readonly type="text" value=group.token)
+					if group.tokenExpires
+						.input-group-addon Expires #{moment(group.tokenExpires).fromNow()}
+					else
+						.input-group-addon Expires: never
+					if user.privilege == privilege.admin
+						.input-group-btn
+							button.btn.btn-primary(type="submit" name="action" value="refreshToken" data-toggle="confirm") 
+								span.icon.glyphicon.glyphicon-refresh
+								| Refresh
+	if user.privilege == privilege.admin
+		.col-sm-6
+			button.btn.btn-sm.btn-default.pull-right(data-toggle="modal" data-target="#addUser") 
+				span.glyphicon.glyphicon-plus
+				|  Add
+			h3 Users
+			include modal-user
+			if users.length
+				form(method="post" action=url)
+					ul.list-group
+						for user in users
+							li.list-group-item=user.name
+								button.close(data-toggle="confirm" type="submit" name="removeUser" value=user._id) &times;
+			else
+				.alert.alert-warning No users in this group
+		.col-sm-6
+			button.btn.btn-sm.btn-default.pull-right(data-toggle="modal" data-target="#addGame") 
+				span.glyphicon.glyphicon-plus
+				|  Add
+			h3 Games
+			include modal-game
+			if games.length
+				form(method="post" action=url)
+					ul.list-group
+						for game in games
+							li.list-group-item: a.btn-block(href="/games/game/#{game.slug}")=game.title
+								button.close(data-toggle="confirm" type="submit" name="removeGame" value=game._id) &times;
+			else
+				.alert.alert-warning No games for this group

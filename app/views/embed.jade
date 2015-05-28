@@ -1,0 +1,146 @@
+extends templates/base
+
+block header
+	link(href="/css/embed.css?v=#{version}", rel="stylesheet")
+
+block footer
+	script(src="/js/embed.js?v=#{version}")
+
+block body
+	body
+		#frame.loading
+			#pausedScreen
+				.container
+					h2 Game is Paused.
+					button#resumeButton.button.large
+						span.icon.icon-play
+						|  Resume
+			#appTitle Loading...
+			.controls
+				button#helpButton.button.main.disabled(data-toggle='tooltip', title='Play Help')
+					span.icon.icon-help
+				button#soundButton.button.main.muted.disabled(data-toggle='tooltip', title='Toggle All Sounds')
+					span.icon.icon-sound.on
+					span.icon.icon-sound-off.off
+				button#soundToggle.button.main.drop-handle.disabled(data-toggle-div='#soundContexts')
+					span.arrow-down
+				#soundContexts.drop-down.form
+					.form-title
+						| Audio Settings
+					.form-element
+						label Sound Effects
+						button#sfxButton.button.muted.disabled
+							span.icon.icon-sfx.on
+							span.icon.icon-sfx-off.off
+							span.label.on On
+							span.label.off Off
+					.form-element
+						label Music
+						button#musicButton.button.muted.disabled
+							span.icon.icon-music.on
+							span.icon.icon-music-off.off
+							span.label.on On
+							span.label.off Off
+					.form-element
+						label Voice-Over
+						button#voButton.button.muted.disabled
+							span.icon.icon-vo.on
+							span.icon.icon-vo-off.off
+							span.label.on On
+							span.label.off Off
+					.form-buttons
+						button.button(data-toggle-div='#soundContexts')
+							| Close
+				button#captionsButton.button.main.muted.disabled(data-toggle='tooltip', title='Toggle Captions')
+					span.icon.icon-captions.on
+					span.icon.icon-captions-off.off
+				button#captionsToggle.button.main.drop-handle.disabled(data-toggle-div='#captionsStyles')
+					span.arrow-down
+				#captionsStyles.drop-down.form
+					.form-title
+						| Captions Style
+					.form-element
+						label Align
+						select(name='align')
+							option(value='top', selected='') Top
+							option(value='bottom') Bottom
+					.form-element
+						label Text Color
+						select(name='color')
+							option(value='white', selected='') White
+							option(value='white-semi') White (50%)
+							option(value='black') Black
+							option(value='black-semi') Black (50%)
+							option(value='yellow') Yellow
+							option(value='yellow-semi') Yellow (50%)
+							option(value='pink') Pink
+							option(value='pink-semi') Pink (50%)
+							option(value='blue') Blue
+							option(value='blue-semi') Blue (50%)
+					.form-element
+						label Background Color
+						select(name='background')
+							option(value='none') [None]
+							option(value='white') White
+							option(value='white-semi') White (50%)
+							option(value='black') Black
+							option(value='black-semi', selected='') Black (50%)
+							option(value='yellow') Yellow
+							option(value='yellow-semi') Yellow (50%)
+							option(value='pink') Pink
+							option(value='pink-semi') Pink (50%)
+							option(value='blue') Blue
+							option(value='blue-semi') Blue (50%)
+					.form-element
+						label Edge Style
+						select(name='edge')
+							option(value='none', selected='') [None]
+							option(value='raise') Beveled Up
+							option(value='depress') Beveled Down
+							option(value='uniform') Stroke
+							option(value='drop') Drop Shadow
+					.form-element
+						label Size
+						select(name='size')
+							option(value='xs') Extra Small
+							option(value='sm') Small
+							option(value='md', selected='') Medium
+							option(value='lg') Large
+							option(value='xl') Extra Large
+					.form-element
+						label Font
+						select(name='font')
+							option(value='arial', selected='') Arial
+							option(value='arial-black') Arial Black
+							option(value='comic-sans') Comic Sans MS
+							option(value='courier') Courier New
+							option(value='georgia') Georgia
+							option(value='impact') Impact
+							option(value='console') Lucida Console
+							option(value='lucida') Lucida Grande
+							option(value='palatino') Palatino Linotype
+							option(value='tahoma') Tahoma
+							option(value='times') Times New Roman
+							option(value='trebuchet') Trebuchet MS
+							option(value='verdana') Verdana
+					.form-buttons
+						button.button(data-toggle-div='#captionsStyles')
+							| Close
+				button#settingsButton.button.main.disabled(data-toggle-div='#settings', data-toggle='tooltip', title='Settings')
+					span.icon.icon-gear
+				#settings.drop-down.form
+					.form-title
+						| Progress Tracker Logging
+					.form-element
+						label Remote Host or IP
+						input#remoteHost(type='text', name='remoteHost')
+					.form-buttons
+						button#remoteConnect.button.disabled(data-toggle-div='#settings')
+							| Connect
+						button#cancelSettings.button(data-toggle-div='#settings')
+							| Cancel
+				button#pauseButton.button.main.unpaused.disabled(data-toggle='tooltip', title='Play/Pause Game')
+					span.icon.icon-pause.on
+					span.icon.icon-play.off
+			.appWrapper
+				iframe#appContainer(frameborder='0', scrolling='no')

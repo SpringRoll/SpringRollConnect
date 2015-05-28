@@ -1,0 +1,40 @@
+#gameTemplate.hidden
+	span.search-result
+		input(type="hidden" name="game" value="%id%")
+		button.btn.btn-sm.btn-default(type="button") %title% &times;
+.modal.fade#addGame
+	.modal-dialog
+		form.modal-content.form-horizontal(method="post" action=url)
+			.modal-header
+				button.close(data-dismiss="modal") &times;
+				h4.modal-title Add Game
+			.modal-body
+				table.table.table-striped.table-bordered
+					thead: tr
+						th.text-center Normal
+							|  
+							a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Group can access games but not edit or add releases") 
+								span.glyphicon.glyphicon-question-sign
+						th.text-center Producer
+							|  
+							a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Group can manage releases and game properties") 
+								span.glyphicon.glyphicon-question-sign
+						th.text-center Admin
+							|  
+							a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Group has Producer privileges but can manage game privileges as well") 
+								span.glyphicon.glyphicon-question-sign
+					tbody: tr
+						td.text-center: input(name="permission" value="0" type="radio" checked=true)
+						td.text-center: input(name="permission" value="1" type="radio")
+						td.text-center: input(name="permission" value="2" type="radio")
+				.input-group
+					.input-group-addon
+						span.glyphicon.glyphicon-search
+					input.form-control#gameSearch(type="text" placeholder="Search for games" data-search="/games/search" data-list="#gameSearchDisplay" data-field="title" autocomplete="off")
+				.dropdown.search#gameSearchDisplay
+					ul.dropdown-menu
+				.search-results#games
+			.modal-footer
+				button.btn.btn-primary(type="submit" name="action" value="addGames") Add
+				|  
+				button.btn.btn-default(type="button" data-dismiss="modal") Cancel

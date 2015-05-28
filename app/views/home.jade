@@ -1,0 +1,43 @@
+extend templates/normal
+
+append content
+	.col-sm-12
+		h2 Welcome #{user.name}!
+	.col-sm-8
+		h3 Games
+		if !games.length
+			.alert.alert-warning Currently, not assigned to any games.
+		else
+			.list-group
+				for game in games
+					a.list-group-item(href="/games/game/#{game.slug}")=game.title
+						span.hidden-xs.help-inline=game.bundleId
+						span.badge=game.releases.length
+		form.panel.panel-default(method="post" action=url)
+			.panel-heading
+				h3.panel-title Personal Access Token
+			.panel-body 
+				include partials/feedback
+				input(type="hidden" name="group" value=user.groups[0]._id)
+				p An acces token is required to have access to non-production releases of games (i.e., Development, QA, and Staging). For more information about the access token, see the 
+					a(href="/docs") documentation
+					|.
+				.input-group
+					input.monospace.select-all.form-control(readonly type="text" value=user.groups[0].token)
+					if user.groups[0].tokenExpires
+						.input-group-addon Expires #{moment(user.groups[0].tokenExpires).fromNow()}
+					else
+						.input-group-addon Expires: never
+					.input-group-btn
+						button.btn.btn-primary(type="submit" data-toggle="confirm") 
+							span.icon.glyphicon.glyphicon-refresh
+							| Refresh
+	.col-sm-4
+		h3 Teams
+		if !groups.length
+			.alert.alert-warning Currently, not assigned to any groups.
+		else
+			.list-group
+				for group in groups
+					a.list-group-item(href="/groups/group/#{group.slug}")=group.name
+			

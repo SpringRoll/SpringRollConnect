@@ -1,0 +1,42 @@
+.modal.fade#editGame
+	.modal-dialog
+		form.modal-content.form-horizontal(method="post" action=url)
+			.modal-header
+				button.close(data-dismiss="modal") &times;
+				h4.modal-title Edit Game Properties
+			.modal-body
+				.form-group
+					label.col-sm-3.control-label(for="title") Title
+					.col-sm-9
+						input.form-control#title(type="text" name="title" #{disabled} value=game.title required)
+				.form-group(data-unique="/games/search" data-ignore=game.bundleId)
+					label.col-sm-3.control-label(for="bundleId") Bundle
+					.col-sm-9
+						input.form-control#bundleId(type="text" name="bundleId" #{disabled} value=game.bundleId required)
+						span.yes.glyphicon.glyphicon-ok.form-control-feedback
+						span.no.glyphicon.glyphicon-remove.form-control-feedback
+				.form-group(data-unique="/games/search" data-ignore=game.slug)
+					label.col-sm-3.control-label(for="slug") Slug
+					.col-sm-9
+						input.form-control#slug(type="text" name="slug" #{disabled} value=game.slug required)
+						span.yes.glyphicon.glyphicon-ok.form-control-feedback
+						span.no.glyphicon.glyphicon-remove.form-control-feedback
+				.form-group
+					label.col-sm-3.control-label(for="repository") Repository
+					.col-sm-9
+						input.form-control#repository(type="text" #{disabled} name="repository" value=game.repository required)
+				.form-group
+					label.col-sm-3.control-label(for="location") Location
+					.col-sm-9
+						input.form-control#location(type="text" #{disabled} name="location" value=game.location required)
+				.form-group
+					label.col-sm-3.control-label(for="description") Description
+					.col-sm-9
+						textarea.md.form-control#description(name="description" #{disabled})=game.description
+				include capabilities
+			.modal-footer
+				button.btn.btn-primary(type="submit" name="action" value="updateGame") Update
+				|  
+				button.btn.btn-danger(data-toggle="confirm" type="submit" name="action" value="removeGame") Delete
+				|  
+				button.btn.btn-default(type="button" data-dismiss="modal") Cancel

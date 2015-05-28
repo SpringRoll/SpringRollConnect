@@ -1,0 +1,45 @@
+extends base
+
+block body
+	body.nav-spacer
+		nav.navbar.navbar-inverse.navbar-fixed-top
+			.container
+				.navbar-header
+					button.navbar-toggle(type='button' data-toggle='collapse' data-target='.navbar-collapse')
+						span.sr-only Toggle navigation
+						span.icon-bar
+						span.icon-bar
+						span.icon-bar
+					a.navbar-brand(href='/') SpringRoll Connect 
+						small.version v#{version}
+				.navbar-collapse.collapse
+					ul.nav.navbar-nav.navbar-right
+						if user
+							if user.privilege >= privilege.editor
+								li(class=isActive(/^\/games/))
+									a(href='/games') 
+										span Games
+							if user.privilege == privilege.admin
+								li(class=isActive(/^\/users/))
+									a(href="/users")
+										span Users
+								li(class=isActive(/^\/groups/))
+									a(href='/groups') 
+										span Groups
+							li(class=isActive('/docs'))
+								a(href='/docs') Docs
+							li
+								a(href='#' data-toggle="dropdown") 
+									span.glyphicon.glyphicon-cog.hidden-xs
+									span.hidden-sm.hidden-md.hidden-lg Settings
+									span.caret
+								ul.dropdown-menu
+									li(class=isActive('/profile')) 
+										a(href='/profile') Profile
+									li(class=isActive('/password'))
+										a(href='/password') Password
+									li: a(href='/logout' data-toggle="confirm") Logout
+
+		.container
+			.row
+				block content

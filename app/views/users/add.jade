@@ -1,0 +1,58 @@
+extend ../templates/normal
+
+append title
+	| Add New User -
+
+append content
+	.col-md-8.col-md-offset-2.col-sm-10.col-sm-offset-1
+		.panel.panel-default
+			.panel-heading
+				h2.panel-title Add New User
+			form.panel-body.form-horizontal(action=url, method='post')
+				include ../partials/feedback
+				.form-group
+					label.control-label.col-sm-3(for="active") Active
+					.col-sm-9
+						.checkbox: label
+							input(type='checkbox', name='active', value='1', checked=true) 
+							span.help-inline If the user can login
+				.form-group
+					label.control-label.col-sm-3(for="name") Name
+					.col-sm-9
+						input.form-control(type='text', name='name', required, autofocus)
+				.form-group(data-unique="/users/search")
+					label.control-label.col-sm-3(for="username") Username
+					.col-sm-9
+						input.form-control(type='text', name='username', required, autofocus)
+						include ../partials/form-control-feedback
+				.form-group(data-unique="/users/search")
+					label.control-label.col-sm-3(for="email") Email
+					.col-sm-9
+						input.form-control(type='text', name='email', required, autofocus)
+						include ../partials/form-control-feedback
+				.form-group
+					label.control-label.col-sm-3(for="password") Password
+					.col-sm-9
+						input.form-control(type='password', name='password', required)
+				.form-group
+					label.control-label.col-sm-3(for="confirm") Confirm
+					.col-sm-9
+						input.form-control(type='password', name='confirm', required)
+				.form-group
+					label.control-label.col-sm-3 Global Privilege
+					.col-sm-9
+						.radio: label
+							input(type='radio' name='privilege' value="0" checked=true)
+							| Normal 
+							span.help-inline Default user privilege
+						.radio: label
+							input(type='radio' name='privilege' value="1")
+							| Editor
+							span.help-inline Ability to manage games
+						.radio: label
+							input(type='radio' name='privilege' value="2")
+							| Administrator
+							span.help-inline Ability to manage games, users and groups
+				.form-group.form-actions.text-center
+					.col-sm-9.col-sm-offset-3
+						button.btn.btn-lg.btn-primary(type='submit') Add User

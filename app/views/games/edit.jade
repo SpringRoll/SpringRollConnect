@@ -1,0 +1,16 @@
+extend ../templates/normal
+
+append title
+	| Edit Game - 
+
+append content
+	.col-sm-12.col-md-8.col-md-offset-2.col-lg-6.col-lg-offset-3
+		h3 Games
+		if !games.length
+			.alert.alert-warning.text-center No games have been added.
+				|    
+				a.btn.btn-warning.btn-sm(href="/games/add") Add Game
+		else
+			.list-group
+				for game in games
+					a.list-group-item(href="/games/game/#{game.slug}")=game.title

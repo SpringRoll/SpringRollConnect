@@ -1,0 +1,84 @@
+extend ../templates/game
+
+append gameContent
+	.panel.panel-default
+		.panel-heading
+			if isEditor
+				include modal-release
+				button.pull-right.btn.btn-sm.btn-default(data-toggle="modal" data-target="#addRelease") 
+					span.glyphicon.glyphicon-plus 
+					|  Add
+			h3.panel-title Releases
+		if !game.releases.length
+			.panel-body
+				.alert.alert-warning No releases yet for this game.
+		else
+			.panel-body.releases
+				for release in game.releases
+					.release(class=release.status)
+						.row
+							.col-sm-3
+								if isEditor
+									form.release-title.text-center(action=url method="post")
+										input(type="hidden" name="release" value=release._id)
+										input(type="hidden" name="action" value="statusChange")
+										.btn-group.btn-block
+											button.btn.btn-default.btn-block.status.dropdown-toggle(data-toggle="dropdown")
+												span.bullet
+												span.name=release.status.toUpperCase()
+												|  
+												span.caret
+											ul.dropdown-menu.statusChange-menu
+												li(class=(release.status == "dev" ? "active" : ""))
+													a(href="#")
+														input.auto-submit(type="radio" name="status" value="dev" checked=(release.status == "dev"))
+														|  Development
+												li(class=(release.status == "qa" ? "active" : ""))
+													a(href="#")
+														input.auto-submit(type="radio" name="status" value="qa" checked=(release.status == "qa"))
+														|  QA
+												li(class=(release.status == "stage" ? "active" : ""))
+													a(href="#")
+														input.auto-submit(type="radio" name="status" value="stage" checked=(release.status == "stage"))
+														|  Staging
+												if isAdmin
+													li(class=(release.status == "prod" ? "active" : ""))
+														a(href="#")
+															input.auto-submit(type="radio" name="status" value="prod" checked=(release.status == "prod"))
+															|  Production
+								else
+									.release-title.text-center
+										.status.normal
+											span.bullet
+											span.name=release.status.toUpperCase()
+								.release-title.clearfix
+									.btn-group.btn-flex-2
+										if release.version
+											a.btn.btn-sm.btn-default.external(data-toggle="tooltip" title="Release" href="http://#{host}/embed/#{game.slug}/version/#{release.version}?controls=1&title=1&token=#{token}")
+												span.glyphicon.glyphicon-play
+											a.btn.btn-sm.btn-default.external(data-toggle="tooltip" title="Debug" href="http://#{host}/embed/#{game.slug}/version/#{release.version}?debug=1&controls=1&title=1&token=#{token}")
+												span.glyphicon.glyphicon-wrench
+												|  
+												span.glyphicon.glyphicon-play
+										else
+											a.btn.btn-sm.btn-default.external(data-toggle="tooltip" title="Release" href="http://#{host}/embed/#{game.slug}/commit/#{release.commitId}?controls=1&title=1&token=#{token}")
+												span.glyphicon.glyphicon-play
+											a.btn.btn-sm.btn-default.external(data-toggle="tooltip" title="Debug" href="http://#{host}/embed/#{game.slug}/commit/#{release.commitId}?debug=1&controls=1&title=1&token=#{token}")
+												span.glyphicon.glyphicon-wrench  
+												|  
+												span.glyphicon.glyphicon-play
+							.col-sm-9: .row: .col-sm-12
+								if release.version
+									include releases-controls
+									h4: strong Version #{release.version} 
+										small: a.commit(href="#{game.repository}/commits/#{release.commitId}" data-toggle="tooltip" title="View Commit")=release.commitId.substr(0,7)
+								else
+									include releases-controls
+									h4: strong Commit 
+										a(href="#{game.repository}/commits/#{release.commitId}" data-toggle="tooltip" title="View Commit")=release.commitId.substr(0,7)
+							
+								.help-block.updated.hidden-xs
+									span Updated 
+									span=moment(release.updated).fromNow()
+								if release.notes
+									p!= marked(release.notes)

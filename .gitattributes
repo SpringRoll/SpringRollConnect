@@ -1,0 +1,9 @@
+.gitattributes export-ignore  
+.gitignore export-ignore
+.bowerrc export-ignore
+db export-ignore
+tasks export-ignore
+src export-ignore
+bower.json export-ignore
+Gruntfile.js export-ignore
+project.json export-ignore

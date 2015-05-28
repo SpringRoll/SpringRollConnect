@@ -1,0 +1,37 @@
+{
+	"name": "SpringRollConnect",
+	"version": "1.0.10",
+	"main": [
+		"src/plugins/*.js",
+		"src/widgets/*.js",
+		"src/main.less"
+	],
+	"libraries": [
+		"components/jquery/dist/jquery.min.js",
+		"components/jquery-ui/jquery-ui.min.js",
+		"components/bootstrap/dist/js/bootstrap.min.js",
+		"components/bootstrap/dist/css/bootstrap.min.css",
+		"components/modernizr/modernizr.js",
+		"components/bellhop/dist/bellhop.min.js",
+		"components/springroll/dist/modules/container.min.js",
+		"components/pbskids-pt-client/dist/progress-tracker-client.min.js",
+		"components/autogrow-textarea/jquery.autogrowtextarea.min.js"
+	],
+	"librariesDebug": [
+		"components/jquery/dist/jquery.js",
+		"components/jquery-ui/jquery-ui.js",
+		"components/bootstrap/dist/js/bootstrap.js",
+		"components/bootstrap/dist/css/bootstrap.css",
+		"components/modernizr/modernizr.js",
+		"components/bellhop/dist/bellhop.js",
+		"components/springroll/dist/modules/container.js",
+		"components/pbskids-pt-client/dist/progress-tracker-client.js",
+		"components/autogrow-textarea/jquery.autogrowtextarea.js"
+	],
+	"modules": {
+		"embed": [
+			"src/embed.js",
+			"src/embed.less"
+		]
+	}
+}

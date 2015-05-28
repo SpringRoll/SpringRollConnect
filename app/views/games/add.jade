@@ -1,0 +1,106 @@
+extend ../templates/normal
+
+append title
+	| Add Game - 
+
+append content
+	.col-md-8.col-md-offset-2.col-sm-10.col-sm-offset-1
+		.panel.panel-default
+			.panel-heading
+				h3.panel-title Add New Game
+			form.panel-body.form-horizontal(method="post" action="/games/add")
+				include ../partials/feedback
+				.form-group
+					label.col-sm-3.control-label(for="title") Title
+					.col-sm-9
+						input.form-control#title(type="text" name="title" data-uri="#slug" required)
+				.form-group(data-unique="/games/search")
+					label.col-sm-3.control-label(for="bundleId") Bundle ID
+					.col-sm-9
+						input.form-control#bundleId(type="text" placeholder="com.example.MyGame" name="bundleId" required)
+						span.yes.glyphicon.glyphicon-ok.form-control-feedback
+						span.no.glyphicon.glyphicon-remove.form-control-feedback
+				.form-group(data-unique="/games/search")
+					label.col-sm-3.control-label(for="slug") Slug
+					.col-sm-9
+						input.form-control#slug(type="text" placeholder="my-game" name="slug" required)
+						span.yes.glyphicon.glyphicon-ok.form-control-feedback
+						span.no.glyphicon.glyphicon-remove.form-control-feedback
+				.form-group
+					label.col-sm-3.control-label(for="repository") Repository
+					.col-sm-9
+						input.form-control#repository(type="text" name="repository" required)
+				.form-group
+					label.col-sm-3.control-label(for="location") Location
+					.col-sm-9
+						input.form-control#location(type="text" name="location" required)
+				.form-group
+					label.col-sm-3.control-label(for="description") Description
+					.col-sm-9
+						textarea.md.form-control#description(name="description")
+				.form-group
+					label.col-sm-3.control-label Capabilities
+					.col-sm-9
+						button.btn.btn-default.btn-sm(type="button" data-toggle="collapse" data-target=".capabilities") Show Options
+				.capabilities.collapse: .well
+					.row
+						.form-group
+							label.col-sm-3.control-label Interface
+							.col-sm-9
+								.checkbox
+									label
+										input(type="checkbox" name="capabilities[ui][mouse]" checked=true)
+										|  Mouse supported
+								.checkbox
+									label
+										input(type="checkbox" name="capabilities[ui][touch]" checked=true)
+										|  Touch supported
+						.form-group
+							label.col-sm-3.control-label Sizes
+							.col-sm-9
+								.checkbox
+									label
+										input(type="checkbox" name="capabilities[sizes][xsmall]" checked=true)
+										|  Screens &lt; 480px
+								.checkbox
+									label
+										input(type="checkbox" name="capabilities[sizes][small]" checked=true) 
+										|  Screens &lt; 768px
+								.checkbox
+									label
+										input(type="checkbox" name="capabilities[sizes][medium]" checked=true) 
+										|  Screens &lt; 992px
+								.checkbox
+									label
+										input(type="checkbox" name="capabilities[sizes][large]" checked=true) 
+										|  Screens &lt; 1200px
+								.checkbox
+									label
+										input(type="checkbox" name="capabilities[sizes][xlarge]" checked=true) 
+										|  Screens &gt;= 1200px
+						.form-group
+							label.col-sm-3.control-label Features
+							.col-sm-9
+								.checkbox
+									label
+										input(type="checkbox" name="capabilities[features][webgl]" checked=false)
+										|  WebGL required
+								.checkbox
+									label
+										input(type="checkbox" name="capabilities[features][geolocation]" checked=false) 
+										|  Geolocation required
+								.checkbox
+									label
+										input(type="checkbox" name="capabilities[features][webaudio]" checked=false) 
+										|  WebAudio API required (no Flash fallback)
+								.checkbox
+									label
+										input(type="checkbox" name="capabilities[features][websockets]" checked=false) 
+										|  WebSockets API required
+								.checkbox
+									label
+										input(type="checkbox" name="capabilities[features][webworkers]" checked=false) 
+										|  WebWorkers API required
+				.form-group.text-center
+					.col-sm-9.col-sm-offset-3
+						button.btn.btn-lg.btn-primary(type="submit") Add Game

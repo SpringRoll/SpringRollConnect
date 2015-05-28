@@ -1,0 +1,22 @@
+extend templates/normal
+
+append title
+	| Forgot Password - 
+
+append content
+	.col-md-6.col-md-offset-3.col-sm-8.col-sm-offset-2
+		.panel.panel-default
+			.panel-heading
+				h2.panel-title.text-center
+					span.icon.glyphicon.glyphicon-user
+					| Forgot Password
+			.panel-body
+				include partials/feedback
+				form.form-horizontal(action='/forgot', method='post')
+					.form-group
+						label.control-label.col-sm-3(for="email") Email
+						.col-sm-9
+							input.form-control(type='text', name='email', required, autofocus)
+					.form-group.form-actions.text-center
+						.col-sm-9.col-sm-offset-3
+							button.btn.btn-lg.btn-primary(type='submit') Reset

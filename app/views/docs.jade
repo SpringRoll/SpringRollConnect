@@ -1,0 +1,58 @@
+extend templates/normal
+
+append title
+	| Documentation - 
+
+append content
+	.col-sm-12
+		h2 Methods
+		ul
+			li GET 
+				code /api/releases/
+					em [slug]/
+					em (dev|qa|stage|prod)
+			li GET 
+				code /api/release/
+					em [slug]
+					span /version/
+					em [version]
+			li GET 
+				code /api/release/
+					em [slug]
+					span /commit/
+					em [commit]
+			li GET 
+				code /api/release/
+					em [slug]/
+					em (dev|qa|stage|prod)
+			li POST 
+				code /api/release/[slug]
+				ul
+					li
+						strong status 
+						em (dev|qa|stage|prod)
+					li
+						strong version 
+						em (string)
+					li
+						strong commitId 
+						em (string)
+					li
+						strong notes 
+						em (string)
+			li DELETE 
+				code /api/release/[id]
+		h2 Query String Parameters
+		p Parameters work on all methods for getting releases.
+		ul
+			li 
+				strong token 
+				span The access token required to view releases on Dev, QA or Stage
+			li 
+				strong debug 
+				em (default: false) 
+				span Select the debug URL for releases
+			li
+				strong archive 
+				em (default: false) 
+				span Select the archive ZIP for releases
