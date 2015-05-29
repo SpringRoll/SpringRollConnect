@@ -79,7 +79,24 @@ router.post('/:slug', function(req, res)
 		{
 			game.releases.push(release._id);
 			game.updated = Date.now();
-			game.save(done);
+			game.save(function(err, result)
+			{
+				done(err, game);
+			});
+		}, 
+		function(game, done)
+		{
+			Release.getByIdsAndStatus(game.releases, "dev", function(err, releases)
+			{
+				if (releases.length > MAX_DEV_RELEASES)
+				{
+					_.each(_.dropRight(releases, MAX_DEV_RELEASES), function(release)
+					{
+						Release.removeById(release._id, function(){});
+					});
+				}
+				done(null, game);
+			});
 		}
 	], 
 	function(err, result)

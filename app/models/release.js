@@ -111,6 +111,25 @@ ReleaseSchema.statics.getById = function(id, callback)
 };
 
 /**
+ * Get a release by ids
+ * @method getByIdsAndStatus
+ * @static
+ * @param {Array} ids
+ * @param {function} callback
+ * @return {Promise} Promise for async request
+ */
+ReleaseSchema.statics.getByIdsAndStatus = function(ids, status, callback)
+{
+	return this.find(
+		{
+			_id: { $in: ids }, 
+			status: status
+		}, 
+		callback
+	);
+};
+
+/**
  * Get all releases by game and status
  * @method getByGame
  * @static
