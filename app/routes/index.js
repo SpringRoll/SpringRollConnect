@@ -1,6 +1,7 @@
 module.exports = function(app)
 {
 	var access = require('../helpers/access');
+	var marky = require("marky-markdown");
 
 	// Add the user to whatever template
 	app.use(function(req, res, next)
@@ -11,7 +12,10 @@ module.exports = function(app)
 		res.locals.privilege = access.privilege;
 		res.locals.moment = require('moment');
 		res.locals.version = app.get('version');
-		res.locals.marked = require('marked');
+		res.locals.marked = function(str)
+		{
+			return marky(str).html();
+		};
 		res.locals.isActive = function(url, undefined)
 		{
 			var isCurrent = (url instanceof RegExp) ? 
