@@ -1,4 +1,4 @@
-# SpringRoll Connect
+# SpringRoll Connect [![Build Status](https://travis-ci.org/SpringRoll/SpringRollConnect.svg)](https://travis-ci.org/SpringRoll/SpringRollConnect) [![Dependency Status](https://david-dm.org/SpringRoll/SpringRollConnect.svg)](https://david-dm.org/SpringRoll/SpringRollConnect) [![GitHub release](https://img.shields.io/github/release/qubyte/rubidium.svg)](https://github.com/SpringRoll/SpringRollConnect)
 
 SpringRoll Connect is a content management system built using [NodeJS](https://nodejs.org/), [Express](http://expressjs.com/) and [MongoDB](https://www.mongodb.org/). This app allows the easy deployment of SpringRoll apps and games.
 

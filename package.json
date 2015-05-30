@@ -8,14 +8,14 @@
 		"project-grunt": "^0.6.2"
 	},
 	"dependencies": {
-		"async": "^0.9.0",
+		"async": "^1.0.0",
 		"bash-vars": "^1.1.0",
 		"bcrypt-nodejs": "0.0.3",
 		"body-parser": "^1.11.0",
 		"bunyan": "^1.3.4",
 		"colors": "^1.0.3",
 		"connect-flash": "^0.1.1",
-		"dotenv": "^0.5.1",
+		"dotenv": "^1.1.0",
 		"errorhandler": "^1.3.3",
 		"express": "^4.11.2",
 		"express-mongoose": "^0.1.0",
@@ -25,13 +25,13 @@
 		"lodash": "^3.5.0",
 		"marked": "^0.3.3",
 		"moment": "^2.9.0",
-		"mongoose": "^3.8.24",
+		"mongoose": "^4.0.4",
 		"mongoose-deep-populate": "^1.0.1",
 		"mongoose-types": "^1.0.3",
 		"mongoose-unique-validator": "^0.4.1",
 		"nodemailer": "^1.3.2",
 		"passport": "^0.2.1",
 		"passport-local": "^1.0.0",
-		"semver": "^4.3.0"
+		"semver": "^4.3.5"
 	}
 }
