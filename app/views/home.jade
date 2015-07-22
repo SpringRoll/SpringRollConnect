@@ -11,7 +11,7 @@ append content
 			.list-group
 				for game in games
 					a.list-group-item(href="/games/game/#{game.slug}")=game.title
-						span.hidden-xs.help-inline=game.bundleId
+						span.hidden-xs.help-inline=game.slug
 						span.badge=game.releases.length
 		form.panel.panel-default(method="post" action=url)
 			.panel-heading

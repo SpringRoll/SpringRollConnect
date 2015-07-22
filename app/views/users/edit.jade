@@ -43,15 +43,15 @@ append content
 					.col-sm-9
 						.radio: label
 							input(type='radio' name='privilege' value="0" checked=(editUser.groups[0].privilege == 0))
-							| Normal 
+							| Read 
 							span.help-inline Default user privilege
 						.radio: label
 							input(type='radio' name='privilege' value="1" checked=(editUser.groups[0].privilege == 1))
-							| Editor
+							| Write
 							span.help-inline Ability to manage games
 						.radio: label
 							input(type='radio' name='privilege' value="2" checked=(editUser.groups[0].privilege == 2))
-							| Administrator
+							| Admin
 							span.help-inline Ability to manage games, users and groups
 				.form-group.form-actions.text-center
 					.col-sm-9.col-sm-offset-3

@@ -1,8 +1,9 @@
-form.controls.pull-right(action="/games/game/#{game.slug}/releases" method="post")
-	input(type="hidden" name="release" value=release._id)
-	input(type="hidden" name="action" value="removeRelease")
-	button.btn.btn-block.btn-default.dropdown-toggle(data-toggle="confirm" type="submit")
-		span.glyphicon.glyphicon-trash
+if isEditor
+	form.controls.pull-right(action="/games/game/#{game.slug}/releases" method="post")
+		input(type="hidden" name="release" value=release._id)
+		input(type="hidden" name="action" value="removeRelease")
+		button.btn.btn-block.btn-default.dropdown-toggle(data-toggle="confirm" type="submit")
+			span.glyphicon.glyphicon-trash
 form.controls.pull-right(action="/games/game/#{game.slug}/release" method="post")
 	input(type="hidden" name="release" value=release._id)
 	input(type="hidden" name="action" value="selectRelease")

@@ -4,8 +4,8 @@
 	var groups = $("#groups");
 	var groupTemplate = $("#groupTemplate").html();
 	var permissions = [
-		"Normal",
-		"Editor",
+		"Read",
+		"Write",
 		"Admin"
 	];
 	$("#groupSearch").on('search', function(e, group)

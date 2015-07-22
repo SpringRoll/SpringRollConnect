@@ -21,12 +21,14 @@
 								th.text-center: label(for="statusDev") Dev
 								th.text-center: label(for="statusQA") QA
 								th.text-center: label(for="statusStage") Stage
-								th.text-center: label(for="statusProd") Prod
+								if isAdmin
+									th.text-center: label(for="statusProd") Prod
 							tbody: tr
 								td: input#statusDev(type="radio" name="status" value="dev" checked=true)
 								td: input#statusQA(type="radio" name="status" value="qa")
 								td: input#statusStage(type="radio" name="status" value="stage")
-								td: input#statusProd(type="radio" name="status" value="prod")
+								if isAdmin
+									td: input#statusProd(type="radio" name="status" value="prod")
 				.form-group
 					label.col-sm-3.control-label(for="notes") Notes
 					.col-sm-9
