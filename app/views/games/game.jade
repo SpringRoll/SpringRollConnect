@@ -22,6 +22,11 @@ append gameContent
 				.col-sm-2: strong Repository
 				.col-sm-10: p
 					a(href=game.repository)=game.repository
+			if game.thumbnail && game.thumbnail.length
+				.row
+					.col-sm-2: strong Thumbnail
+					.col-sm-10
+						img.preview(src="data:image/png;base64,#{game.thumbnail}")
 			if game.description
 				.row
 					.col-sm-2: strong Description

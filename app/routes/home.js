@@ -11,7 +11,7 @@ router.get('/', function(req, res)
 		res.render('home', {
 			success: req.flash('success'),
 			error: req.flash('error'),
-			games: req.user.getGames(),
+			games: req.user.getGames().select('title slug releases thumbnail'),
 			groups: _.filter(req.user.groups, 'isUserGroup', false)
 		});
 	}

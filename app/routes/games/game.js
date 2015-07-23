@@ -273,6 +273,7 @@ router.post('/:slug', function(req, res)
 			req.checkBody('repository', 'Repository needs to be a URL').isURL();
 			req.checkBody('location', 'Location needs to be a URL').isURL();
 			req.checkBody('description').optional();
+			req.checkBody('thumbnail').optional();
 			
 			var errors = req.validationErrors();
 

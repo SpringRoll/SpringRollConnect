@@ -27,8 +27,8 @@ router.get('/:slug', function(req, res)
 			success: req.flash('success'),
 			error: req.flash('error'),
 			group: group,
-			games: Game.getGamesByGroup(group),
-			users: User.getByGroup(group)
+			games: Game.getGamesByGroup(group).select('title slug'),
+			users: User.getByGroup(group).select('name')
 		});
 	});
 });

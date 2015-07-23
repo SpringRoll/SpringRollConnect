@@ -204,3 +204,56 @@ p { overflow: hidden }
 		.no { display:block }
 	}
 }
+
+.preview {
+	border: 1px solid #ccc;
+	padding: 2px;
+	display:block;
+	margin-bottom:10px;
+}
+
+.base64 {
+	display:inline-block;
+	position:relative;
+	.reset {
+		position:absolute;
+		top:5px;
+		right:5px;
+	}
+	.reset, .preview { display: inline-block }
+	.select, .help { display:none }
+	&.empty {
+		.reset, .preview { display: none }
+		.select, .help { display:inline-block }
+	}
+}
+
+.game {
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	display:block;
+	position:relative;
+	margin-bottom:15px;
+	&:hover {
+		text-decoration: none;
+		border-color:#999;
+	}
+	.preview {
+		width:100%;
+		background:#fff;
+		border:0;
+		margin:0;
+	}
+	.title {
+		display:block;
+		padding:6px 0 6px 6px;
+		font-size:85%;
+		white-space: nowrap;
+		overflow: hidden;
+	}
+	.badge {
+		position:absolute;
+		bottom: 8px;
+		right: 6px;
+	}
+}

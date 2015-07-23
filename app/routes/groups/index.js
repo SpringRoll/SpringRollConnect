@@ -109,7 +109,7 @@ function render(group, req, res)
 	return res.render('groups/edit', 
 	{
 		group: group,
-		users: User.getByGroup(group),
+		users: User.getByGroup(group).select('name slug'),
 		error: req.flash('error'),
 		errors: req.flash('errors'),
 		success: req.flash('success')

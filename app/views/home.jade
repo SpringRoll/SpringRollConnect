@@ -3,16 +3,21 @@ extend templates/normal
 append content
 	.col-sm-12
 		h2 Welcome #{user.name}!
-	.col-sm-8
+	.col-sm-9
 		h3 Games
 		if !games.length
 			.alert.alert-warning Currently, not assigned to any games.
 		else
-			.list-group
+			.row
 				for game in games
-					a.list-group-item(href="/games/game/#{game.slug}")=game.title
-						span.hidden-xs.help-inline=game.slug
-						span.badge=game.releases.length
+					.col-md-3.col-sm-4.col-xs-6
+						a.game(href="/games/game/#{game.slug}")
+							if game.thumbnail.length
+								img.preview(src="data:image/png;base64,#{game.thumbnail}")
+							else
+								img.preview(src="images/none.png")
+							span.title=game.title
+							span.badge=game.releases.length
 		form.panel.panel-default(method="post" action=url)
 			.panel-heading
 				h3.panel-title Personal Access Token
@@ -32,7 +37,7 @@ append content
 						button.btn.btn-primary(type="submit" data-toggle="confirm") 
 							span.icon.glyphicon.glyphicon-refresh
 							| Refresh
-	.col-sm-4
+	.col-sm-3
 		h3 Teams
 		if !groups.length
 			.alert.alert-warning Currently, not assigned to any groups.

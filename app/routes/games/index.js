@@ -14,7 +14,7 @@ router.get('/', function(req, res)
 		itemProperty: 'slug',
 		itemKey: 'slug',
 		itemValue: 'title',
-		items: Game.getAll().sort('title')
+		items: Game.getAll().select('title slug').sort('title')
 	});
 });
 

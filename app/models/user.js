@@ -184,13 +184,10 @@ UserSchema.statics.getByEmail = function(email, callback)
  */
 UserSchema.methods.getGames = function(callback)
 {
-	var promise = new mongoose.Promise();
-	if (callback) promise.addBack(callback);
-	this.model('Game').getGamesByGroups(
-		this.groups, 
-		promise.resolve.bind(promise)
+	return this.model('Game').getGamesByGroups(
+		this.groups,
+		callback
 	);
-	return promise;
 };
 
 /**
@@ -217,9 +214,8 @@ UserSchema.methods.inGroup = function(group)
  */
 UserSchema.statics.getAll = function(excludeId, callback)
 {
-	return this.find({_id: {$ne: excludeId}})
-		.sort('name')
-		.exec(callback);
+	return this.find({_id: {$ne: excludeId}}, callback)
+		.sort('name');
 };
 
 /**
@@ -293,6 +289,7 @@ UserSchema.statics.getBySearch = function(search, limit, callback)
 	return this.find({ name: new RegExp(search, "i") })
 		.limit(limit)
 		.sort('name')
+		.select('name')
 		.exec(callback);
 };
 

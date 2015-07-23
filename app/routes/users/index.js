@@ -117,7 +117,7 @@ router.get('/', function(req, res)
 	{
 		itemName: 'User',
 		itemProperty: 'userId',
-		items: User.getAll(req.user._id),
+		items: User.getAll(req.user._id).select('name'),
 		error: req.flash('error'),
 		errors: req.flash('errors'),
 		success: req.flash('success')

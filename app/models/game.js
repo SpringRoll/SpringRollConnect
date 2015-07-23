@@ -128,10 +128,29 @@ var GameSchema = new Schema({
 	 * are used with in the release object.
 	 * @property {Object} capabilities
 	 */
-	capabilities: require('./capabilities')
+	capabilities: require('./capabilities'),
+
+	/**
+	 * The thumbnail image
+	 * @property {Buffer} thumbnail
+	 */
+	thumbnail: {
+		type: Buffer,
+		required: false
+	}
 });
 
 GameSchema.plugin(require('mongoose-unique-validator'));
+
+// Convert the base64 image into a Buffer
+GameSchema.pre('save', function(next)
+{
+	if (this.isModified('thumbnail'))
+	{
+		this.thumbnail = new Buffer(this.thumbnail, "base64");
+	}
+	return next();
+});
 
 /**
  * Get all the games
@@ -168,9 +187,9 @@ GameSchema.statics.getGamesByGroups = function(groups, callback)
 {
 	return this.find({
 		"groups.group": {
-			$in: _.flatten(groups, "_id")
+			$in: _.pluck(groups, "_id")
 		}
-	}).sort('title').exec(callback);
+	}, callback).sort('title');
 };
 
 /**
@@ -183,9 +202,8 @@ GameSchema.statics.getGamesByGroups = function(groups, callback)
  */
 GameSchema.statics.getGamesByGroup = function(group, callback)
 {
-	return this.find({"groups.group": group.id})
-		.sort('title')
-		.exec(callback);
+	return this.find({"groups.group": group.id}, callback)
+		.sort('title');
 };
 
 /**
@@ -239,6 +257,7 @@ GameSchema.statics.getBySearch = function(search, limit, callback)
 {
 	return this.find({ title: new RegExp(search, "i") })
 		.limit(limit)
+		.select('title slug')
 		.sort('title')
 		.exec(callback);
 };
