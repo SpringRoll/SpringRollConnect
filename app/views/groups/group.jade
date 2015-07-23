@@ -6,7 +6,7 @@ append title
 append content
 	.col-sm-12
 		if user.privilege == privilege.admin
-			form.pull-right(method="post" action="/groups/edit")
+			form.pull-right(method="post" action="/groups")
 				button.btn.btn-sm.btn-default.pull-right(type="submit" name="groupId" value=group._id) 
 					span.glyphicon.glyphicon-pencil
 					|  Edit

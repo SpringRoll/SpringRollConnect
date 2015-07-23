@@ -1,6 +1,6 @@
 {
 	"name": "SpringRollConnect",
-	"version": "1.0.12",
+	"version": "1.0.13",
 	"main": [
 		"src/plugins/*.js",
 		"src/widgets/*.js",

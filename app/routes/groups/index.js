@@ -49,14 +49,14 @@ router.post('/', function(req, res)
 						// Remove all users
 						User.removeGroup(null, group._id, done);
 					},
-					function(num, raw, done)
+					function(num, done)
 					{
 						// Add new users, if any
 						var users = req.body.user;
 						if (!users) done(null);
 						User.addGroup(users, group._id, done);
 					},
-					function(num, raw, done)
+					function(num, done)
 					{
 						if (req.body.refreshToken)
 						{
