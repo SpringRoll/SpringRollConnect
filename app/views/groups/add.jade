@@ -46,6 +46,16 @@ append content
 								td.text-center: input(name="privilege" value="1" type="radio")
 								td.text-center: input(name="privilege" value="2" type="radio")
 				.form-group
+					label.col-sm-3.control-label(for="logo") Logo
+					.col-sm-9
+						.base64.empty(data-limit="20000" data-width="64" data-height="64")
+							button.select.btn.btn-default.btn-sm(type="button" data-toggle="popover" data-trigger="manual" data-content="Invalid image") Browse...
+							input.input.hidden(type="file" accept="image/jpeg, image/png")
+							button.btn.btn-default.btn-sm.reset(type="button") &times;
+							img.preview(width="64" height="64")
+							input.output(type="hidden" name="logo")
+							span.help.help-inline PNG or JPG 64px &times; 64px less than 20KB
+				.form-group
 					label.col-sm-3.control-label(for="tokenExpires") Access
 					.col-sm-9
 						.radio: label

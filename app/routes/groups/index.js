@@ -36,6 +36,7 @@ router.post('/', function(req, res)
 				group.name = req.body.name;
 				group.slug = req.body.slug;
 				group.privilege = req.body.privilege;
+				group.logo = req.body.logo;
 
 				if (req.body.tokenExpiresRefresh == "1")
 					group.tokenExpires = Group.getTokenExpires();

@@ -66,10 +66,29 @@ var GroupSchema = new Schema({
 		required: true,
 		min: 0,
 		max: 2
+	},
+
+	/**
+	 * The logo image
+	 * @property {Buffer} logo
+	 */
+	logo: {
+		type: Buffer,
+		required: false
 	}
 });
 
 GroupSchema.plugin(require('mongoose-unique-validator'));
+
+// Convert the base64 image into a Buffer
+GroupSchema.pre('save', function(next)
+{
+	if (this.isModified('logo'))
+	{
+		this.logo = new Buffer(this.logo, "base64");
+	}
+	return next();
+});
 
 /**
  * Generate a new token

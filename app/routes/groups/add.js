@@ -45,6 +45,7 @@ router.post('/', function(req, res)
 					name: req.body.name,
 					privilege: req.body.privilege,
 					slug: req.body.slug,
+					logo: req.body.logo,
 					token: token,
 					tokenExpires: expires,
 					isUserGroup: false,

@@ -208,7 +208,6 @@ p { overflow: hidden }
 .preview {
 	border: 1px solid #ccc;
 	padding: 2px;
-	display:block;
 	margin-bottom:10px;
 }
 
@@ -226,6 +225,29 @@ p { overflow: hidden }
 		.reset, .preview { display: none }
 		.select, .help { display:inline-block }
 	}
+}
+
+.logo {
+	vertical-align: bottom;
+	margin-right:10px;
+	&.logo-sm {
+		width:16px;
+		height:16px;
+	}
+	&.logo-md {
+		width:32px;
+		height:32px;
+	}
+	&.logo-lg {
+		width:64px;
+		height:64px;
+		vertical-align:middle;
+	}
+}
+
+.navbar-brand .logo {
+	vertical-align:middle;
+	display: inline-block !important;
 }
 
 .game {

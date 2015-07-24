@@ -11,11 +11,11 @@ append content
 			.row
 				for game in games
 					.col-md-3.col-sm-4.col-xs-6
-						a.game(href="/games/game/#{game.slug}")
+						a.game(data-toggle="tooltip" title=game.title href="/games/game/#{game.slug}")
 							if game.thumbnail.length
 								img.preview(src="data:image/png;base64,#{game.thumbnail}")
 							else
-								img.preview(src="images/none.png")
+								img.preview(src="/images/none.png")
 							span.title=game.title
 							span.badge=game.releases.length
 		form.panel.panel-default(method="post" action=url)
@@ -44,5 +44,8 @@ append content
 		else
 			.list-group
 				for group in groups
-					a.list-group-item(href="/groups/group/#{group.slug}")=group.name
+					a.list-group-item(href="/groups/group/#{group.slug}")
+						if group.logo && group.logo.length
+							img.logo.logo-lg(src="data:image/png;base64,#{group.logo}")
+						| #{group.name}
 			

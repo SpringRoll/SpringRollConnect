@@ -10,7 +10,10 @@ append content
 				button.btn.btn-sm.btn-default.pull-right(type="submit" name="groupId" value=group._id) 
 					span.glyphicon.glyphicon-pencil
 					|  Edit
-		h2=group.name
+		h2
+			if group.logo && group.logo.length
+				img.logo.logo-md(src="data:image/png;base64,#{group.logo}")
+			| #{group.name}
 		include ../partials/feedback
 		form.panel.panel-default(method="post" action=url)
 			.panel-heading
