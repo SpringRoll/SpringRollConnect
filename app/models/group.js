@@ -145,9 +145,8 @@ GroupSchema.statics.getUserGroups = function(callback)
  */
 GroupSchema.statics.getTeams = function(callback)
 {
-	return this.find({isUserGroup: false})
-		.sort('name')
-		.exec(callback);
+	return this.find({isUserGroup: false}, callback)
+		.sort('name');
 };
 
 /**
