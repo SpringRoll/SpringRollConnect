@@ -1,19 +1,10 @@
-extend ../templates/normal
-
-append title
-	| Edit Group - 
-
-append content
-	#userTemplate.hidden
-		span.search-result
-			input(type="hidden" name="user" value="%id%")
-			button.btn.btn-sm.btn-default(type="button") %name% &times;
-	.col-md-8.col-md-offset-2.col-sm-10.col-sm-offset-1
-		.panel.panel-default
-			.panel-heading
-				h3.panel-title Edit Group
-			form.panel-body.form-horizontal(method="post" action=url)
-				include ../partials/feedback
+.modal.fade#editGroup
+	.modal-dialog
+		form.modal-content.form-horizontal(method="post" action=url)
+			.modal-header
+				button.close(data-dismiss="modal") &times;
+				h4.modal-title Edit Group Properties
+			.modal-body
 				.form-group
 					label.col-sm-3.control-label(for="name") Name
 					.col-sm-9
@@ -80,24 +71,9 @@ append content
 							input(type="radio" name="tokenExpiresRefresh" value="-1" checked=!group.tokenExpires) 
 							| Forever
 							span.help-inline Token doesn't expire
-				.form-group
-					label.col-sm-3.control-label(for="user") Add Users
-					.col-sm-9
-						if users.length > 0
-							ul.list-group.search-results
-								for u in users
-									li.list-group-item.search-result=u.name
-										input(type="hidden" name="user" value=u.id)
-										button.close &times;
-						input.form-control#userSearch(type="text" data-search="/users/search" data-list="#userSearchDisplay" autocomplete="off")
-						.dropdown.search#userSearchDisplay
-							ul.dropdown-menu
-						.search-results#users
-				.form-group.text-center
-					.col-sm-9.col-sm-offset-3
-						input(type='hidden', value=group._id, name='groupId')
-						button.btn.btn-lg.btn-primary(type="submit" name="action" value="save") Save
-						|  
-						button.btn.btn-lg.btn-danger(data-toggle="confirm" type="submit" name="action" value="delete") Delete
-						|  
-						a.btn.btn-lg.btn-default(href="/groups") Cancel
+			.modal-footer
+				button.btn.btn-primary(type="submit" name="action" value="updateGroup") Save
+				|  
+				button.btn.btn-danger(data-toggle="confirm" type="submit" name="action" value="deleteGroup") Delete
+				|  
+				button.btn.btn-default(type="button" data-dismiss="modal") Cancel

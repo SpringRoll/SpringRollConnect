@@ -6,10 +6,10 @@ append title
 append content
 	.col-sm-12
 		if user.privilege == privilege.admin
-			form.pull-right(method="post" action="/groups")
-				button.btn.btn-sm.btn-default.pull-right(type="submit" name="groupId" value=group._id) 
-					span.glyphicon.glyphicon-pencil
-					|  Edit
+			include modal-edit
+			button.btn.btn-sm.btn-default.pull-right(data-toggle="modal" data-target="#editGroup") 
+				span.glyphicon.glyphicon-pencil
+				|  Edit
 		h2
 			if group.logo && group.logo.length
 				img.logo.logo-md(src="data:image/png;base64,#{group.logo}")
@@ -45,7 +45,8 @@ append content
 					ul.list-group
 						for user in users
 							li.list-group-item=user.name
-								button.close(data-toggle="confirm" type="submit" name="removeUser" value=user._id) &times;
+								input(type="hidden" name="user" value=user._id)
+								button.close(data-toggle="confirm" type="submit" name="action" value="removeUser") &times;
 			else
 				.alert.alert-warning No users in this group
 		.col-sm-6
@@ -59,6 +60,7 @@ append content
 					ul.list-group
 						for game in games
 							li.list-group-item: a.btn-block(href="/games/game/#{game.slug}")=game.title
-								button.close(data-toggle="confirm" type="submit" name="removeGame" value=game._id) &times;
+								input(type="hidden" name="game" value=game._id)
+								button.close(data-toggle="confirm" type="submit" name="action" value="removeGame") &times;
 			else
 				.alert.alert-warning No games for this group

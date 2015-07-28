@@ -35,6 +35,8 @@ router.get('/:slug', function(req, res)
 
 router.post('/:slug', access.isAdmin, function(req, res)
 {
+	var action = req.body.action;
+
 	async.waterfall(
 		[
 			function(done)
@@ -47,50 +49,137 @@ router.post('/:slug', access.isAdmin, function(req, res)
 				{
 					return res.status(404).render('404');
 				}
-				if (req.body.action == "refreshToken")
-				{
-					group.refreshToken(function(err, group)
-					{
-						done(err, "Access token has been refreshed");
-					});
-				}
-				else if (req.body.action == "addUsers")
-				{
-					var users = req.body.user;
-					if (!users) done("No users to add");
 
-					User.addGroup(users, group._id, function(err)
-					{
-						done(err, "User(s) added to " + group.name);
-					});
-				}
-				else if (req.body.action == "addGames")
+				switch(action)
 				{
-					var games = req.body.game;
-					if (!games) done("No games to add");
+					case "refreshToken": 
+					{
+						group.refreshToken(function(err, group)
+						{
+							done(err, "Access token has been refreshed");
+						});
+						break;
+					}
+					case "addUsers":
+					{	
+						var users = req.body.user;
+						if (!users) done("No users to add");
 
-					Game.addGroup(games, group._id, req.body.permission, function(err)
+						User.addGroup(users, group._id, function(err)
+						{
+							done(err, "User(s) added to " + group.name);
+						});
+						break;
+					}
+					case "addGames":
 					{
-						done(err, "Game(s) added to " + group.name);
-					});
-				}
-				else if (req.body.removeGame)
-				{
-					Game.removeGroup(req.body.removeGame, group._id, function(err)
+						var games = req.body.game;
+						if (!games) done("No games to add");
+
+						Game.addGroup(games, group._id, req.body.permission, function(err)
+						{
+							done(err, "Game(s) added to " + group.name);
+						});
+						break;
+					}
+					case "removeGame":
 					{
-						done(err, "Game remove from " + group.name);
-					});
-				}
-				else if (req.body.removeUser)
-				{
-					User.removeGroup(req.body.removeUser, group._id, function(err)
+						Game.removeGroup(req.body.game, group._id, function(err)
+						{
+							done(err, "Game remove from " + group.name);
+						});
+						break;
+					}
+					case "removeUser":
 					{
-						done(err, "User removed from " + group.name);
-					});
-				}
-				else
-				{
-					done("Invalid action");
+						User.removeGroup(req.body.user, group._id, function(err)
+						{
+							done(err, "User removed from " + group.name);
+						});
+						break;
+					}
+					case "updateGroup": 
+					{
+						req.checkBody('name', 'Name is required').notEmpty();
+						req.checkBody('slug', 'Slug is required').isSlug();
+						req.checkBody('privilege', 'Privilege must be valid').isInt();
+
+						var errors = req.validationErrors();
+
+						if (errors)
+						{
+							req.flash('errors', errors);
+							render(group, req, res);
+						}
+						else
+						{
+							group.name = req.body.name;
+							group.slug = req.body.slug;
+							group.privilege = req.body.privilege;
+							group.logo = req.body.logo;
+
+							if (req.body.tokenExpiresRefresh == "1")
+								group.tokenExpires = Group.getTokenExpires();
+
+							if (req.body.tokenExpiresRefresh == "-1")
+								group.tokenExpires = null;
+
+							async.waterfall([
+								function(done)
+								{
+									// Remove all users
+									User.removeGroup(null, group._id, done);
+								},
+								function(num, done)
+								{
+									// Add new users, if any
+									var users = req.body.user;
+									if (!users) done(null);
+									User.addGroup(users, group._id, done);
+								},
+								function(num, done)
+								{
+									if (req.body.refreshToken)
+									{
+										// Refresh the token this also saves the group
+										group.refreshToken(done);
+									}
+									else
+									{
+										// Do a regular ol' save
+										group.save(done);
+									}
+								}
+							], 
+							function(err, group)
+							{
+								if (err)
+								{
+									done('Unable to update the group: ' + err);
+								}
+								else
+								{
+									done(err, 'Saved group!');
+								}
+							});
+						}
+						break;
+					}
+					case "deleteGroup": 
+					{
+						// Remove the group
+						group.remove(function(err)
+						{
+							req.flash('success', 'Deleted ' + group.name + ' successfully.');
+							res.redirect('/groups');
+						});
+						break;
+					}
+					default:
+					{
+						done("Invalid action");
+						break;
+					}
 				}
 			}
 		], 
