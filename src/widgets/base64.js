@@ -34,6 +34,7 @@ $(".base64").each(function()
 			var file = files[0];
 			if (file.size > limit)
 			{
+				console.log("Over the size limit %d, expecting less than %d", file.size, limit);
 				reset();
 				button.popover('show');
 				return;
@@ -56,6 +57,7 @@ $(".base64").each(function()
 	{
 		if (width != this.naturalWidth || height != this.naturalHeight)
 		{
+			console.log("Incorrect dimensions, expecting (" + width + ", " + height + ") got (" + this.naturalWidth + ", " + this.naturalHeight + ")");
 			reset();
 			button.popover('show');
 		}

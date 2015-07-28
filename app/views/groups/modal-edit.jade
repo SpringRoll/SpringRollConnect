@@ -44,7 +44,7 @@
 							input.input.hidden(type="file" accept="image/jpeg, image/png")
 							button.btn.btn-default.btn-sm.reset(type="button") &times;
 							img.preview(width="64" height="64" src="data:image/png;base64,#{group.logo}")
-							input.output(type="hidden" name="logo")
+							input.output(type="hidden" name="logo" value=group.logo)
 							span.help.help-inline PNG or JPG 64px &times; 64px less than 20KB
 				.form-group
 					label.col-sm-3.control-label Access Token
