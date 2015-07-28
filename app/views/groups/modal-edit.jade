@@ -47,30 +47,16 @@
 							input.output(type="hidden" name="logo")
 							span.help.help-inline PNG or JPG 64px &times; 64px less than 20KB
 				.form-group
-					label.col-sm-3.control-label Access
+					label.col-sm-3.control-label Access Token
 					.col-sm-9
-						p: .input-group
-							input.select-all.form-control(readonly type="text" value=group.token)
-							.input-group-addon
-								input(type="checkbox" name="refreshToken" value="1" checked=false)
-								|  Refresh
-						p
-							strong Expires: 
-							if group.tokenExpires
-								span=moment(group.tokenExpires).fromNow()
-							else
-								span never
 						.radio: label
-							input(type="radio" name="tokenExpiresRefresh" value="0"  checked=!!group.tokenExpires) 
-							| No change
-						.radio: label
-							input(type="radio" name="tokenExpiresRefresh" value="1") 
+							input(type="radio" name="tokenExpiresRefresh" value="1" checked=(group.tokenExpires !== null)) 
 							| Expires
 							span.help-inline Token expires in a year
 						.radio: label
-							input(type="radio" name="tokenExpiresRefresh" value="-1" checked=!group.tokenExpires) 
+							input(type="radio" name="tokenExpiresRefresh" value="-1" checked=(group.tokenExpires === null)) 
 							| Forever
-							span.help-inline Token doesn't expire
+							span.help-inline Token never expires
 			.modal-footer
 				button.btn.btn-primary(type="submit" name="action" value="updateGroup") Save
 				|  

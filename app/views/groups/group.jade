@@ -41,10 +41,10 @@ append content
 			h3 Users
 			include modal-user
 			if users.length
-				form(method="post" action=url)
-					ul.list-group
-						for user in users
-							li.list-group-item=user.name
+				ul.list-group
+					for user in users
+						li.list-group-item=user.name
+							form.pull-right(method="post" action=url)
 								input(type="hidden" name="user" value=user._id)
 								button.close(data-toggle="confirm" type="submit" name="action" value="removeUser") &times;
 			else
@@ -56,10 +56,10 @@ append content
 			h3 Games
 			include modal-game
 			if games.length
-				form(method="post" action=url)
-					ul.list-group
-						for game in games
-							li.list-group-item: a.btn-block(href="/games/game/#{game.slug}")=game.title
+				ul.list-group
+					for game in games
+						li.list-group-item: a.btn-block(href="/games/game/#{game.slug}")=game.title
+							form.pull-right(method="post" action=url)
 								input(type="hidden" name="game" value=game._id)
 								button.close(data-toggle="confirm" type="submit" name="action" value="removeGame") &times;
 			else

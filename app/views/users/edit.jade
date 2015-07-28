@@ -41,18 +41,24 @@ append content
 				.form-group
 					label.control-label.col-sm-3 Global Privilege
 					.col-sm-9
-						.radio: label
-							input(type='radio' name='privilege' value="0" checked=(editUser.groups[0].privilege == 0))
-							| Read 
-							span.help-inline Default user privilege
-						.radio: label
-							input(type='radio' name='privilege' value="1" checked=(editUser.groups[0].privilege == 1))
-							| Write
-							span.help-inline Ability to manage games
-						.radio: label
-							input(type='radio' name='privilege' value="2" checked=(editUser.groups[0].privilege == 2))
-							| Admin
-							span.help-inline Ability to manage games, users and groups
+						table.table.table-striped.table-bordered
+							thead: tr
+								th.text-center Read
+									|  
+									a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Default user privilege") 
+										span.glyphicon.glyphicon-question-sign
+								th.text-center Write
+									|  
+									a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Ability to manage games") 
+										span.glyphicon.glyphicon-question-sign
+								th.text-center Admin
+									|  
+									a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Ability to manage games, users and groups") 
+										span.glyphicon.glyphicon-question-sign
+							tbody: tr
+								td.text-center: input(name="privilege" value="0" type="radio" checked=(editUser.groups[0].privilege == 0))
+								td.text-center: input(name="privilege" value="1" type="radio" checked=(editUser.groups[0].privilege == 1))
+								td.text-center: input(name="privilege" value="2" type="radio" checked=(editUser.groups[0].privilege == 2))
 				.form-group.form-actions.text-center
 					.col-sm-9.col-sm-offset-3
 						input(type='hidden', value=editUser._id, name='userId')
