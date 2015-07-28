@@ -189,7 +189,7 @@ GameSchema.statics.getGamesByGroups = function(groups, callback)
 		"groups.group": {
 			$in: _.pluck(groups, "_id")
 		}
-	}, callback).sort('title');
+	}, callback);
 };
 
 /**
@@ -202,8 +202,7 @@ GameSchema.statics.getGamesByGroups = function(groups, callback)
  */
 GameSchema.statics.getGamesByGroup = function(group, callback)
 {
-	return this.find({"groups.group": group.id}, callback)
-		.sort('title');
+	return this.find({"groups.group": group.id}, callback);
 };
 
 /**

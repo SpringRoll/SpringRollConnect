@@ -18,6 +18,7 @@ append content
 								img.preview(src="/images/none.png")
 							span.title=game.title
 							span.badge=game.releases.length
+			.row: include partials/pagination
 		form.panel.panel-default(method="post" action=url)
 			.panel-heading
 				h3.panel-title Personal Access Token

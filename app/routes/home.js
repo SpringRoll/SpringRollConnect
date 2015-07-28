@@ -3,16 +3,26 @@ var Group = require('../models/group');
 var access = require('../helpers/access');
 var log = require('../helpers/logger');
 var _ = require('lodash');
+var Pagination = require('../helpers/pagination');
 
-router.get('/', function(req, res)
+router.get('/:local(page)?/:number([0-9]+)?', function(req, res)
 {
 	if (req.isAuthenticated())
 	{
-		res.render('home', {
-			success: req.flash('success'),
-			error: req.flash('error'),
-			games: req.user.getGames().select('title slug releases thumbnail'),
-			groups: _.filter(req.user.groups, 'isUserGroup', false)
+		req.user.getGames().count(function(err, count)
+		{
+			var nav = new Pagination('', count, req.params.number);
+			res.render('home', {
+				success: req.flash('success'),
+				error: req.flash('error'),
+				games: req.user.getGames()
+					.select('title slug releases thumbnail updated')
+					.sort('-updated')
+					.skip(nav.start || 0)
+					.limit(nav.itemsPerPage),
+				pagination: nav.result,
+				groups: _.filter(req.user.groups, 'isUserGroup', false)
+			});
 		});
 	}
 	else
@@ -26,8 +36,6 @@ router.get('/', function(req, res)
 
 router.post('/', function(req, res)
 {
-	console.log("Search for group " + req.body.group);
-
 	Group.findById(req.body.group, function(err, group)
 	{
 		if (err)
