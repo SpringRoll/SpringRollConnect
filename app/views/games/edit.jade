@@ -4,13 +4,24 @@ append title
 	| Edit Game - 
 
 append content
-	.col-sm-12.col-md-8.col-md-offset-2.col-lg-6.col-lg-offset-3
+	.col-sm-12
+		a.btn.btn-sm.btn-default.pull-right(href="/games/add")
+			span.glyphicon.glyphicon-pencil
+			|  Add
 		h3 Games
 		if !games.length
 			.alert.alert-warning.text-center No games have been added.
 				|    
 				a.btn.btn-warning.btn-sm(href="/games/add") Add Game
 		else
-			.list-group
+			.row
 				for game in games
-					a.list-group-item(href="/games/game/#{game.slug}")=game.title
+					.col-md-2.col-sm-3.col-xs-6
+						a.game(data-toggle="tooltip" title=game.title href="/games/game/#{game.slug}")
+							if game.thumbnail && game.thumbnail.length
+								img.preview(src="data:image/png;base64,#{game.thumbnail}")
+							else
+								img.preview(src="/images/none.png")
+							span.title=game.title
+							span.badge=game.releases.length
+			.row: include ../partials/pagination

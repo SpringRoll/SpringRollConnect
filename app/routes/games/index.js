@@ -1,20 +1,21 @@
 var router = require('express').Router(),
-	Game = require('../../models/game.js');
+	Game = require('../../models/game'),
+	Pagination = require('../../helpers/pagination');
 
-router.post('/', function(req, res)
+router.get('/:local(page)?/:number([0-9]+)?', function(req, res)
 {
-	res.redirect('/games/game/'+req.body.slug);
-});
-
-router.get('/', function(req, res)
-{
-	res.render('select',
+	Game.getAll().count(function(err, count)
 	{
-		itemName: 'Game',
-		itemProperty: 'slug',
-		itemKey: 'slug',
-		itemValue: 'title',
-		items: Game.getAll().select('title slug').sort('title')
+		var nav = new Pagination('/games', count, req.params.number, 7, 2);
+		res.render('games/edit',
+		{
+			pagination: nav.result,
+			games: Game.getAll()
+				.select('title slug thumbnail releases')
+				.sort('title')
+				.skip(nav.start || 0)
+				.limit(nav.itemsPerPage)
+		});
 	});
 });
 
