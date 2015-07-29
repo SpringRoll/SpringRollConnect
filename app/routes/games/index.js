@@ -6,8 +6,8 @@ router.get('/:local(page)?/:number([0-9]+)?', function(req, res)
 {
 	Game.getAll().count(function(err, count)
 	{
-		var nav = new Pagination('/games', count, req.params.number, 7, 2);
-		res.render('games/edit',
+		var nav = new Pagination('/games', count, req.params.number);
+		res.render('games/index',
 		{
 			pagination: nav.result,
 			games: Game.getAll()

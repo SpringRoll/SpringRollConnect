@@ -1,0 +1,24 @@
+extend ../templates/normal
+
+append title
+	| Edit #{itemName} -
+
+append content
+	.col-md-6.col-md-offset-3.col-sm-8.col-sm-offset-2
+		.panel.panel-default
+			.panel-heading
+				a.pull-right.btn.btn-sm.btn-default(href="/users/add") 
+					span.glyphicon.glyphicon-plus 
+					|  Add
+				h2.panel-title Users
+			form.panel-body.form-horizontal(action=url, method='post')
+				if !users.length
+					.alert.alert-warning No users to edit.
+				else
+					include ../partials/feedback
+					.form-group
+						.col-sm-12
+							select.content-select.form-control(name="userId", required, autofocus)
+								option Edit User...
+								for user in users
+									option(value=user._id)=user.name

@@ -113,11 +113,9 @@ function render(user, req, res)
 
 router.get('/', function(req, res)
 {
-	res.render('select',
+	res.render('users/index',
 	{
-		itemName: 'User',
-		itemProperty: 'userId',
-		items: User.getAll(req.user._id).select('name'),
+		users: User.getAll(req.user._id).select('name'),
 		error: req.flash('error'),
 		errors: req.flash('errors'),
 		success: req.flash('success')

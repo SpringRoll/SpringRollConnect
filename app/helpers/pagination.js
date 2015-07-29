@@ -5,12 +5,12 @@
  * @param {string} base The base url
  * @param {int} numItems Number of items
  * @param {int} currentPage The page currently being shown
+ * @param {int} [itemsPerPage=30] Number of items per page
  * @param {int} [buttonCount=7]
  *   How many page button to display from left-to-right.
  *   Odd numbers wil produce nicer looking, even sided, UI.
- * @param {int} [itemsPerPage=20] Number of items per page
  */
-module.exports = function(base, numItems, currentPage, buttonCount, itemsPerPage)
+module.exports = function(base, numItems, currentPage, itemsPerPage, buttonCount)
 {
     itemsPerPage = itemsPerPage || 30;
 

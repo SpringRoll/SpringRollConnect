@@ -1,25 +1,26 @@
 var router = require('express').Router(),
 	async = require('async'),
     log = require('../../helpers/logger'),
-	User = require('../../models/user'),
+	Pagination = require('../../helpers/pagination'),
 	Group = require('../../models/group');
 
-router.post('/', function(req, res)
+router.get('/:local(page)?/:number([0-9]+)?', function(req, res)
 {
-	res.redirect('/groups/group/'+req.body.slug);
-});
-
-router.get('/', function(req, res)
-{
-	res.render('select',
+	Group.getTeams().count(function(err, count)
 	{
-		itemName: 'Group',
-		itemProperty: 'slug',
-		itemKey: 'slug',
-		items: Group.getTeams().select('name slug'),
-		error: req.flash('error'),
-		errors: req.flash('errors'),
-		success: req.flash('success')
+		var nav = new Pagination('/groups', count, req.params.number);
+		res.render('groups/index',
+		{
+			pagination: nav.result,
+			groups: Group.getTeams()
+				.select('name slug logo')
+				.sort('name')
+				.skip(nav.start || 0)
+				.limit(nav.itemsPerPage),
+			error: req.flash('error'),
+			errors: req.flash('errors'),
+			success: req.flash('success')
+		});
 	});
 });
 
