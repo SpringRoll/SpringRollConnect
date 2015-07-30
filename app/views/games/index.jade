@@ -4,24 +4,32 @@ append title
 	| Edit Game - 
 
 append content
-	.col-sm-12
-		a.btn.btn-sm.btn-default.pull-right(href="/games/add")
-			span.glyphicon.glyphicon-pencil
-			|  Add
-		h3 Games
-		if !games.length
-			.alert.alert-warning.text-center No games have been added.
-				|    
-				a.btn.btn-warning.btn-sm(href="/games/add") Add Game
-		else
-			.row
-				for game in games
-					.col-md-2.col-sm-3.col-xs-6
-						a.game(data-toggle="tooltip" title=game.title href="/games/game/#{game.slug}")
-							if game.thumbnail && game.thumbnail.length
-								img.preview(src="data:image/png;base64,#{game.thumbnail}")
-							else
-								img.preview(src="/images/none.png")
-							span.title=game.title
-							span.badge=game.releases.length
-			.row: include ../partials/pagination
+	.col-sm-12: .panel.panel-default
+		.panel-heading
+			.pull-right
+				| Sort by: 
+				.btn-group
+					a.btn.btn-sm.btn-default(class=(order=='alphabetical' ? 'disabled' : '') href="/games/alphabetical") title
+					a.btn.btn-sm.btn-default(class=(order=='latest' ? 'disabled' : '') href="/games/latest") updated
+				| 
+				a.btn.btn-sm.btn-default(href="/games/add")
+					span.glyphicon.glyphicon-pencil
+					|  Add
+			h3.panel-title Games 
+		.panel-body
+			if !games.length
+				.alert.alert-warning.text-center No games have been added.
+					|    
+					a.btn.btn-warning.btn-sm(href="/games/add") Add Game
+			else
+				.row
+					for game in games
+						.col-md-2.col-sm-3.col-xs-6
+							a.game(data-toggle="tooltip" title=game.title href="/games/game/#{game.slug}")
+								if game.thumbnail && game.thumbnail.length
+									img.preview(src="data:image/png;base64,#{game.thumbnail}")
+								else
+									img.preview(src="/images/none.png")
+								span.title=game.title
+								span.badge=game.releases.length
+				.row: include ../partials/pagination

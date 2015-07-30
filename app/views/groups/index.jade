@@ -4,21 +4,23 @@ append title
 	| Edit Group - 
 
 append content
-	.col-sm-12
-		a.btn.btn-sm.btn-default.pull-right(href="/groups/add")
-			span.glyphicon.glyphicon-pencil
-			|  Add
-		h3 Groups
-		if !groups.length
-			.alert.alert-warning.text-center No groups have been added.
-				|    
-				a.btn.btn-warning.btn-sm(href="/groups/add") Add Group
-		else
-			.row
-				for group in groups
-					.col-md-3.col-sm-4.col-xs-6
-						a.group(href="/groups/group/#{group.slug}")
-							if group.logo && group.logo.length
-								img.logo.logo-lg(src="data:image/png;base64,#{group.logo}")
-							| #{group.name}
-			.row: include ../partials/pagination
+	.col-sm-12: .panel.panel-default
+		.panel-heading
+			a.btn.btn-sm.btn-default.pull-right(href="/groups/add")
+				span.glyphicon.glyphicon-pencil
+				|  Add
+			h3.panel-title Groups
+		.panel-body
+			if !groups.length
+				.alert.alert-warning.text-center No groups have been added.
+					|    
+					a.btn.btn-warning.btn-sm(href="/groups/add") Add Group
+			else
+				.row
+					for group in groups
+						.col-md-3.col-sm-4.col-xs-6
+							a.group(href="/groups/group/#{group.slug}")
+								if group.logo && group.logo.length
+									img.logo.logo-lg(src="data:image/png;base64,#{group.logo}")
+								| #{group.name}
+				.row: include ../partials/pagination

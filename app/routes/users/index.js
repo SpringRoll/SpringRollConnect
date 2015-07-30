@@ -115,7 +115,7 @@ router.get('/', function(req, res)
 {
 	res.render('users/index',
 	{
-		users: User.getAll(req.user._id).select('name'),
+		users: User.getAll(req.user._id).select('name username'),
 		error: req.flash('error'),
 		errors: req.flash('errors'),
 		success: req.flash('success')

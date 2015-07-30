@@ -16,8 +16,7 @@ append content
 					.alert.alert-warning No users to edit.
 				else
 					include ../partials/feedback
-					.form-group
-						.col-sm-12
+					.form-group: .col-sm-12
 							select.content-select.form-control(name="userId", required, autofocus)
 								option Edit User...
 								for user in users
