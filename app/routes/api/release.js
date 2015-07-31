@@ -41,7 +41,7 @@ router.post('/:slug', function(req, res)
 	async.waterfall([
 		function(done)
 		{
-			Game.getBySlug(req.params.slug, done);
+			Game.getBySlug(req.params.slug, done).select('-thumbnail');
 		},
 		function(game, done)
 		{
