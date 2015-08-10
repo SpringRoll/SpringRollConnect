@@ -16,10 +16,6 @@ module.exports = function(base, numItems, currentPage, itemsPerPage, buttonCount
 
     var total = Math.ceil(numItems / itemsPerPage);
     var current = parseInt(currentPage) || 1;
-    if (current > total)
-    {
-        current = total;
-    }
 
     buttonCount = buttonCount || 7; //default to seven
 
