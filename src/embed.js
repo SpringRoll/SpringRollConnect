@@ -53,6 +53,12 @@
 			}
 		});
 
+		// Disable the form submitting
+		$('form').submit(function(e)
+		{
+			return false;
+		});
+
 		/**
 		 * The Progress tracker client for sending events 
 		 * @property {pbskids.Tracker} tracker
@@ -77,7 +83,7 @@
 		*  @property {jquery} remoteConnect
 		*/
 		this.remoteConnect = $("#remoteConnect")
-			.click(onRemoteConnect.bind(this));
+			.click(this.connectLoggingService.bind(this));
 
 		/**
 		*  The toggle button for captions options
@@ -104,7 +110,11 @@
 		this.remoteHost = $("#remoteHost")
 			.val(SavedData.read('remoteHost'));
 
-		this.remoteConnect.click();
+		/**
+		*  The name of the remote channel name
+		*  @property {jquery} remoteChannel
+		*/
+		this.remoteChannel = $("#remoteChannel");
 
 		/**
 		* Toggle the control drop down options
@@ -258,16 +268,21 @@
 
 	/**
 	 * Handler to connect to the remote host
-	 * @method onRemoteConnect
+	 * @method connectLoggingService
 	 * @private
 	 */
-	var onRemoteConnect = function()
+	p.connectLoggingService = function()
 	{
 		var host = this.remoteHost.val();
+		var channel = this.remoteChannel.val();
 		SavedData.write('remoteHost', host);
 		if (host)
 		{
 			this.tracker.remoteConnect(host);
+		}
+		if (channel)
+		{
+			this.tracker.remoteChannel(channel);
 		}
 	};
 
@@ -317,8 +332,9 @@
 	{
 		var release = this.release;
 
-		// Change the channel
-		this.tracker.remoteChannel(release.game.slug);
+		// Change the channel and connect to logging service
+		this.remoteChannel.val(release.game.slug);
+		this.connectLoggingService();
 
 		this.dropdowns.removeClass('on');
 		this.toggles.addClass('disabled');
