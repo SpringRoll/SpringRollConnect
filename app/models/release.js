@@ -226,7 +226,7 @@ ReleaseSchema.statics.getByGame = function(slug, options, callback)
 			var select = options.multi ? Release.find(query) : Release.findOne(query);
 
 			// Make sure the the latest are always first
-			select.sort('-updated');
+			select.sort('-created');
 
 			select
 				.select('version url capabilities commitId game -_id')
