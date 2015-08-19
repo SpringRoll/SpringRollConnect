@@ -12,7 +12,7 @@
  */
 module.exports = function(base, numItems, currentPage, itemsPerPage, buttonCount)
 {
-    itemsPerPage = itemsPerPage || 30;
+    itemsPerPage = itemsPerPage || 24;
 
     var total = Math.ceil(numItems / itemsPerPage);
     var current = parseInt(currentPage) || 1;
