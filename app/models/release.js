@@ -111,6 +111,19 @@ ReleaseSchema.statics.getById = function(id, callback)
 };
 
 /**
+ * Get a release by commit id
+ * @method getByCommitId
+ * @static
+ * @param {String} commitId
+ * @param {function} callback
+ * @return {Promise} Promise for async request
+ */
+ReleaseSchema.statics.getByCommitId = function(commitId, callback)
+{
+	return this.findOne({commitId: commitId}, callback);
+};
+
+/**
  * Get a release by ids
  * @method getByIdsAndStatus
  * @static

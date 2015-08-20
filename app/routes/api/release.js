@@ -49,6 +49,33 @@ router.post('/:slug', function(req, res)
 		},
 		function(game, done)
 		{
+			// Better handling of a unique commitId
+			Release.getByCommitId(req.body.commitId, function(err, release)
+			{
+				if (!!req.body.warnUniqueCommit)
+				{
+					done('The Commit ID is already taken');
+				}
+				else
+				{
+					done(err, game, release);
+				}
+			});
+		},
+		function(game, release, done)
+		{
+			// If we already have a release
+			// lets just modify the updated timestamp
+			// and leave everything else the same
+			if (release)
+			{
+				release.updated = Date.now();
+				release.save(function(err)
+				{
+					done(err, game);
+				});
+				return;
+			}
 			var values = _.clone(req.body);
 			values.game = game._id;
 			delete values.token;
@@ -69,21 +96,19 @@ router.post('/:slug', function(req, res)
 				);
 				game.save();
 			}
-			var release = new Release(values);
-			release.save(function(err, release)
+			var newRelease = new Release(values);
+			newRelease.save(function(err, release)
 			{
-				done(err, game, release);
+				if (err) return done(err, game);
+
+				game.releases.push(release._id);
+				game.updated = Date.now();
+				game.save(function(err, result)
+				{
+					done(err, game);
+				});
 			});
 		},
-		function(game, release, done)
-		{
-			game.releases.push(release._id);
-			game.updated = Date.now();
-			game.save(function(err, result)
-			{
-				done(err, game);
-			});
-		}, 
 		function(game, done)
 		{
 			Release.getByIdsAndStatus(game.releases, "dev", function(err, releases)
