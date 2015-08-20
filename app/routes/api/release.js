@@ -52,7 +52,7 @@ router.post('/:slug', function(req, res)
 			// Better handling of a unique commitId
 			Release.getByCommitId(req.body.commitId, function(err, release)
 			{
-				if (!!req.body.warnUniqueCommit)
+				if (!!req.body.warnUniqueCommit && !!release)
 				{
 					done('The Commit ID is already taken');
 				}
