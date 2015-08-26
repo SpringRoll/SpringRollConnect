@@ -1,12 +1,12 @@
 {
 	"name": "SpringRollConnect",
-	"version": "1.1.11",
+	"version": "1.1.12",
 	"dependencies": {
 		"jquery": "*",
 		"bootstrap": "*",
 		"bellhop": "*",
 		"modernizr": "*",
-		"springroll": "*",
+		"springroll": "master",
 		"autogrow-textarea": "*",
 		"pbskids-pt-client": "SpringRoll/ProgressTrackerClient"
 	},

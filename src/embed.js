@@ -42,13 +42,16 @@
 			helpEnabled: onHelpEnabled.bind(this),
 			closed: onClosed.bind(this),
 			features: onFeatures.bind(this),
-			unsupported: function(){
-				alert("Your current web browser doesn't support this games features.");
+			unsupported: function(err)
+			{
+				alert(err || "Browser not supported.");
 			},
-			remoteFailed: function(){
+			remoteFailed: function()
+			{
 				alert('Invalid API request');
 			},
-			remoteError: function(err){
+			remoteError: function(err)
+			{
 				alert(err);
 			}
 		});
@@ -152,10 +155,10 @@
 
 		BASE_TITLE = document.title;
 
-		if (!Modernizr.touch)
+		if (!Features.touch)
 		{
 			// Turn on the tooltips
-			$('[data-toggle="tooltip"]').tooltip(TOOLTIP_CONFIG);
+			$('[data-toggle="tooltip"]').tooltip();
 
 			// Turn off the tool tip for the help button initially
 			this.helpEnabled = false;
@@ -210,11 +213,6 @@
 
 	// Current base title
 	var BASE_TITLE = "";
-
-	// Tooltip setup for bootstrap
-	var TOOLTIP_CONFIG = {
-		placement: 'bottom'
-	};
 
 	/**
 	*  Handle the progress tracker events
@@ -294,12 +292,12 @@
 	 */
 	var onHelpEnabled = function(enabled)
 	{
-		if (Modernizr.touch) return;
+		if (Features.touch) return;
 
 		var helpButton = this.helpButton;
 		if (enabled)
 		{
-			helpButton.tooltip(TOOLTIP_CONFIG);
+			helpButton.tooltip();
 		}
 		else
 		{

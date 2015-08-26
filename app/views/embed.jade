@@ -2,6 +2,8 @@ extends templates/base
 
 block header
 	link(href="/css/embed.css?v=#{version}", rel="stylesheet")
+	meta(name="apple-mobile-web-app-capable" content="yes")
+	meta(name="apple-touch-fullscreen" content="yes")
 
 block footer
 	script(src="/js/embed.js?v=#{version}")
@@ -17,9 +19,9 @@ block body
 						|  Resume
 			#appTitle Loading...
 			.controls.text-right
-				button#helpButton.btn.btn-primary.main.disabled(data-toggle='tooltip', title='Play Help')
+				button#helpButton.btn.btn-primary.main.disabled(data-placement='bottom', data-toggle='tooltip', title='Play Help')
 					span.icon.icon-help
-				button#soundButton.btn.btn-primary.main.muted.disabled(data-toggle='tooltip', title='Toggle All Sounds')
+				button#soundButton.btn.btn-primary.main.muted.disabled(data-placement='bottom', data-toggle='tooltip', title='Toggle All Sounds')
 					span.icon.icon-sound.on
 					span.icon.icon-sound-off.off
 				button#soundToggle.btn.btn-primary.main.drop-handle.disabled(data-toggle-div='#soundContexts')
@@ -45,7 +47,7 @@ block body
 							span.icon.icon-vo-off.off
 							span.label.on Voice-Over On
 							span.label.off Voice-Over Off						
-				button#captionsButton.btn.btn-primary.main.muted.disabled(data-toggle='tooltip', title='Toggle Captions')
+				button#captionsButton.btn.btn-primary.main.muted.disabled(data-placement='bottom', data-toggle='tooltip', title='Toggle Captions')
 					span.icon.icon-captions.on
 					span.icon.icon-captions-off.off
 				button#captionsToggle.btn.btn-primary.main.drop-handle.disabled(data-toggle-div='#captionsStyles')
@@ -57,12 +59,12 @@ block body
 						| Captions Style
 					.form-group
 						label.col-xs-4.control-label Align
-						.col-xs-8: select.form-control(name='align')
+						.col-xs-8: select.pause-on-focus.form-control(name='align')
 							option(value='top', selected='') Top
 							option(value='bottom') Bottom
 					.form-group
 						label.col-xs-4.control-label Text Color
-						.col-xs-8: select.form-control(name='color')
+						.col-xs-8: select.pause-on-focus.form-control(name='color')
 							option(value='white', selected='') White
 							option(value='white-semi') White (50%)
 							option(value='black') Black
@@ -75,7 +77,7 @@ block body
 							option(value='blue-semi') Blue (50%)
 					.form-group
 						label.col-xs-4.control-label Background
-						.col-xs-8: select.form-control(name='background')
+						.col-xs-8: select.pause-on-focus.form-control(name='background')
 							option(value='none') [None]
 							option(value='white') White
 							option(value='white-semi') White (50%)
@@ -89,7 +91,7 @@ block body
 							option(value='blue-semi') Blue (50%)
 					.form-group
 						label.col-xs-4.control-label Edge Style
-						.col-xs-8: select.form-control(name='edge')
+						.col-xs-8: select.pause-on-focus.form-control(name='edge')
 							option(value='none', selected='') [None]
 							option(value='raise') Beveled Up
 							option(value='depress') Beveled Down
@@ -97,7 +99,7 @@ block body
 							option(value='drop') Drop Shadow
 					.form-group
 						label.col-xs-4.control-label Size
-						.col-xs-8: select.form-control(name='size')
+						.col-xs-8: select.pause-on-focus.form-control(name='size')
 							option(value='xs') Extra Small
 							option(value='sm') Small
 							option(value='md', selected='') Medium
@@ -105,7 +107,7 @@ block body
 							option(value='xl') Extra Large
 					.form-group
 						label.col-xs-4.control-label Font
-						.col-xs-8: select.form-control(name='font')
+						.col-xs-8: select.pause-on-focus.form-control(name='font')
 							option(value='arial', selected='') Arial
 							option(value='arial-black') Arial Black
 							option(value='comic-sans') Comic Sans MS
@@ -119,7 +121,7 @@ block body
 							option(value='times') Times New Roman
 							option(value='trebuchet') Trebuchet MS
 							option(value='verdana') Verdana						
-				button#settingsButton.btn.btn-primary.main.disabled(data-toggle-div='#settings', data-toggle='tooltip', title='Logging Service')
+				button#settingsButton.btn.btn-primary.main.disabled(data-toggle-div='#settings', data-placement='bottom', data-toggle='tooltip', title='Logging Service')
 					span.icon.icon-gear
 				form#settings.drop-down.form.form-horizontal
 					.form-group.form-title
@@ -128,15 +130,15 @@ block body
 						| Logging Service
 					.form-group
 						label.col-xs-4.control-label Host or IP
-						.col-xs-8: input.form-control#remoteHost(type='text', name='remoteHost')
+						.col-xs-8: input.pause-on-focus.form-control#remoteHost(type='text', name='remoteHost')
 					.form-group
 						label.col-xs-4.control-label Channel Name
-						.col-xs-8: input.form-control#remoteChannel(type='text', name='remoteChannel')
+						.col-xs-8: input.pause-on-focus.form-control#remoteChannel(type='text', name='remoteChannel')
 					.form-group.text-center
 						.col-xs-8.col-xs-offset-4
 							button#remoteConnect.btn.btn-primary.btn-block.disabled(data-toggle-div='#settings')
 								| Connect
-				button#pauseButton.btn.btn-primary.main.unpaused.disabled(data-toggle='tooltip', title='Play/Pause')
+				button#pauseButton.btn.btn-primary.main.unpaused.disabled(data-placement='bottom', data-toggle='tooltip', title='Play/Pause')
 					span.icon.icon-pause.on
 					span.icon.icon-play.off
 			.appWrapper
