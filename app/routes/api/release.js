@@ -7,6 +7,11 @@ var router = require('express').Router(),
 	_ = require('lodash'),
     log = require('../../helpers/logger');
 
+router.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+});
+
 router.post('/:slug', function(req, res)
 {
 	req.checkBody('status', 'Status must be one of: "dev", "qa", "stage", "prod"').isStatus();

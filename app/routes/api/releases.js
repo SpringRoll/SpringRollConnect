@@ -5,6 +5,11 @@ var router = require('express').Router(),
 	Game = require('../../models/game'),
 	response = require('../../helpers/response');
 
+router.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin": "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+});
+
 router.get('/:slug', function(req, res)
 {
 	req.checkParams('slug').isSlug();
