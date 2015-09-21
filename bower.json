@@ -1,6 +1,6 @@
 {
 	"name": "SpringRollConnect",
-	"version": "1.1.13",
+	"version": "1.1.14",
 	"dependencies": {
 		"jquery": "*",
 		"bootstrap": "*",
