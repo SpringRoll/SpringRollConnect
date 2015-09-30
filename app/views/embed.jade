@@ -4,9 +4,13 @@ block header
 	link(href="/css/embed.css?v=#{version}", rel="stylesheet")
 	meta(name="apple-mobile-web-app-capable" content="yes")
 	meta(name="apple-touch-fullscreen" content="yes")
+	if config.embedCssPlugin
+		link(href="#{config.embedCssPlugin}", rel="stylesheet")
 
 block footer
 	script(src="/js/embed.js?v=#{version}")
+	if config.embedScriptPlugin
+		script(src="#{config.embedScriptPlugin}")
 
 block body
 	body

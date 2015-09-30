@@ -8,9 +8,6 @@ var express = require('express'),
 	bodyParser = require('body-parser'),
     dotenv = require('dotenv');
 
-// The number of dev releases to retain
-global.MAX_DEV_RELEASES = 20;
-
 // Load the environment file
 dotenv.load();
 

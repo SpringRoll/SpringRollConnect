@@ -1,0 +1,39 @@
+extend templates/normal
+
+append title
+	| Configuration - Admin - 
+
+append content
+	.col-sm-12
+		form.panel.panel-default.form-horizontal(method="post" action="/configuration")
+			.panel-heading
+				h3.panel-title SpringRoll Connect Configuration
+			.panel-body
+				include partials/feedback
+				.form-group
+					label.control-label.col-sm-3(for="maxDevReleases", required) Maximum Dev Releases
+					.col-sm-9
+						input.form-control(type="number" name="maxDevReleases" id="maxDevReleases" value=config.maxDevReleases)
+						span.help-inline The maximum number of Dev releases to keep
+				.form-group
+					label.control-label.col-sm-3(for="devExpireDays", required) Dev Expires Days
+					.col-sm-9
+						input.form-control(type="number" name="devExpireDays" id="devExpireDays" value=config.devExpireDays)
+						span.help-inline The number of days before Dev releases expire
+				.form-group
+					label.control-label.col-sm-3(for="embedScriptPlugin") Embed Script Plugin
+					.col-sm-9
+						input.form-control(type="text" placeholder="http://" name="embedScriptPlugin" id="embedScriptPlugin" value=config.embedScriptPlugin)
+						span.help-inline Path to an optional script to use on the embed page
+				.form-group
+					label.control-label.col-sm-3(for="embedCssPlugin") Embed CSS Plugin
+					.col-sm-9
+						input.form-control(type="text" placeholder="http://"  name="embedCssPlugin" id="embedCssPlugin" value=config.embedCssPlugin)
+						span.help-inline Path to an optional CSS document to use on the embed page
+				.form-group.form-actions.text-center
+					.col-sm-9.col-sm-offset-3
+						if !config.isNew
+							input(type="hidden" name="id" value=config.id)
+						button.btn.btn-lg.btn-primary(type="submit") 
+							span.icon.glyphicon.glyphicon-pencil
+							| Update

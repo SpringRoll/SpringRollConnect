@@ -2,6 +2,7 @@ module.exports = function(app)
 {
 	var access = require('../helpers/access');
 	var marky = require("marky-markdown");
+	var Config = require('../models/config');
 
 	// Add the user to whatever template
 	app.use(function(req, res, next)
@@ -26,6 +27,16 @@ module.exports = function(app)
 		next();
 	});
 
+	// Get the configuration
+	app.use(function(req, res, next)
+	{
+		Config.getConfig(function(err, config)
+		{
+			global.CONFIGURATION = res.locals.config = config || new Config();
+			next();
+		});
+	});
+
 	// Site pages
 	app.use('/', require('./home'));
 	app.use('/embed', require('./embed'));
@@ -41,6 +52,7 @@ module.exports = function(app)
 	app.use('/users/search', require('./users/search'));
 	app.use('/users/add', access.isAdmin, require('./users/add'));
 	app.use('/users', access.isAdmin, require('./users/index'));
+	app.use('/configuration', access.isAdmin, require('./configuration'));
 
 	// RESTful service for releases
 	app.use('/api/release', require('./api/release'));

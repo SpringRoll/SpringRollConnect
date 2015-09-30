@@ -119,9 +119,10 @@ router.post('/:slug', function(req, res)
 		{
 			Release.getByIdsAndStatus(game.releases, "dev", function(err, releases)
 			{
-				if (releases.length > MAX_DEV_RELEASES)
+				var maxDevReleases = CONFIGURATION.maxDevReleases;
+				if (releases.length > maxDevReleases)
 				{
-					_.each(_.dropRight(releases, MAX_DEV_RELEASES), function(release)
+					_.each(_.dropRight(releases, maxDevReleases), function(release)
 					{
 						Release.removeById(release._id, function(){});
 					});
