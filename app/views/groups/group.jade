@@ -33,34 +33,39 @@ append content
 							button.btn.btn-primary(type="submit" name="action" value="refreshToken" data-toggle="confirm") 
 								span.icon.glyphicon.glyphicon-refresh
 								| Refresh
-	if user.privilege == privilege.admin
-		.col-sm-6
-			button.btn.btn-sm.btn-default.pull-right(data-toggle="modal" data-target="#addUser") 
-				span.glyphicon.glyphicon-plus
-				|  Add
-			h3 Users
-			include modal-user
-			if users.length
-				ul.list-group
-					for user in users
-						li.list-group-item=user.name
-							form.pull-right(method="post" action=url)
-								input(type="hidden" name="user" value=user._id)
-								button.close(data-toggle="confirm" type="submit" name="action" value="removeUser") &times;
-			else
-				.alert.alert-warning No users in this group
-		.col-sm-6
+	.col-md-8.col-sm-7
+		if user.privilege == privilege.admin
 			button.btn.btn-sm.btn-default.pull-right(data-toggle="modal" data-target="#addGame") 
 				span.glyphicon.glyphicon-plus
 				|  Add
-			h3 Games
+		h3 Games
+		if user.privilege == privilege.admin
 			include modal-game
-			if games.length
-				ul.list-group
-					for game in games
-						li.list-group-item: a.btn-block(href="/games/game/#{game.slug}")=game.title
+		if games.length
+			ul.list-group
+				for game in games
+					li.list-group-item: a.btn-block(href="/games/game/#{game.slug}")=game.title
+						if user.privilege == privilege.admin
 							form.pull-right(method="post" action=url)
 								input(type="hidden" name="game" value=game._id)
 								button.close(data-toggle="confirm" type="submit" name="action" value="removeGame") &times;
-			else
-				.alert.alert-warning No games for this group
+		else
+			.alert.alert-warning No games for this group
+	.col-md-4.col-sm-5
+		if user.privilege == privilege.admin
+			button.btn.btn-sm.btn-default.pull-right(data-toggle="modal" data-target="#addUser") 
+				span.glyphicon.glyphicon-plus
+				|  Add
+		h3 Users
+		if user.privilege == privilege.admin
+			include modal-user
+		if users.length
+			ul.list-group
+				for user in users
+					li.list-group-item=user.name
+						if user.privilege == privilege.admin
+							form.pull-right(method="post" action=url)
+								input(type="hidden" name="user" value=user._id)
+								button.close(data-toggle="confirm" type="submit" name="action" value="removeUser") &times;
+		else
+			.alert.alert-warning No users in this group
