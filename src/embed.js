@@ -3,8 +3,7 @@
 	// Import classes
 	var Container = include('springroll.Container'),
 		Features = include('springroll.Features'),
-		SavedData = include('springroll.SavedData'),
-		Tracker = include('pbskids.Tracker');
+		SavedData = include('springroll.SavedData');
 
 	/**
 	*  The main class for the site
@@ -34,8 +33,6 @@
 		*  @property {springroll.Container} container
 		*/
 		this.on({
-			learningEvent: onLearningEvent.bind(this),
-			analyticEvent: onAnalyticEvent.bind(this),
 			open: onOpen.bind(this),
 			opened: onOpened.bind(this),
 			pause: onPauseToggle.bind(this),
@@ -56,37 +53,11 @@
 			}
 		});
 
-		// Disable the form submitting
-		$('form').submit(function(e)
-		{
-			return false;
-		});
-
-		/**
-		 * The Progress tracker client for sending events 
-		 * @property {pbskids.Tracker} tracker
-		 */
-		this.tracker = new Tracker();
-		this.tracker.setEnabled(false);
-
 		/**
 		*  The game title area
 		*  @property {jquery} appTitle
 		*/
 		this.appTitle = $("#appTitle");
-
-		/**
-		*  The current release data
-		*  @property {Object} release
-		*/
-		this.release = null;
-
-		/**
-		*  Button for connecting to the remote host
-		*  @property {jquery} remoteConnect
-		*/
-		this.remoteConnect = $("#remoteConnect")
-			.click(this.connectLoggingService.bind(this));
 
 		/**
 		*  The toggle button for captions options
@@ -101,45 +72,19 @@
 		this.soundToggle = $("#soundToggle");
 
 		/**
-		*  The toggle for the settings
-		*  @property {jquery} settingsButton
-		*/
-		this.settingsButton = $("#settingsButton");
-
-		/**
-		*  The name of the remote host or ip address
-		*  @property {jquery} remoteHost
-		*/
-		this.remoteHost = $("#remoteHost")
-			.val(SavedData.read('remoteHost'));
-
-		/**
-		*  The name of the remote channel name
-		*  @property {jquery} remoteChannel
-		*/
-		this.remoteChannel = $("#remoteChannel");
-
-		/**
 		* Toggle the control drop down options
 		* @property {jquery} dropdowns
 		*/
-		var dropdowns = this.dropdowns = $(".drop-down");
+		this.dropdowns = null;
 
 		/**
 		* The toggle buttons
 		* @property {jquery} toggles
 		*/
-		this.toggles = $("button[data-toggle-div]").each(function(){
-			var toggle = $(this);
-			var selector = toggle.data('toggle-div');
-			var dropdown = $(selector);
-			toggle.on('click hover', function(e){
-				var showing = dropdown.hasClass('on'); 
-				dropdowns.removeClass('on');
-				if (!showing)
-					dropdown.addClass('on');
-			});
-		});
+		this.toggles = null;
+
+		// Refresh the toggles and dropdowns
+		this.refreshUI();
 
 		// Change the captions style
 		$("#captionsStyles select").change(onCaptionsStyles.bind(this));
@@ -154,15 +99,6 @@
 		$("select[name='edge']").val(styles.edge);
 
 		BASE_TITLE = document.title;
-
-		if (!Features.touch)
-		{
-			// Turn on the tooltips
-			$('[data-toggle="tooltip"]').tooltip();
-
-			// Turn off the tool tip for the help button initially
-			this.helpEnabled = false;
-		}
 
 		// Prevent user selection in IE9
 		$(document).on('selectstart', false);
@@ -215,25 +151,42 @@
 	var BASE_TITLE = "";
 
 	/**
-	*  Handle the progress tracker events
-	*  @method onAnalyticEvent
-	*  @private
-	*  @param {object} data THe event data
-	*/
-	var onAnalyticEvent = function(data)
+	 * Refresh the drop down elements
+	 * @method refreshUI
+	 */
+	p.refreshUI = function()
 	{
-		this.tracker.remoteSend("ga-event", data);
-	};
+		// Disable the form submitting
+		$('form').submit(function(e)
+		{
+			return false;
+		});
+		
+		if (!Features.touch)
+		{
+			// Turn on the tooltips
+			$('[data-toggle="tooltip"]').tooltip();
 
-	/**
-	*  Handle the progress tracker events
-	*  @method onLearningEvent
-	*  @private
-	*  @param {object} data THe event data
-	*/
-	var onLearningEvent = function(data)
-	{
-		this.tracker.pushEvent(data);
+			// Turn off the tool tip for the help button initially
+			this.helpEnabled = false;
+		}
+
+		this.dropdowns = $(".drop-down");
+
+		var self = this;
+		this.toggles = $("button[data-toggle-div]").each(function()
+		{
+			var toggle = $(this);
+			var selector = toggle.data('toggle-div');
+			var dropdown = $(selector);
+			toggle.on('click hover', function(e)
+			{
+				var showing = dropdown.hasClass('on'); 
+				self.dropdowns.removeClass('on');
+				if (!showing)
+					dropdown.addClass('on');
+			});
+		});
 	};
 
 	/**
@@ -257,31 +210,9 @@
 	{		
 		this.captionsToggle.hide();
 		this.soundToggle.hide();
-		this.settingsButton.hide();
 
 		if (features.captions) this.captionsToggle.show();
 		if (features.sound) this.soundToggle.show();
-		if (features.learning) this.settingsButton.show();
-	};
-
-	/**
-	 * Handler to connect to the remote host
-	 * @method connectLoggingService
-	 * @private
-	 */
-	p.connectLoggingService = function()
-	{
-		var host = this.remoteHost.val();
-		var channel = this.remoteChannel.val();
-		SavedData.write('remoteHost', host);
-		if (host)
-		{
-			this.tracker.remoteConnect(host);
-		}
-		if (channel)
-		{
-			this.tracker.remoteChannel(channel);
-		}
 	};
 
 	/**
@@ -321,24 +252,18 @@
 
 	/**
 	 * Start loading the release
-	 * @method  loadRelease
+	 * @method  onOpen
 	 * @param {Object} [options] The additional options
 	 * @param {boolean} [options.debug=false] Run the debug version
 	 * @param {String} [options.queryString=""] Query string parameters
 	 */
 	var onOpen = function()
 	{
-		var release = this.release;
-
-		// Change the channel and connect to logging service
-		this.remoteChannel.val(release.game.slug);
-		this.connectLoggingService();
-
 		this.dropdowns.removeClass('on');
 		this.toggles.addClass('disabled');
 		this.frame.addClass('loading');
-		this.appTitle.text(release.game.title);
-		document.title = release.game.title + " | " + BASE_TITLE;
+		this.appTitle.text(this.release.game.title);
+		document.title = this.release.game.title + " | " + BASE_TITLE;
 	};
 
 	/**

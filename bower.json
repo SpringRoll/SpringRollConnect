@@ -1,14 +1,13 @@
 {
 	"name": "SpringRollConnect",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"dependencies": {
 		"jquery": "*",
 		"bootstrap": "*",
 		"bellhop": "*",
 		"modernizr": "*",
 		"springroll": "master",
-		"autogrow-textarea": "*",
-		"pbskids-pt-client": "SpringRoll/ProgressTrackerClient"
+		"autogrow-textarea": "*"
 	},
 	"ignore": [
 		".gitignore",

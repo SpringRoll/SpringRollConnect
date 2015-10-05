@@ -23,6 +23,13 @@ router.post('/', function(req, res)
 	if (req.body.embedCssPlugin)
 		req.checkBody('embedCssPlugin', 'Embed CSS Plugin must be a valid URL').isURL();
 
+	if (req.body.embedDebugScriptPlugin)
+		req.checkBody('embedDebugScriptPlugin', 'Embed Debug Script Plugin must be a valid URL').isURL();
+
+	if (req.body.embedDebugCssPlugin)
+		req.checkBody('embedDebugCssPlugin', 'Embed Debug CSS Plugin must be a valid URL').isURL();
+
+
 	var errors = req.validationErrors();
 
 	if (errors)

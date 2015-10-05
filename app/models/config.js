@@ -45,6 +45,24 @@ var ConfigSchema = new Schema({
 	embedCssPlugin: {
 		type: String,
 		trim: true
+	},
+
+	/**
+	 * The embed JavaScript URL for non-production
+	 * @property {String} embedDebugScriptPlugin
+	 */
+	embedDebugScriptPlugin: {
+		type: String,
+		trim: true
+	},
+
+	/**
+	 * The embed css URL for non-production
+	 * @property {String} embedDebugCssPlugin
+	 */
+	embedDebugCssPlugin: {
+		type: String,
+		trim: true
 	}
 });
 

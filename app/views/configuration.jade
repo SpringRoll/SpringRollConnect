@@ -30,6 +30,16 @@ append content
 					.col-sm-9
 						input.form-control(type="text" placeholder="http://"  name="embedCssPlugin" id="embedCssPlugin" value=config.embedCssPlugin)
 						span.help-inline Path to an optional CSS document to use on the embed page
+				.form-group
+					label.control-label.col-sm-3(for="embedDebugScriptPlugin") Embed Debug Script Plugin
+					.col-sm-9
+						input.form-control(type="text" placeholder="http://" name="embedDebugScriptPlugin" id="embedDebugScriptPlugin" value=config.embedDebugScriptPlugin)
+						span.help-inline Path to an optional script to use on the embed page, in non-production views
+				.form-group
+					label.control-label.col-sm-3(for="embedDebugCssPlugin") Embed Debug CSS Plugin
+					.col-sm-9
+						input.form-control(type="text" placeholder="http://"  name="embedDebugCssPlugin" id="embedDebugCssPlugin" value=config.embedDebugCssPlugin)
+						span.help-inline Path to an optional CSS document to use on the embed page, in non-production views
 				.form-group.form-actions.text-center
 					.col-sm-9.col-sm-offset-3
 						if !config.isNew

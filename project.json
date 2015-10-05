@@ -1,6 +1,6 @@
 {
 	"name": "SpringRollConnect",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"main": [
 		"src/plugins/*.js",
 		"src/widgets/*.js",
@@ -14,7 +14,6 @@
 		"components/modernizr/modernizr.js",
 		"components/bellhop/dist/bellhop.min.js",
 		"components/springroll/dist/modules/container.min.js",
-		"components/pbskids-pt-client/dist/progress-tracker-client.min.js",
 		"components/autogrow-textarea/jquery.autogrowtextarea.min.js"
 	],
 	"librariesDebug": [
@@ -25,7 +24,6 @@
 		"components/modernizr/modernizr.js",
 		"components/bellhop/dist/bellhop.js",
 		"components/springroll/dist/modules/container.js",
-		"components/pbskids-pt-client/dist/progress-tracker-client.js",
 		"components/autogrow-textarea/jquery.autogrowtextarea.js"
 	],
 	"modules": {
