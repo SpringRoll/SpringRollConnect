@@ -5,8 +5,8 @@
 		"jquery": "*",
 		"bootstrap": "*",
 		"bellhop": "*",
-		"modernizr": "*",
-		"springroll": "master",
+		"modernizr": "~2",
+		"springroll": "learning-removed",
 		"autogrow-textarea": "*"
 	},
 	"ignore": [

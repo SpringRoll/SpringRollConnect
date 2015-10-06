@@ -84,7 +84,7 @@
 		this.toggles = null;
 
 		// Refresh the toggles and dropdowns
-		this.refreshUI();
+		this.setupUI();
 
 		// Change the captions style
 		$("#captionsStyles select").change(onCaptionsStyles.bind(this));
@@ -152,9 +152,9 @@
 
 	/**
 	 * Refresh the drop down elements
-	 * @method refreshUI
+	 * @method setupUI
 	 */
-	p.refreshUI = function()
+	p.setupUI = function()
 	{
 		// Disable the form submitting
 		$('form').submit(function(e)
@@ -172,21 +172,7 @@
 		}
 
 		this.dropdowns = $(".drop-down");
-
-		var self = this;
-		this.toggles = $("button[data-toggle-div]").each(function()
-		{
-			var toggle = $(this);
-			var selector = toggle.data('toggle-div');
-			var dropdown = $(selector);
-			toggle.on('click hover', function(e)
-			{
-				var showing = dropdown.hasClass('on'); 
-				self.dropdowns.removeClass('on');
-				if (!showing)
-					dropdown.addClass('on');
-			});
-		});
+		this.toggles = $("button[data-toggle-div]").menuToggle();
 	};
 
 	/**

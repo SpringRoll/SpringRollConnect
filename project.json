@@ -2,7 +2,7 @@
 	"name": "SpringRollConnect",
 	"version": "1.2.1",
 	"main": [
-		"src/plugins/*.js",
+		"src/plugins/jquery-search.js",
 		"src/widgets/*.js",
 		"src/main.less"
 	],
@@ -28,6 +28,7 @@
 	],
 	"modules": {
 		"embed": [
+			"src/plugins/jquery-menuToggle.js",
 			"src/embed.js",
 			"src/embed.less"
 		]
