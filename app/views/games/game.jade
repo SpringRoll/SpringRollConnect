@@ -106,11 +106,11 @@ append gameContent
 				.col-sm-2: strong Staging
 				.col-sm-10
 					.input-group
-						input.monospace.form-control.select-all(readonly type="text" value='<iframe src="http://#{host}/embed/#{game.slug}/stage?token=#{token}" frameborder="0" />')
+						input.monospace.form-control.select-all(readonly type="text" value='<iframe src="http://#{host}/embed/#{game.slug}?status=stage&token=#{token}" frameborder="0" />')
 						.input-group-btn
-							a.btn.btn-default(href="http://#{host}/embed/#{game.slug}/stage?controls=1&title=1&token=#{token}")
+							a.btn.btn-default(href="http://#{host}/embed/#{game.slug}?status=stage&controls=1&title=1&token=#{token}")
 								span.glyphicon.glyphicon-play
-							a.btn.btn-default(href="http://#{host}/embed/#{game.slug}/stage?debug=1&controls=1&title=1&token=#{token}")
+							a.btn.btn-default(href="http://#{host}/embed/#{game.slug}?status=stage&debug=1&controls=1&title=1&token=#{token}")
 								span.glyphicon.glyphicon-wrench  
 								|  
 								span.glyphicon.glyphicon-play
@@ -118,11 +118,11 @@ append gameContent
 				.col-sm-2: strong QA
 				.col-sm-10
 					.input-group
-						input.monospace.form-control.select-all(readonly type="text" value='<iframe src="http://#{host}/embed/#{game.slug}/qa?token=#{token}" frameborder="0" />')
+						input.monospace.form-control.select-all(readonly type="text" value='<iframe src="http://#{host}/embed/#{game.slug}?status=qa&token=#{token}" frameborder="0" />')
 						.input-group-btn
-							a.btn.btn-default(href="http://#{host}/embed/#{game.slug}/qa?controls=1&title=1&token=#{token}")
+							a.btn.btn-default(href="http://#{host}/embed/#{game.slug}?status=qa&controls=1&title=1&token=#{token}")
 								span.glyphicon.glyphicon-play
-							a.btn.btn-default(href="http://#{host}/embed/#{game.slug}/qa?debug=1&controls=1&title=1&token=#{token}")
+							a.btn.btn-default(href="http://#{host}/embed/#{game.slug}?status=qa&debug=1&controls=1&title=1&token=#{token}")
 								span.glyphicon.glyphicon-wrench  
 								|  
 								span.glyphicon.glyphicon-play
@@ -131,11 +131,11 @@ append gameContent
 				.col-sm-2: strong Development
 				.col-sm-10
 					.input-group
-						input.monospace.form-control.select-all(readonly type="text" value='<iframe src="http://#{host}/embed/#{game.slug}/dev?token=#{token}" frameborder="0" />')
+						input.monospace.form-control.select-all(readonly type="text" value='<iframe src="http://#{host}/embed/#{game.slug}?status=dev&token=#{token}" frameborder="0" />')
 						.input-group-btn
-							a.btn.btn-default(href="http://#{host}/embed/#{game.slug}/dev?controls=1&title=1&token=#{token}")
+							a.btn.btn-default(href="http://#{host}/embed/#{game.slug}?status=dev&controls=1&title=1&token=#{token}")
 								span.glyphicon.glyphicon-play
-							a.btn.btn-default(href="http://#{host}/embed/#{game.slug}/dev?debug=1&controls=1&title=1&token=#{token}")
+							a.btn.btn-default(href="http://#{host}/embed/#{game.slug}?status=dev&debug=1&controls=1&title=1&token=#{token}")
 								span.glyphicon.glyphicon-wrench  
 								|  
 								span.glyphicon.glyphicon-play

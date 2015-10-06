@@ -40,42 +40,25 @@ router.post('/clean', function(req, res)
 	);
 });
 
-router.get('/:slug', function(req, res)
+router.get('/:slugOrBundleId', function(req, res)
 {
-	req.checkParams('slug').isSlug();
+	req.checkQuery('status').optional().isStatus();
 	req.checkQuery('token').optional().isToken();
+	req.checkQuery('version').optional().isSemver();
+	req.checkQuery('commitId').optional().isCommit();
 	if (req.validationErrors())
 	{
 		return response.call(res, "Invalid arguments");
 	}
 	Release.getByGame(
-		req.params.slug, 
+		req.params.slugOrBundleId,
 		{
+			version: req.query.version,
+			commitId: req.query.commitId,
+			archive: req.query.archive,
+			status: req.query.status,
 			token: req.query.token,
 			debug: req.query.debug,
-			archive: req.query.archive,
-			multi: true
-		}, 
-		response.bind(res)
-	);
-});
-
-router.get('/:slug/:status', function(req, res)
-{
-	req.checkParams('slug').isSlug();
-	req.checkParams('status').isStatus();
-	req.checkQuery('token').optional().isToken();
-	if (req.validationErrors())
-	{
-		return response.call(res, "Invalid arguments");
-	}
-	Release.getByGame(
-		req.params.slug, 
-		{
-			token: req.query.token,
-			debug: req.query.debug,
-			archive: req.query.archive,
-			status: req.params.status,
 			multi: true
 		}, 
 		response.bind(res)

@@ -4,7 +4,9 @@ router.get('/:slug*', function(req, res)
 {
 	res.render('embed', 
 	{
-		isDebug: !!req.params['0']
+		isDebug: !!req.query.status ||
+			!!req.query.version || 
+			!!req.query.commitId
 	});
 });
 

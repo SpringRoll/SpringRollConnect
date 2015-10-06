@@ -188,20 +188,14 @@ ReleaseSchema.statics.getByGame = function(slug, options, callback)
 	async.waterfall([
 		function(done)
 		{
-			Game.getBySlug(slug, done).populate('groups.group');
+			Game.getBySlugOrBundleId(slug, done).populate('groups.group');
 		},
 		function(game, done)
 		{
 			if (!game) return done('Invalid game slug');
 
-			// Get a specific status level
-			if (options.status)
-			{
-				var requiresToken = options.status != 'prod';
-				done(null, game, { status: options.status }, requiresToken);
-			}
 			// commit version
-			else if (options.commitId)
+			if (options.commitId)
 			{
 				done(null, game, { commitId: options.commitId }, true);
 			}
@@ -209,6 +203,12 @@ ReleaseSchema.statics.getByGame = function(slug, options, callback)
 			else if (options.version)
 			{
 				done(null, game, { version: options.version }, true);
+			}
+			// Get a specific status level
+			else if (options.status)
+			{
+				var requiresToken = options.status != 'prod';
+				done(null, game, { status: options.status }, requiresToken);
 			}
 			// get all releases
 			else 

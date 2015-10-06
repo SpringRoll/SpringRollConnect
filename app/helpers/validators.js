@@ -23,6 +23,6 @@ module.exports = {
 	},
 	isBundleId: function(value)
 	{
-		return /^[a-zA-Z0-9\.]{3,}$/.test(value);
+		return /^[a-zA-Z0-9\.\-]{3,}$/.test(value);
 	}
 };

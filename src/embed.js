@@ -111,8 +111,12 @@
 			var params = parseQuery(location.search.substr(1));
 			var apiArgs = [];
 
-			// Add the token to the API call
-			if (params.token) apiArgs.push("token=" + params.token);
+			// API configurations
+			['version', 'status', 'commitId', 'token'].forEach(function(param)
+			{
+				if (params[param])
+					apiArgs.push(param + "=" + params[param]);
+			});
 
 			// Check for debug
 			if (params.debug) apiArgs.push("debug=true");

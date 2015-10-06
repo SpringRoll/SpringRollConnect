@@ -47,7 +47,7 @@ router.post('/:slug', function(req, res)
 	async.waterfall([
 		function(done)
 		{
-			Game.getBySlug(req.params.slug, done).select('-thumbnail');
+			Game.getBySlugOrBundleId(req.params.slug, done).select('-thumbnail');
 		},
 		function(game, done)
 		{
@@ -168,64 +168,25 @@ router.post('/:slug', function(req, res)
 	});
 });
 
-router.get('/:slug/:status?', function(req, res)
+router.get('/:slugOrBundleId', function(req, res)
 {
-	req.checkParams('slug').isSlug();
-	req.checkParams('status').optional().isStatus();
 	req.checkQuery('token').optional().isToken();
+	req.checkQuery('status').optional().isStatus();
+	req.checkQuery('commitId').optional().isCommit();
+	req.checkQuery('version').optional().isSemver();
 	if (req.validationErrors())
 	{
 		return response.call(res, "Invalid arguments");
 	}
 	Release.getByGame(
-		req.params.slug, 
+		req.params.slugOrBundleId, 
 		{
-			status: req.params.status || 'prod',
-			debug: req.query.debug,
+			version: req.query.version,
+			commitId: req.query.commitId,
 			archive: req.query.archive,
-			token: req.query.token
-		}, 
-		response.bind(res)
-	);
-});
-
-router.get('/:slug/commit/:commitId', function(req, res)
-{
-	req.checkParams('slug').isSlug();
-	req.checkParams('commitId').isCommit();
-	req.checkQuery('token').isToken();
-	if (req.validationErrors())
-	{
-		return response.call(res, "Invalid arguments");
-	}
-	Release.getByGame(
-		req.params.slug, 
-		{
-			commitId: req.params.commitId,
-			debug: req.query.debug,
-			archive: req.query.archive,
-			token: req.query.token
-		}, 
-		response.bind(res)
-	);
-});
-
-router.get('/:slug/version/:version', function(req, res)
-{
-	req.checkParams('slug').isSlug();
-	req.checkParams('version').isSemver();
-	req.checkQuery('token').isToken();
-	if (req.validationErrors())
-	{
-		return response.call(res, "Invalid arguments");
-	}
-	Release.getByGame(
-		req.params.slug, 
-		{
-			version: req.params.version,
+			status: req.query.status || 'prod',
 			token: req.query.token,
-			debug: req.query.debug,
-			archive: req.query.archive
+			debug: req.query.debug
 		}, 
 		response.bind(res)
 	);

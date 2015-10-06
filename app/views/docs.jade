@@ -6,58 +6,89 @@ append title
 append content
 	.col-sm-12
 		h2 API Methods
-		ul
-			li GET 
-				code /api/releases/
-					em [slug]/
-					em (dev|qa|stage|prod)
-			li GET 
-				code /api/release/
-					em [slug]
-					span /version/
-					em [version]
-			li GET 
-				code /api/release/
-					em [slug]
-					span /commit/
-					em [commit]
-			li GET 
-				code /api/release/
-					em [slug]/
-					em (dev|qa|stage|prod)
-			li POST 
-				code /api/release/[slug]
-				ul
-					li
-						strong status 
-						em (dev|qa|stage|prod)
-					li
-						strong version 
-						em (string)
-					li
-						strong commitId 
-						em (string)
-					li
-						strong notes 
-						em (string)
-					li
-						strong warnUniqueCommit 
-						em (boolean, default=false)
-			li POST
-				code /api/releases/clean
-			li DELETE 
-				code /api/release/[id]
-		h2 API Query String Parameters
-		p Parameters work on all methods for getting releases.
-		ul
-			li 
-				strong token 
-				span The access token required to view releases on Dev, QA or Stage
-			li 
-				strong debug 
-				em (default: false) 
-				span Select the debug URL for releases
-			li
-				strong archive 
-				em (default: false) 
-				span Select the archive ZIP for releases
+		.well 
+			h4 GET 
+				strong /api/releases/[slugOrBundleId]
+			ul
+				li
+					strong status 
+					em (dev|qa|stage|prod) 
+					p Deployment environment
+				li
+					strong version 
+					em (String) 
+					p The release version (e.g., "1.0.0")
+				li
+					strong commitId 
+					em (String) 
+					p The GIT commit hash
+				li 
+					strong token 
+					em (String)
+					p The access token required to view releases on Dev, QA or Stage
+				li 
+					strong debug 
+					em (Boolean, default: false) 
+					p Select the debug URL for releases
+				li
+					strong archive 
+					em (Boolean, default: false) 
+					p Select the archive ZIP for releases
+		.well 
+			h4 GET 
+				strong /api/release/[slugOrBundleId]
+			ul
+				li
+					strong status 
+					em (dev|qa|stage|prod) 
+					p Deployment environment
+				li
+					strong version 
+					em (String) 
+					p The release version (e.g., "1.0.0")
+				li
+					strong commitId 
+					em (String) 
+					p The GIT commit hash
+				li 
+					strong token 
+					em (String)
+					p The access token required to view releases on Dev, QA or Stage
+				li 
+					strong debug 
+					em (Boolean, default: false) 
+					p Select the debug URL for releases
+				li
+					strong archive 
+					em (Boolean, default: false) 
+					p Select the archive ZIP for releases
+		.well 
+			h4 POST 
+				strong /api/release/[slugOrBundleId]
+			ul
+				li
+					strong status 
+					em (dev|qa|stage|prod) 
+					p Deployment environment
+				li
+					strong version 
+					em (String) 
+					p The release version (e.g., "1.0.0")
+				li
+					strong commitId 
+					em (String) 
+					p The GIT commit hash
+				li
+					strong notes 
+					em (String)
+					p The release notes
+				li
+					strong warnUniqueCommit 
+					em (Boolean, default=false) 
+					p Warn on duplicate commitId
+		.well 
+			h4 POST 
+				strong /api/releases/clean
+		.well 
+			h4 DELETE 
+				strong /api/release/[id]

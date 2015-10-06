@@ -222,13 +222,30 @@ GameSchema.statics.getByIds = function(ids, callback)
 /**
  * Get a game by slug
  * @method getBySlug
- * @param {string} slug The game slug
+ * @param {string} slugOrBundleId The game slug or bundleId
  * @param {function} callback The callback
  * @return {Promise} The async Promise
  */
 GameSchema.statics.getBySlug = function(slug, callback)
 {
-	return this.findOne({ slug: slug }, callback);
+	return this.findOne({ 'slug': slug }, callback);
+};
+
+/**
+ * Get a game by slug or bundleId
+ * @method getBySlugOrBundleId
+ * @param {string} slugOrBundleId The game slug or bundleId
+ * @param {function} callback The callback
+ * @return {Promise} The async Promise
+ */
+GameSchema.statics.getBySlugOrBundleId = function(slugOrBundleId, callback)
+{
+	return this.findOne({ '$or':
+		[ 
+			{ 'slug': slugOrBundleId }, 
+			{ 'bundleId': slugOrBundleId } 
+		]
+	}, callback);
 };
 
 /**
