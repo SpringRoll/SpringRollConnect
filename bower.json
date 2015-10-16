@@ -6,7 +6,7 @@
 		"bootstrap": "*",
 		"bellhop": "*",
 		"modernizr": "~2",
-		"springroll": "learning-removed",
+		"springroll": "*",
 		"autogrow-textarea": "*"
 	},
 	"ignore": [
