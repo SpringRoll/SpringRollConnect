@@ -10,5 +10,5 @@ if(cluster.isMaster) {
         cluster.fork()
     }
 } else {
-    var restServer = require('./app/index');
+    var restServer = require('./app');
 }
