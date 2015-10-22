@@ -6,6 +6,8 @@ var mongoose = require('mongoose'),
 	flash = require('connect-flash'),
 	session = require('express-session'),
 	log = require('./logger');
+    RedisStore = require('connect-redis')(session);
+    redis = require("redis").createClient();
 
 // Database connection bootstrap
 module.exports = function(app)
@@ -37,7 +39,13 @@ module.exports = function(app)
 	{
 		secret: process.env.SECRET_KEY,
 		saveUninitialized: true,
-		resave: true
+		resave: true,
+        store: new RedisStore({
+            host: process.env.REDIS_HOST,
+            port: 6379,
+            client: redis
+        })
+                                       
 	}));
 	app.use(flash());
 	app.use(passport.initialize());
