@@ -6,9 +6,7 @@ var mongoose = require('mongoose'),
 	flash = require('connect-flash'),
 	session = require('express-session'),
 	log = require('./logger');
-    RedisStore = require('connect-redis')(session);
-    redis = require('redis').createClient(6379, process.env.REDIS_HOST);
-
+    MongoDBStore = require('connect-mongodb-session')(session);
 // Database connection bootstrap
 module.exports = function(app)
 {
@@ -33,18 +31,25 @@ module.exports = function(app)
 	{
 		console.error(String("Connection error : " + err).red);
 	});
+    
+    var store = new MongoDBStore(
+        {
+            uri: process.env.MONGO_DATABASE,
+            collection: 'auth_sessions'
+        }
+    );
 
+    store.on('error', function(error) {
+        assert.ifError(error);
+        assert.ok(false);
+    });
 	// Authentication stuff
 	app.use(session(
 	{
 		secret: process.env.SECRET_KEY,
 		saveUninitialized: true,
 		resave: true,
-        store: new RedisStore({
-            host: process.env.REDIS_HOST,
-            port: 6379,
-            client: redis
-        })
+        store: store
                                        
 	}));
 	app.use(flash());
