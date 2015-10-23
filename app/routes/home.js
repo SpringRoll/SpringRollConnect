@@ -4,7 +4,7 @@ var access = require('../helpers/access');
 var log = require('../helpers/logger');
 var _ = require('lodash');
 var Pagination = require('../helpers/pagination');
-
+var flash = require('connect-flash');
 router.get('/:local(page)?/:number([0-9]+)?', function(req, res)
 {
 	if (req.isAuthenticated())
