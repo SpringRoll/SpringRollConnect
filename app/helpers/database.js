@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
 	session = require('express-session'),
 	log = require('./logger');
     RedisStore = require('connect-redis')(session);
-    redis = require("redis").createClient();
+    redis = require('redis').createClient(6379, process.env.REDIS_HOST);
 
 // Database connection bootstrap
 module.exports = function(app)
