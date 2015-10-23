@@ -39,10 +39,6 @@ module.exports = function(app)
         }
     );
 
-    store.on('error', function(error) {
-        assert.ifError(error);
-        assert.ok(false);
-    });
 	// Authentication stuff
 	app.use(session(
 	{
