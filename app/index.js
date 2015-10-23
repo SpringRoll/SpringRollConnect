@@ -6,8 +6,7 @@ var express = require('express'),
 	expressValidator = require('express-validator'),
 	errorHandler = require('errorhandler'),
 	bodyParser = require('body-parser'),
-    dotenv = require('dotenv'),
-	flash = require('connect-flash');
+    dotenv = require('dotenv');
 // Load the environment file
 dotenv.load();
 
@@ -26,7 +25,6 @@ app.listen(port);
 app.use(bodyParser.urlencoded({
 	extended: true
 }));
-app.use(flash);
 app.use(bodyParser.json());
 app.set('json spaces', config.spaces);
 
