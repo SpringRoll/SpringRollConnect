@@ -3,14 +3,14 @@ module.exports = {
     {
         options:
         {
-            script: 'server.js'
+            script: 'app/index.js'
         }
     },
     prod:
     {
         options:
         {
-            script: 'server.js',
+            script: 'app/index.js',
             node_env: 'production'
         }
     }
