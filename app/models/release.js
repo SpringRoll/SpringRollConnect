@@ -208,7 +208,13 @@ ReleaseSchema.statics.getByGame = function(slug, options, callback)
 			else if (options.status)
 			{
 				var requiresToken = options.status != 'prod';
-				done(null, game, { status: options.status }, requiresToken);
+				var statuses = ['dev', 'qa', 'stage', 'prod'];
+
+				// The status is inclusive of status levels greater than the current
+				// for instance, QA status means the latest QA, Stage or Prod release
+				statuses = statuses.slice(statuses.indexOf(options.status));
+
+				done(null, game, { status: { "$in": statuses } }, requiresToken);
 			}
 			// get all releases
 			else 
