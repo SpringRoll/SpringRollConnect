@@ -105,7 +105,10 @@
 
 		// Open via api
 		var api = location.pathname.replace('/embed/', '/api/release/');
-		
+		var query;
+		var playOptions = null;
+		var singlePlay = false;
+
 		if (location.search)
 		{
 			var params = parseQuery(location.search.substr(1));
@@ -115,25 +118,72 @@
 			['version', 'status', 'commitId', 'token'].forEach(function(param)
 			{
 				if (params[param])
+				{
 					apiArgs.push(param + "=" + params[param]);
+					delete params[param];
+				}
 			});
 
 			// Check for debug
-			if (params.debug) apiArgs.push("debug=true");
+			if (params.debug)
+			{
+				apiArgs.push("debug=true");
+				delete params.debug;
+			}
 
 			// Show the controls
-			if (params.controls) this.frame.addClass('show-controls');
+			if (params.controls)
+			{
+				this.frame.addClass('show-controls');
+				delete params.controls;
+			}
 
 			// Show the title
-			if (params.title) this.frame.addClass('show-title');
+			if (params.title)
+			{
+				this.frame.addClass('show-title');
+				delete params.title;
+			}
 
 			// Add the arguments
 			if (apiArgs.length)
 			{
 				api += "?" + apiArgs.join("&");
 			}
+
+			// Single play
+			if (params.singlePlay)
+			{
+				singlePlay = params.singlePlay == "true" || params.singlePlay == "1";
+				delete params.singlePlay;
+			}
+
+			// Play options
+			if (params.playOptions)
+			{
+				try
+				{
+					playOptions = JSON.parse(params.playOptions);
+				}
+				catch(e){} // ignore invalid JSON parse
+				delete params.playOptions;
+			}
+
+			// Get any other options and pass them to the query string
+			query = [];
+			for(var param in params)
+			{
+				query.push(param + "=" + params[param]);
+			}
+			query = query.length ? "?" + query.join("&") : '';
 		}
-		this.openRemote(api);
+
+		this.openRemote(api, 
+		{
+			singlePlay: singlePlay,
+			playOptions: playOptions,
+			query: query
+		});
 	};
 
 	function parseQuery(queryString)
