@@ -1,12 +1,12 @@
 {
 	"name": "SpringRollConnect",
-	"version": "1.3.3",
+	"version": "1.3.4",
 	"dependencies": {
 		"jquery": "*",
 		"bootstrap": "*",
 		"bellhop": "*",
 		"modernizr": "~2",
-		"springroll": "*",
+		"springroll-container": "*",
 		"autogrow-textarea": "*"
 	},
 	"ignore": [
