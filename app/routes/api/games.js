@@ -20,18 +20,19 @@ router.get('/', function(req, res)
     {
         return response.call(res, "Invalid Arguments");
     }
-    
-    async.waterfall([
-        function(done)
-        {
-            Game.getAll(response.bind(res)).select('-thumbnail');
-        },
-        function(done)
-        {
-            response.bind(res);
+    group = Group.getByToken(req.query.token);
+    Game
+    .getAll(response.bind(res))
+    .select('-thumbnail')
+    .populate({
+        path: 'releases', 
+        select: 'status updated',
+        match: {'status': {$in: [req.query.status]}},
+        options: {
+            sort: {updated: -1},
+            limit: 1
         }
-
-    ]);
+    })
 });
 
 module.exports = router;
