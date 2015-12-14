@@ -14,25 +14,82 @@ router.use(function(req, res, next) {
 
 router.get('/', function(req, res)
 {
-	req.checkQuery('status').isStatus();
+	req.checkQuery('status').optional().isStatus();
 	req.checkQuery('token').optional().isToken();
-	if(req.validationErrors())
+
+	if (req.validationErrors())
 	{
 		return response.call(res, "Invalid Arguments");
 	}
-	group = Group.getByToken(req.query.token);
-	Game
-	.getAll(response.bind(res))
-	.select('-thumbnail')
-	.populate({
+
+	var status = req.query.status || "prod";
+	var token = req.query.token;
+
+	var populateOptions = {
 		path: 'releases', 
-		select: 'status updated',
-		match: {'status': {$in: [req.query.status]}},
+		select: 'status updated commitId',
+		match: {'status': {$in: [status]}},
 		options: {
 			sort: {updated: -1},
 			limit: 1
 		}
-	});
+	};
+
+	async.waterfall([
+		function(done)
+		{
+			// Require token
+			if (status == "prod")
+			{
+				return Game.getAll(done)
+					.select('-thumbnail')
+					.populate(populateOptions);
+			}
+			else if (!token)
+			{
+				return done("No token");
+			}
+			Group.getByToken(token, function(err, group)
+			{
+				if (err)
+				{
+					return done(err);
+				}
+				else if (!group)
+				{
+					return done("Invalid token");
+				}
+				Game.getGamesByGroup(group, done)
+					.select('-thumbnail')
+					.populate(populateOptions);
+			});
+		}],
+		function(err, games)
+		{
+			if (err)
+			{
+				return response.call(res, err);
+			}
+			else if (games.length === 0)
+			{
+				return response.call(res, "No games");
+			}
+
+			// Update the url
+			games.forEach(function(game)
+			{
+				game.releases.forEach(function(release)
+				{
+					release.url = game.location + '/' + 
+						release.commitId + '/' +
+						(req.query.debug == "true" ? 'debug' : 'release') +
+						(req.query.archive == "true" ? '.zip' : '/index.html');
+				});
+			});
+
+			response.call(res, games);
+		}
+	);
 });
 
 module.exports = router;
