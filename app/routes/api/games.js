@@ -86,8 +86,8 @@ router.get('/', function(req, res)
 						(req.query.archive == "true" ? '.zip' : '/index.html');
 				});
 			});
-
-			response.call(res, games);
+			
+			response.call(res, err, games);
 		}
 	);
 });
