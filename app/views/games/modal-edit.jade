@@ -10,7 +10,7 @@
 					.col-sm-9
 						input.form-control#title(type="text" name="title" #{disabled} value=game.title required)
 				.form-group(data-unique="/games/search" data-ignore=game.bundleId)
-					label.col-sm-3.control-label(for="bundleId") Bundle
+					label.col-sm-3.control-label(for="bundleId") GUID
 					.col-sm-9
 						input.form-control#bundleId(type="text" name="bundleId" #{disabled} value=game.bundleId required)
 						span.yes.glyphicon.glyphicon-ok.form-control-feedback

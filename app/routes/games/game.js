@@ -3,6 +3,7 @@ var router = require('express').Router(),
 	_ = require('lodash'),
 	privileges = require('../../helpers/access').privilege,
 	Game = require('../../models/game'),
+	User = require('../../models/user'),
 	Release = require('../../models/release');
     log = require('../../helpers/logger');
 
@@ -37,14 +38,32 @@ function handleError(req, res, errors)
  */
 function renderPage(req, res, template, populate, success)
 {
-	populate = populate || 'groups.group';
-
+	populate = ['groups.group'].concat(populate || []);
 	async.waterfall(
 		[
 			function(done)
 			{
 				Game.getBySlug(req.params.slug, done)
 					.populate(populate);
+			},
+			function(game, done)
+			{
+				if (populate.indexOf('releases'))
+				{
+					User.populate(game.releases, {
+						path: 'updatedBy',
+						select: 'name'
+					},
+					function(err, releases)
+					{
+						if (err) return done(err);
+						done(null, game);
+					});
+				}
+				else
+				{
+					done(null, game);
+				}
 			},
 			function(game, done)
 			{
@@ -169,7 +188,8 @@ router.post('/:slug/releases', function(req, res)
 				req.body.release, 
 				{ 
 					status: req.body.status,
-					updated: Date.now()
+					updated: Date.now(),
+					updatedBy: req.body.updatedBy
 				},
 				done
 			);
@@ -318,7 +338,7 @@ router.get('/:slug/release', function(req, res)
 router.get('/:slug/releases', function(req, res)
 {
 	renderPage(req, res, 'games/releases', 
-		'releases groups.group', 
+		['releases'],
 		function(game)
 		{
 			game.releases.reverse();

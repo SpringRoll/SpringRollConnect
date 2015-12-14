@@ -8,11 +8,31 @@ append content
 		h2 API Methods
 		.well 
 			h4 GET 
-				strong /api/releases/[slugOrBundleId]
+				strong /api/games
 			ul
 				li
 					strong status 
-					em (dev|qa|stage|prod) 
+					em (dev|qa|stage|prod, default:prod) 
+					p Deployment environment
+				li 
+					strong token 
+					em (String)
+					p The access token required to view releases on Dev, QA or Stage
+				li 
+					strong debug 
+					em (Boolean, default: false) 
+					p Select the debug URL for releases
+				li
+					strong archive 
+					em (Boolean, default: false) 
+					p Select the archive ZIP for releases
+		.well 
+			h4 GET 
+				strong /api/releases/[slugOrGuid]
+			ul
+				li
+					strong status 
+					em (dev|qa|stage|prod, default:prod) 
 					p Deployment environment
 				li
 					strong version 
@@ -36,7 +56,7 @@ append content
 					p Select the archive ZIP for releases
 		.well 
 			h4 GET 
-				strong /api/release/[slugOrBundleId]
+				strong /api/release/[slugOrGuid]
 			ul
 				li
 					strong status 
@@ -64,7 +84,7 @@ append content
 					p Select the archive ZIP for releases
 		.well 
 			h4 POST 
-				strong /api/release/[slugOrBundleId]
+				strong /api/release/[slugOrGuid]
 			ul
 				li
 					strong status 

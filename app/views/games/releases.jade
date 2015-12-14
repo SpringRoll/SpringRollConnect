@@ -20,6 +20,7 @@ append gameContent
 							.col-sm-3
 								if isEditor
 									form.release-title.text-center(action=url method="post")
+										input(type="hidden" name="updatedBy" value=user._id)
 										input(type="hidden" name="release" value=release._id)
 										input(type="hidden" name="action" value="statusChange")
 										.btn-group.btn-block
@@ -77,8 +78,10 @@ append gameContent
 									h4: strong Commit 
 										a(href="#{game.repository}/commits/#{release.commitId}" data-toggle="tooltip" title="View Commit")=release.commitId.substr(0,7)
 							
-								.help-block.updated.hidden-xs
+								.help-block.updated
 									span Updated 
 									span=moment(release.updated).fromNow()
+									if release.updatedBy
+										|  by #{release.updatedBy.name}
 								if release.notes
 									p!= marked(release.notes)

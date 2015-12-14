@@ -65,6 +65,16 @@ var ReleaseSchema = new Schema({
 	updated: Date,
 
 	/**
+	 * The user who updated the release
+	 * @property {User} updatedBy
+	 */
+	updatedBy: {
+		type: Schema.Types.ObjectId,
+		ref: 'User',
+		required: false
+	},
+
+	/**
 	 * Release notes for the game
 	 * @property {String} notes
 	 */
