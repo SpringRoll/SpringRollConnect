@@ -22,13 +22,18 @@ router.get('/', function(req, res)
 		return response.call(res, "Invalid Arguments");
 	}
 
-	var status = req.query.status || "prod";
+	var status = req.query.status || 'prod';
 	var token = req.query.token;
+	var statuses = ['dev', 'qa', 'stage', 'prod'];
+
+	// The status is inclusive of status levels greater than the current
+	// for instance, QA status means the latest QA, Stage or Prod release
+	statuses = statuses.slice(statuses.indexOf(status));
 
 	var populateOptions = {
 		path: 'releases', 
-		select: 'status updated commitId',
-		match: {'status': {$in: [status]}},
+		select: 'status updated commitId version',
+		match: {'status': {$in: statuses}},
 		options: {
 			sort: {updated: -1},
 			limit: 1
