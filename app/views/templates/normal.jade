@@ -15,6 +15,22 @@ block body
 						| SpringRoll Connect 
 						small.version.hidden-xs v#{version}
 				.navbar-collapse.collapse
+					if user && user.privilege >= privilege.editor
+						form.navbar-form.search.hidden-sm.hidden-xs
+							.input-group
+								.input-group-addon
+									span.glyphicon.glyphicon-search
+								input.form-control#allGameSearch(
+									type="text" 
+									placeholder="Search for games" 
+									data-search="/games/search" 
+									data-list="#allGameSearchDisplay" 
+									data-field="title"
+									autofocus
+									tabIndex=1
+									autocomplete="off")
+							.dropdown.search#allGameSearchDisplay
+								ul.dropdown-menu
 					ul.nav.navbar-nav.navbar-right
 						if user
 							if user.privilege >= privilege.editor

@@ -45,6 +45,22 @@ h2, h3, h4 {
 	}
 }
 
+form.search {
+	float:right;
+	display:inline-block;
+	padding-right:0;
+	.search-item {
+		color: #337ab7 !important;
+		&:hover {
+			color:#23527c !important;
+			text-decoration: underline;
+		}
+	}
+	.active .search-item {
+		color:#fff !important;
+	}
+}
+
 .navbar-brand {
 	.version {
 		background: #333;
