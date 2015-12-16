@@ -1,5 +1,5 @@
-(function($){
-	
+(function($)
+{
 	/**
 	 * Search setup
 	 * @param  {object|Function} options The options or handler
@@ -33,13 +33,14 @@
 
 			var onSearchClicked = function(e)
 			{
-				container.removeClass('open');
+				e.preventDefault();
 				var content = $(this).data('content');
 
 				if (options.selected)
 					options.selected(content);
 
 				input.trigger('search', content);
+				container.removeClass('open');
 
 				if (options.autoClear)
 				{
@@ -50,7 +51,7 @@
 			var clear = function()
 			{
 				input.val("");
-				list.find('.search-item').off('click');
+				list.find('.search-item').off('tap');
 				list.empty();
 				container.removeClass('open');
 			};
@@ -83,7 +84,7 @@
 						items.push(item);
 					}
 					list.html(items);
-					list.find('.search-item').click(onSearchClicked);
+					list.find('.search-item').on('tap', onSearchClicked);
 				}
 			};
 			input.keydown(function(e){
@@ -122,7 +123,7 @@
 				{
 					if (active.length)
 					{
-						active.find('.search-item').click();
+						active.find('.search-item').tap();
 						e.preventDefault();
 					}
 					else if (options.enterPress && this.value)

@@ -1,5 +1,5 @@
 // Auto select the input field
-$('.select-all').on('click', function()
+$('.select-all').on('tap', function()
 {
 	$(this).select();
 });

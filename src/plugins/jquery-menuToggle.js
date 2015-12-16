@@ -14,7 +14,7 @@
 			var toggle = $(this);
 			var selector = toggle.data('toggle-div');
 			var dropdown = $(selector);
-			toggle.off('click hover').on('click hover', function(e)
+			toggle.off('tap hover').on('tap hover', function(e)
 			{
 				var showing = dropdown.hasClass('on'); 
 				if (currDropdown) currDropdown.removeClass('on');

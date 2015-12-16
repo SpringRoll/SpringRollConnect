@@ -1,5 +1,5 @@
 // Submit on change
-$('.auto-submit').click(function()
+$('.auto-submit').on('tap', function()
 {
 	$(this).closest('form').submit();
 });
