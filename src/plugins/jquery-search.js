@@ -29,7 +29,9 @@
 			var input = $(this);
 			var container = $(input.data('list') || options.list);
 			var field = input.data('field') || options.field;
-			var list = container.find("ul").on('click', '.search-item', function(e)
+			var list = container.find("ul");
+
+			var onSearchClicked = function(e)
 			{
 				container.removeClass('open');
 				var content = $(this).data('content');
@@ -43,18 +45,18 @@
 				{
 					clear();
 				}
-			});
+			};
 
 			var clear = function()
 			{
 				input.val("");
+				list.find('.search-item').off('click');
 				list.empty();
 				container.removeClass('open');
 			};
 
 			var onSearchResults = function(contents)
 			{
-				console.log(contents);
 				if (!contents) return;
 
 				container.addClass('open');
@@ -81,6 +83,7 @@
 						items.push(item);
 					}
 					list.html(items);
+					list.find('.search-item').click(onSearchClicked);
 				}
 			};
 			input.keydown(function(e){
