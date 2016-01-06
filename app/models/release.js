@@ -258,7 +258,7 @@ ReleaseSchema.statics.getByGame = function(slug, options, callback)
 			select.sort('-created');
 
 			select
-				.select('version url capabilities commitId game -_id')
+				.select('version url capabilities commitId game updated -_id')
 				.populate('game', 'slug location title -_id')
 				.exec(done);
 		}],
