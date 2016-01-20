@@ -61,11 +61,11 @@ append content
 			include modal-user
 		if users.length
 			ul.list-group
-				for user in users
-					li.list-group-item=user.name
+				for u in users
+					li.list-group-item=u.name
 						if user.privilege == privilege.admin
 							form.pull-right(method="post" action=url)
-								input(type="hidden" name="user" value=user._id)
+								input(type="hidden" name="user" value=u._id)
 								button.close(data-toggle="confirm" type="submit" name="action" value="removeUser") &times;
 		else
 			.alert.alert-warning No users in this group
