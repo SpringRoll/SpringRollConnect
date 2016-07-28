@@ -442,7 +442,7 @@ GameSchema.statics.removeGroup = function(ids, groupId, callback)
 	return this.update(
 		query,
 		{$pull: {groups: {group : groupId }}},
-		{multi: false},
+		{multi: true},
 		callback
 	);
 };
