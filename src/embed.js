@@ -43,9 +43,13 @@
 			{
 				alert(err || "Browser not supported.");
 			},
-			remoteFailed: function()
+			remoteFailed: function(err)
 			{
-				alert('Invalid API request');
+				if (err && err.responseJSON && typeof err.responseJSON.error !== 'undefined') {
+					alert(err.responseJSON.error);	
+				} else { 
+					alert('Invalid API request');
+				}
 			},
 			remoteError: function(err)
 			{
