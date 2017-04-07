@@ -75,8 +75,11 @@ append gameContent
 										small: a.commit(href="#{game.repository}/commits/#{release.commitId}" data-toggle="tooltip" title="View Commit")=release.commitId.substr(0,7)
 								else
 									include releases-controls
-									h4: strong Commit 
+									h4.release-data: strong Commit 
 										a(href="#{game.repository}/commits/#{release.commitId}" data-toggle="tooltip" title="View Commit")=release.commitId.substr(0,7)
+
+									h4.release-data: strong Branch 
+										a(href="#{game.repository}/browse?at=refs/heads/#{release.branch.replace('origin/', '')}" data-toggle="tooltip" title="View Branch")=release.branch
 							
 								.help-block.updated
 									span Updated 
