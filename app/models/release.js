@@ -53,6 +53,17 @@ var ReleaseSchema = new Schema({
 	},
 
 	/**
+	 * The Branch name
+	 * @property {string} branch
+	 */
+	 branch: {
+	 	type: String,
+	 	trim: false,
+	 	required: false,
+	 	unique: false
+	 },
+
+	/**
 	 * When the game was created
 	 * @property {Date} created
 	 */
