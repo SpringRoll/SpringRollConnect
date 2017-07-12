@@ -1,0 +1,63 @@
+.form-group
+	label.col-sm-3.control-label Capabilities
+	.col-sm-9
+		button.btn.btn-default.btn-sm(type="button" data-toggle="collapse" data-target="#capabilities") Show Options
+#capabilities.collapse: .well
+	.row
+		.form-group
+			label.col-sm-3.control-label Interface
+			.col-sm-9
+				.checkbox
+					label
+						input(type="checkbox" name="capabilities[ui][mouse]" checked=capabilities.ui.mouse)
+						|  Mouse supported
+				.checkbox
+					label
+						input(type="checkbox" name="capabilities[ui][touch]" checked=capabilities.ui.touch)
+						|  Touch supported
+		.form-group
+			label.col-sm-3.control-label Sizes
+			.col-sm-9
+				.checkbox
+					label
+						input(type="checkbox" name="capabilities[sizes][xsmall]" checked=capabilities.sizes.xsmall)
+						|  Screens &lt; 480px
+				.checkbox
+					label
+						input(type="checkbox" name="capabilities[sizes][small]" checked=capabilities.sizes.small) 
+						|  Screens &lt; 768px
+				.checkbox
+					label
+						input(type="checkbox" name="capabilities[sizes][medium]" checked=capabilities.sizes.medium) 
+						|  Screens &lt; 992px
+				.checkbox
+					label
+						input(type="checkbox" name="capabilities[sizes][large]" checked=capabilities.sizes.large) 
+						|  Screens &lt; 1200px
+				.checkbox
+					label
+						input(type="checkbox" name="capabilities[sizes][xlarge]" checked=capabilities.sizes.xlarge) 
+						|  Screens &gt;= 1200px
+		.form-group
+			label.col-sm-3.control-label Features
+			.col-sm-9
+				.checkbox
+					label
+						input(type="checkbox" name="capabilities[features][webgl]" checked=capabilities.features.webgl)
+						|  WebGL required
+				.checkbox
+					label
+						input(type="checkbox" name="capabilities[features][geolocation]" checked=capabilities.features.geolocation) 
+						|  Geolocation required
+				.checkbox
+					label
+						input(type="checkbox" name="capabilities[features][webaudio]" checked=capabilities.features.webaudio) 
+						|  WebAudio API required (no Flash fallback)
+				.checkbox
+					label
+						input(type="checkbox" name="capabilities[features][websockets]" checked=capabilities.features.websockets) 
+						|  WebSockets API required
+				.checkbox
+					label
+						input(type="checkbox" name="capabilities[features][webworkers]" checked=capabilities.features.webworkers) 
+						|  WebWorkers API required

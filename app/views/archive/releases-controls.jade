@@ -1,0 +1,25 @@
+if isEditor
+	form.controls.pull-right(action="/games/game/#{game.slug}/releases" method="post")
+		input(type="hidden" name="release" value=release._id)
+		input(type="hidden" name="action" value="removeRelease")
+		button.btn.btn-block.btn-default.dropdown-toggle(data-toggle="confirm" type="submit")
+			span.glyphicon.glyphicon-trash
+form.controls.pull-right(action="/games/game/#{game.slug}/release" method="post")
+	input(type="hidden" name="release" value=release._id)
+	input(type="hidden" name="action" value="selectRelease")
+	.btn-group
+		button.btn.btn-block.btn-default.dropdown-toggle(data-toggle="dropdown") 
+			span.glyphicon.glyphicon-cog
+			|  
+			span.caret
+		ul.dropdown-menu.dropdown-menu-right
+			if isEditor
+				li: a.auto-submit(href="#")
+					span.glyphicon.glyphicon-pencil
+					|  Edit
+			li: a(href="#{game.location}/#{release.commitId}/release.zip")
+				span.glyphicon.glyphicon-download
+				|  Release ZIP
+			li: a(href="#{game.location}/#{release.commitId}/debug.zip")
+				span.glyphicon.glyphicon-download
+				|  Debug ZIP

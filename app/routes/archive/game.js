@@ -2,11 +2,11 @@ var router = require('express').Router(),
 	async = require('async'),
 	_ = require('lodash'),
 	privileges = require('../../helpers/access').privilege,
-	Game = require('../../models/game'),
-	GameArchive = require('../../models/game-archive'),
+	Game = require('../../models/game-archive'),
+	GameRestore = require('../../models/game'),
 	User = require('../../models/user'),
 	Release = require('../../models/release'),
-	log = require('../../helpers/logger');
+  log = require('../../helpers/logger');
 
 /**
  * Abstraction to handle the page errors
@@ -23,7 +23,7 @@ function handleError(req, res, errors)
 	else
 	{
 		req.flash('error', 'Unable to update the game: ' + errors);
-	}	
+	}
 	res.redirect(req.originalUrl);
 }
 
@@ -124,9 +124,9 @@ function postPage(req, res, minPrivilege, actions)
 				var response = function(err)
 				{
 					if (err) return done(err);
-					done(null, game); 
+					done(null, game);
 				};
-				
+
 				if (access.permission < minPrivilege)
 				{
 					return done('Invalid form permissions');
@@ -138,9 +138,9 @@ function postPage(req, res, minPrivilege, actions)
 				}
 				actions[req.body.action](response, game, access);
 			}
-		], 
+		],
 		function(err, game)
-		{			
+		{
 			if (err) return handleError(req, res, err);
 
 			req.flash('success', game.title + " updated successfully");
@@ -151,16 +151,16 @@ function postPage(req, res, minPrivilege, actions)
 
 function defaultCapabilities(capabilities)
 {
-	capabilities.ui = _.assign({ 
-			mouse: false, 
+	capabilities.ui = _.assign({
+			mouse: false,
 			touch: false
 		}, capabilities.ui);
 
-	capabilities.sizes = _.assign({ 
-			xsmall: false, 
-			small: false, 
-			medium: false, 
-			large: false, 
+	capabilities.sizes = _.assign({
+			xsmall: false,
+			small: false,
+			medium: false,
+			large: false,
 			xlarge: false
 		}, capabilities.sizes);
 }
@@ -169,12 +169,12 @@ function defaultCapabilities(capabilities)
 function response(err)
 {
 	if (err) return done(err);
-	done(null, this); 
+	done(null, this);
 }
 
 router.post('/:slug/releases', function(req, res)
 {
-	postPage(req, res, privileges.editor, 
+	postPage(req, res, privileges.editor,
 	{
 		removeRelease: function(done)
 		{
@@ -186,8 +186,8 @@ router.post('/:slug/releases', function(req, res)
 		statusChange: function(done)
 		{
 			Release.findByIdAndUpdate(
-				req.body.release, 
-				{ 
+				req.body.release,
+				{
 					status: req.body.status,
 					updated: Date.now(),
 					updatedBy: req.body.updatedBy
@@ -200,31 +200,31 @@ router.post('/:slug/releases', function(req, res)
 
 router.post('/:slug/privileges', function(req, res)
 {
-	postPage(req, res, privileges.admin, 
+	postPage(req, res, privileges.admin,
 	{
 		removeGroup: function(done, game)
 		{
 			game.removeGroup(
-				req.body.group, 
+				req.body.group,
 				done
 			);
 		},
 		addGroup: function(done, game)
 		{
 			game.addGroup(
-				req.body.group, 
-				req.body.permission, 
+				req.body.group,
+				req.body.permission,
 				done
 			);
 		},
 		changePermission: function(done, game)
 		{
 			game.changePermission(
-				req.body.group, 
-				req.body.permission, 
+				req.body.group,
+				req.body.permission,
 				done
 			);
-		}		
+		}
 	});
 });
 
@@ -238,7 +238,7 @@ router.post('/:slug/release', function(req, res)
 			{
 				if (err) return done(err);
 
-				res.render("games/release", {
+				res.render("archive/release", {
 					game: game,
 					release: release,
 					capabilities: release.capabilities,
@@ -258,7 +258,7 @@ router.post('/:slug/release', function(req, res)
 			{
 				if (err) return done(err);
 				req.flash('success', 'Deleted release');
-				res.redirect('/games/game/' + game.slug + '/releases');
+				res.redirect('/archive/game/' + game.slug + '/releases');
 			});
 		},
 		updateRelease: function(done, game)
@@ -269,7 +269,7 @@ router.post('/:slug/release', function(req, res)
 
 			if (req.body.version)
 				req.checkBody('version', 'Version must be a valid semantic version').isSemver();
-			
+
 			defaultCapabilities(req.body.capabilities);
 
 			var errors = req.validationErrors();
@@ -295,7 +295,7 @@ router.post('/:slug', function(req, res)
 			req.checkBody('location', 'Location needs to be a URL').isURL();
 			req.checkBody('description').optional();
 			req.checkBody('thumbnail').optional();
-			
+
 			var errors = req.validationErrors();
 
 			if (errors) return done(errors);
@@ -312,14 +312,22 @@ router.post('/:slug', function(req, res)
 		},
 		removeGame: function(done, game)
 		{
-			var gameArchive = new GameArchive(game.toObject());
+			game.remove(function(err)
+			{
+				if (err) return done(err);
+				res.redirect('/');
+			});
+		},
+		restoreGame: function(done, game) {
+			var gameRestore = new GameRestore(game.toObject());
 
-			gameArchive.save(function(err, archive)
+			gameRestore.save(function(err, archive)
 			{
 				if (err)
 				{
 					return done(err);
 				}
+
 				game.remove(function(err)
 				{
 					if (err) return done(err);
@@ -332,22 +340,22 @@ router.post('/:slug', function(req, res)
 
 router.get('/:slug', function(req, res)
 {
-	renderPage(req, res, 'games/game');
+	renderPage(req, res, 'archive/game');
 });
 
 router.get('/:slug/privileges', function(req, res)
 {
-	renderPage(req, res, 'games/privileges');
+	renderPage(req, res, 'archive/privileges');
 });
 
 router.get('/:slug/release', function(req, res)
 {
-	res.redirect('/games/game/' + req.params.slug + '/releases');
+	res.redirect('/archive/game/' + req.params.slug + '/releases');
 });
 
 router.get('/:slug/releases', function(req, res)
 {
-	renderPage(req, res, 'games/releases', 
+	renderPage(req, res, 'archive/releases',
 		['releases'],
 		function(game)
 		{
