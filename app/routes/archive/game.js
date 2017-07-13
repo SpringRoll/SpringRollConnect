@@ -14,7 +14,6 @@ var router = require('express').Router(),
  */
 function handleError(req, res, errors)
 {
-	console.log(String(errors).red);
 	log.error(errors);
 	if (Array.isArray(errors))
 	{

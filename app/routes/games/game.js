@@ -14,7 +14,6 @@ var router = require('express').Router(),
  */
 function handleError(req, res, errors)
 {
-	console.log(String(errors).red);
 	log.error(errors);
 	if (Array.isArray(errors))
 	{
@@ -23,7 +22,7 @@ function handleError(req, res, errors)
 	else
 	{
 		req.flash('error', 'Unable to update the game: ' + errors);
-	}	
+	}
 	res.redirect(req.originalUrl);
 }
 
