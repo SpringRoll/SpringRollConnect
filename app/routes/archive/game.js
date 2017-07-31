@@ -6,7 +6,7 @@ var router = require('express').Router(),
 	GameRestore = require('../../models/game'),
 	User = require('../../models/user'),
 	Release = require('../../models/release'),
-  log = require('../../helpers/logger');
+	log = require('../../helpers/logger');
 
 /**
  * Abstraction to handle the page errors

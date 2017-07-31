@@ -1,1 +1,375 @@
-!function(a){var b=null;a.fn.menuToggle=function(){return this.each(function(){var c=a(this),d=c.data("toggle-div"),e=a(d);c.off("tap hover").on("tap hover",function(a){var c=e.hasClass("on");b&&b.removeClass("on"),c||(e.addClass("on"),b=e)})})}}(jQuery),function(a){function b(a){var b={},c=a.split("&");for(var d in c){var e=c[d].split("=");b[decodeURIComponent(e[0])]=decodeURIComponent(e[1])}return b}var c=include("springroll.Container"),d=include("springroll.Features"),e=(include("springroll.SavedData"),function(){c.call(this,"#appContainer",{helpButton:"#helpButton",captionsButton:"#captionsButton",soundButton:"#soundButton",voButton:"#voButton",sfxButton:"#sfxButton",musicButton:"#musicButton",pauseButton:"#pauseButton, #resumeButton"}),this.frame=$("#frame"),this.on({open:l.bind(this),opened:m.bind(this),pause:k.bind(this),helpEnabled:j.bind(this),closed:n.bind(this),features:i.bind(this),unsupported:function(a){alert(a||"Browser not supported.")},remoteFailed:function(a){a&&a.responseJSON&&"undefined"!=typeof a.responseJSON.error?alert(a.responseJSON.error):alert("Invalid API request")},remoteError:function(a){alert(a)}}),this.appTitle=$("#appTitle"),this.captionsToggle=$("#captionsToggle"),this.soundToggle=$("#soundToggle"),this.dropdowns=null,this.toggles=null,this.setupUI(),$("#captionsStyles select").change(h.bind(this));var a=this.getCaptionsStyles();$("select[name='color']").val(a.color),$("select[name='background']").val(a.background),$("select[name='align']").val(a.align),$("select[name='font']").val(a.font),$("select[name='size']").val(a.size),$("select[name='edge']").val(a.edge),g=document.title,$(document).on("selectstart",!1);var d,e=location.pathname.replace("/embed/","/api/release/"),f=null,o=!1;if(location.search){var p=b(location.search.substr(1)),q=[];if(["version","status","commitId","token"].forEach(function(a){p[a]&&(q.push(a+"="+p[a]),delete p[a])}),p.debug&&(q.push("debug=true"),delete p.debug),p.controls&&(this.frame.addClass("show-controls"),delete p.controls),p.title&&(this.frame.addClass("show-title"),delete p.title),q.length&&(e+="?"+q.join("&")),p.singlePlay&&(o="true"==p.singlePlay||"1"==p.singlePlay,delete p.singlePlay),p.playOptions){try{f=JSON.parse(p.playOptions)}catch(r){}delete p.playOptions}d=[];for(var s in p)d.push(s+"="+p[s]);d=d.length?"?"+d.join("&"):""}this.openRemote(e,{singlePlay:o,playOptions:f,query:d})}),f=extend(e,c),g="";f.setupUI=function(){$("form").submit(function(a){return!1}),d.touch||($('[data-toggle="tooltip"]').tooltip(),this.helpEnabled=!1),this.dropdowns=$(".drop-down"),this.toggles=$("button[data-toggle-div]").menuToggle()};var h=function(a){var b=a.currentTarget;this.setCaptionsStyles(b.name,b.value)},i=function(a){this.captionsToggle.hide(),this.soundToggle.hide(),a.captions&&this.captionsToggle.show(),a.sound&&this.soundToggle.show()},j=function(a){if(!d.touch){var b=this.helpButton;a?b.tooltip():b.tooltip("destroy")}},k=function(a){this.frame.removeClass("paused"),a&&this.frame.addClass("paused")},l=function(){this.dropdowns.removeClass("on"),this.toggles.addClass("disabled"),this.frame.addClass("loading"),this.appTitle.text(this.release.game.title),document.title=this.release.game.title+" | "+g},m=function(){this.frame.removeClass("loading"),this.toggles.removeClass("disabled"),this.paused=!1},n=function(){this.dropdowns.removeClass("on"),this.toggles.addClass("disabled"),document.title=g};namespace("pbskids").Embed=e,window.app=new e}();
+(function($){
+	
+	// The currently opened drop down
+	var currDropdown = null;
+
+	/**
+	 * Dropdown setup
+	 * @return {jquery} For chaining
+	 */
+	$.fn.menuToggle = function()
+	{
+		return this.each(function()
+		{
+			var toggle = $(this);
+			var selector = toggle.data('toggle-div');
+			var dropdown = $(selector);
+			toggle.off('tap hover').on('tap hover', function(e)
+			{
+				var showing = dropdown.hasClass('on'); 
+				if (currDropdown) currDropdown.removeClass('on');
+				if (!showing)
+				{
+					dropdown.addClass('on');
+					currDropdown = dropdown;
+				}
+			});
+		});
+	};
+
+}(jQuery));
+(function(undefined){
+	
+	// Import classes
+	var Container = include('springroll.Container'),
+		Features = include('springroll.Features'),
+		SavedData = include('springroll.SavedData');
+
+	/**
+	*  The main class for the site
+	*  @class Embed
+	*  @namespace springroll
+	*/
+	var Embed = function()
+	{
+		Container.call(this, "#appContainer", {
+			helpButton: "#helpButton",
+			captionsButton: "#captionsButton",
+			soundButton: "#soundButton",
+			voButton: "#voButton",
+			sfxButton: "#sfxButton",
+			musicButton: "#musicButton",
+			pauseButton: "#pauseButton, #resumeButton"
+		});
+
+		/**
+		*  The entire game view including the standard game buttons
+		*  @property {jquery} frame
+		*/
+		this.frame = $("#frame");
+
+		/**
+		*  The game player
+		*  @property {springroll.Container} container
+		*/
+		this.on({
+			open: onOpen.bind(this),
+			opened: onOpened.bind(this),
+			pause: onPauseToggle.bind(this),
+			helpEnabled: onHelpEnabled.bind(this),
+			closed: onClosed.bind(this),
+			features: onFeatures.bind(this),
+			unsupported: function(err)
+			{
+				alert(err || "Browser not supported.");
+			},
+			remoteFailed: function(err)
+			{
+				if (err && err.responseJSON && typeof err.responseJSON.error !== 'undefined') {
+					alert(err.responseJSON.error);	
+				} else { 
+					alert('Invalid API request');
+				}
+			},
+			remoteError: function(err)
+			{
+				alert(err);
+			}
+		});
+
+		/**
+		*  The game title area
+		*  @property {jquery} appTitle
+		*/
+		this.appTitle = $("#appTitle");
+
+		/**
+		*  The toggle button for captions options
+		*  @property {jquery} captionsToggle
+		*/
+		this.captionsToggle = $("#captionsToggle");
+
+		/**
+		*  The toggle button for sound options
+		*  @property {jquery} soundToggle
+		*/
+		this.soundToggle = $("#soundToggle");
+
+		/**
+		* Toggle the control drop down options
+		* @property {jquery} dropdowns
+		*/
+		this.dropdowns = null;
+
+		/**
+		* The toggle buttons
+		* @property {jquery} toggles
+		*/
+		this.toggles = null;
+
+		// Refresh the toggles and dropdowns
+		this.setupUI();
+
+		// Change the captions style
+		$("#captionsStyles select").change(onCaptionsStyles.bind(this));
+
+		// Get the current saved styles
+		var styles = this.getCaptionsStyles();
+		$("select[name='color']").val(styles.color);
+		$("select[name='background']").val(styles.background);
+		$("select[name='align']").val(styles.align);
+		$("select[name='font']").val(styles.font);
+		$("select[name='size']").val(styles.size);
+		$("select[name='edge']").val(styles.edge);
+
+		BASE_TITLE = document.title;
+
+		// Prevent user selection in IE9
+		$(document).on('selectstart', false);
+
+		// Open via api
+		var api = location.pathname.replace('/embed/', '/api/release/');
+		var query;
+		var playOptions = null;
+		var singlePlay = false;
+
+		if (location.search)
+		{
+			var params = parseQuery(location.search.substr(1));
+			var apiArgs = [];
+
+			// API configurations
+			['version', 'status', 'commitId', 'token'].forEach(function(param)
+			{
+				if (params[param])
+				{
+					apiArgs.push(param + "=" + params[param]);
+					delete params[param];
+				}
+			});
+
+			// Check for debug
+			if (params.debug)
+			{
+				apiArgs.push("debug=true");
+				delete params.debug;
+			}
+
+			// Show the controls
+			if (params.controls)
+			{
+				this.frame.addClass('show-controls');
+				delete params.controls;
+			}
+
+			// Show the title
+			if (params.title)
+			{
+				this.frame.addClass('show-title');
+				delete params.title;
+			}
+
+			// Add the arguments
+			if (apiArgs.length)
+			{
+				api += "?" + apiArgs.join("&");
+			}
+
+			// Single play
+			if (params.singlePlay)
+			{
+				singlePlay = params.singlePlay == "true" || params.singlePlay == "1";
+				delete params.singlePlay;
+			}
+
+			// Play options
+			if (params.playOptions)
+			{
+				try
+				{
+					playOptions = JSON.parse(params.playOptions);
+				}
+				catch(e){} // ignore invalid JSON parse
+				delete params.playOptions;
+			}
+
+			// Get any other options and pass them to the query string
+			query = [];
+			for(var param in params)
+			{
+				query.push(param + "=" + params[param]);
+			}
+			query = query.length ? "?" + query.join("&") : '';
+		}
+
+		this.openRemote(api, 
+		{
+			singlePlay: singlePlay,
+			playOptions: playOptions,
+			query: query
+		});
+	};
+
+	function parseQuery(queryString)
+	{
+		var params = {};
+		var entries = queryString.split('&');
+		for (var i in entries)
+		{
+			var parts = entries[i].split('=');
+			params[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
+		}
+		return params;
+	}
+
+	// Reference to the prototype
+	var p = extend(Embed, Container);
+
+	// Current base title
+	var BASE_TITLE = "";
+
+	/**
+	 * Refresh the drop down elements
+	 * @method setupUI
+	 */
+	p.setupUI = function()
+	{
+		// Disable the form submitting
+		$('form').submit(function(e)
+		{
+			return false;
+		});
+		
+		if (!Features.touch)
+		{
+			// Turn on the tooltips
+			$('[data-toggle="tooltip"]').tooltip();
+
+			// Turn off the tool tip for the help button initially
+			this.helpEnabled = false;
+		}
+
+		this.dropdowns = $(".drop-down");
+		this.toggles = $("button[data-toggle-div]").menuToggle();
+	};
+
+	/**
+	*  Handler for change in captions settings
+	*  @method onCaptionsStyles
+	*  @private
+	*/
+	var onCaptionsStyles = function(e)
+	{
+		var select = e.currentTarget;
+		this.setCaptionsStyles(select.name, select.value);
+	};
+
+	/**
+	*  Handle features
+	*  @method onFeatures
+	*  @private
+	*  @param {object} features
+	*/
+	var onFeatures = function(features)
+	{		
+		this.captionsToggle.hide();
+		this.soundToggle.hide();
+
+		if (features.captions) this.captionsToggle.show();
+		if (features.sound) this.soundToggle.show();
+	};
+
+	/**
+	 * Help button changes enabled status
+	 * @method onHelpEnabled
+	 * @private
+	 * @param  {boolean} enabled If the help button is enabled
+	 */
+	var onHelpEnabled = function(enabled)
+	{
+		if (Features.touch) return;
+
+		var helpButton = this.helpButton;
+		if (enabled)
+		{
+			helpButton.tooltip();
+		}
+		else
+		{
+			helpButton.tooltip('destroy');
+		}
+	};
+
+	/**
+	 * Handler for the paused changed
+	 * @method onPauseToggle
+	 * @private
+	 */
+	var onPauseToggle = function(paused)
+	{
+		this.frame.removeClass('paused');
+		if (paused)
+		{
+			this.frame.addClass('paused');
+		}
+	};
+
+	/**
+	 * Start loading the release
+	 * @method  onOpen
+	 * @param {Object} [options] The additional options
+	 * @param {boolean} [options.debug=false] Run the debug version
+	 * @param {String} [options.queryString=""] Query string parameters
+	 */
+	var onOpen = function()
+	{
+		this.dropdowns.removeClass('on');
+		this.toggles.addClass('disabled');
+		this.frame.addClass('loading');
+		this.appTitle.text(this.release.game.title);
+		document.title = this.release.game.title + " | " + BASE_TITLE;
+	};
+
+	/**
+	*  Game finishes loading
+	*  @method onOpened
+	*  @private
+	*/
+	var onOpened = function()
+	{
+		this.frame.removeClass('loading');
+		this.toggles.removeClass('disabled');
+		this.paused = false;
+	};
+
+	/**
+	*  Handler when a game is closed
+	*  @method onClosed
+	*  @private
+	*/
+	var onClosed = function()
+	{
+		this.dropdowns.removeClass('on');
+		this.toggles.addClass('disabled');
+
+		document.title = BASE_TITLE;
+	};	
+
+	// Assign to namespace
+	namespace('pbskids').Embed = Embed;
+
+	// Create the app
+	window.app = new Embed();
+
+}());
+//# sourceMappingURL=embed.js.map
