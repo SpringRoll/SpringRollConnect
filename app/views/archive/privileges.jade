@@ -1,0 +1,52 @@
+extend ../templates/archive
+
+append gameContent
+	.panel.panel-default
+		.panel-heading
+			include modal-group
+			button.pull-right.btn.btn-default.btn-sm(data-toggle="modal" data-target="#addGroup")
+				span.glyphicon.glyphicon-plus
+				|  Add
+			h3.panel-title Privileges
+		.panel-body
+			if game.groups.length == 0
+				.alert.alert-warning No privileges set yet for this game.
+			else
+				table.table.table-striped
+					thead: tr
+						th Group
+						th.text-center Read
+							a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Users or groups can access games but not edit or add releases")
+								span.glyphicon.glyphicon-question-sign
+						th.text-center Write
+							a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Users or groups can manages releases and game properties")
+								span.glyphicon.glyphicon-question-sign
+						th.text-center Admin
+							a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Users or groups have write access and can manage game privileges")
+								span.glyphicon.glyphicon-question-sign
+					tbody
+						for entry in game.groups
+							tr
+								td
+									if entry.group.isUserGroup
+										span=entry.group.name
+									else
+										a(href="/groups/group/#{entry.group.slug}")=entry.group.name
+									form.pull-right(action=url method="post")
+										input(type="hidden" name="group" value=entry.group._id)
+										button.close(data-toggle="confirm" type="submit" name="action" value="removeGroup") &times;
+								td.text-center
+									form.form-inline(action=url method="post")
+										input(type="hidden" name="group" value=entry.group._id)
+										input(type="hidden" name="action" value="changePermission")
+										input.auto-submit(name="permission" value="0" type="radio" checked=(entry.permission == 0))
+								td.text-center
+									form.form-inline(action=url method="post")
+										input(type="hidden" name="group" value=entry.group._id)
+										input(type="hidden" name="action" value="changePermission")
+										input.auto-submit(name="permission" value="1" type="radio" checked=(entry.permission == 1))
+								td.text-center
+									form.form-inline(action=url method="post")
+										input(type="hidden" name="group" value=entry.group._id)
+										input(type="hidden" name="action" value="changePermission")
+										input.auto-submit(name="permission" value="2" type="radio" checked=(entry.permission == 2))

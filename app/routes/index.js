@@ -43,9 +43,11 @@ module.exports = function(app)
 	app.use('/docs', access.isAuthenticated, require('./docs'));
 	app.use('/games/add', access.isEditor, require('./games/add'));
 	app.use('/games/game', access.isAuthenticated, require('./games/game'));
+	app.use('/archive/game', access.isAuthenticated, require('./archive/game'));
 	app.use('/games/search', access.isAdmin, require('./games/search'));
 	app.use('/groups/add', access.isAdmin, require('./groups/add'));
 	app.use('/games', access.isEditor, require('./games/index'));
+	app.use('/archive', access.isEditor, require('./archive/index'));
 	app.use('/groups/group', access.isAuthenticated, require('./groups/group'));
 	app.use('/groups/search', access.isAdmin, require('./groups/search'));
 	app.use('/groups', access.isAdmin, require('./groups/index'));
@@ -57,7 +59,7 @@ module.exports = function(app)
 	// RESTful service for releases
 	app.use('/api/release', require('./api/release'));
 	app.use('/api/releases', require('./api/releases'));
-    app.use('/api/games', require('./api/games'));
+	app.use('/api/games', require('./api/games'));
 	// Authentication Pages
 	app.use('/login', access.isAnonymous, require('./login'));
 	app.use('/logout', access.isAuthenticated, require('./logout'));

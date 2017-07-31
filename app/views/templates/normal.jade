@@ -10,9 +10,9 @@ block body
 						span.icon-bar
 						span.icon-bar
 						span.icon-bar
-					a.navbar-brand(href='/') 
+					a.navbar-brand(href='/')
 						img.logo.logo-sm(src="/images/logo.png")
-						| SpringRoll Connect 
+						| SpringRoll Connect
 						small.version.hidden-xs v#{version}
 				.navbar-collapse.collapse
 					if user && user.privilege >= privilege.editor
@@ -21,10 +21,10 @@ block body
 								.input-group-addon
 									span.glyphicon.glyphicon-search
 								input.form-control#allGameSearch(
-									type="text" 
-									placeholder="Search for games" 
-									data-search="/games/search" 
-									data-list="#allGameSearchDisplay" 
+									type="text"
+									placeholder="Search for games"
+									data-search="/games/search"
+									data-list="#allGameSearchDisplay"
 									data-field="title"
 									autofocus
 									tabIndex=1
@@ -35,24 +35,26 @@ block body
 						if user
 							if user.privilege >= privilege.editor
 								li(class=isActive(/^\/games/))
-									a(href='/games') 
+									a(href='/games')
 										span Games
 							if user.privilege == privilege.admin
 								li(class=isActive(/^\/users/))
 									a(href="/users")
 										span Users
 								li(class=isActive(/^\/groups/))
-									a(href='/groups') 
+									a(href='/groups')
 										span Groups
 							li(class=isActive('/docs'))
 								a(href='/docs') Docs
+							li(class=isActive(/^\/archive/))
+								a(href='/archive') Archive
 							li
-								a(href='#' data-toggle="dropdown") 
+								a(href='#' data-toggle="dropdown")
 									span.glyphicon.glyphicon-cog.hidden-xs
 									span.hidden-sm.hidden-md.hidden-lg Settings
 									span.caret
 								ul.dropdown-menu
-									li(class=isActive('/profile')) 
+									li(class=isActive('/profile'))
 										a(href='/profile') Profile
 									li(class=isActive('/password'))
 										a(href='/password') Password

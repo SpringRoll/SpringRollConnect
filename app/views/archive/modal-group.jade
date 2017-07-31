@@ -1,0 +1,32 @@
+#groupTemplate.hidden
+	span.search-result
+		input(type="hidden" name="group" value="%id%")
+		input(type="hidden" name="permission" value="%permission%")
+		button.btn.btn-sm.btn-default(type="button") %name% (%label%) &times;
+.modal.fade#addGroup
+	.modal-dialog
+		form.modal-content.form-horizontal(method="post" action=url)
+			.modal-header
+				button.close(data-dismiss="modal") &times;
+				h4.modal-title Add User/Group
+			.modal-body
+				table.table.table-striped.table-bordered
+					thead: tr
+						th.text-center Read
+						th.text-center Write
+						th.text-center Admin
+					tbody: tr
+						td.text-center: input(name="selectPermission" value="0" type="radio" checked=true)
+						td.text-center: input(name="selectPermission" value="1" type="radio")
+						td.text-center: input(name="selectPermission" value="2" type="radio")
+				.input-group
+					.input-group-addon
+						span.glyphicon.glyphicon-search
+					input.form-control#groupSearch(type="text" placeholder="Search for groups or users" data-search="/groups/search" data-list="#groupSearchDisplay" autocomplete="off")
+				.dropdown.search#groupSearchDisplay
+					ul.dropdown-menu
+				.search-results#groups
+			.modal-footer
+				button.btn.btn-primary(type="submit" name="action" value="addGroup") Add
+				|  
+				button.btn.btn-default(type="button" data-dismiss="modal") Cancel
