@@ -2,8 +2,8 @@
 	"name": "SpringRollConnect",
 	"version": "1.3.12",
 	"dependencies": {
-		"jquery": "*",
-		"bootstrap": "*",
+		"jquery": "2.2.*",
+		"bootstrap": "3.3.*",
 		"bellhop": "*",
 		"modernizr": "~2",
 		"springroll-container": "*",
