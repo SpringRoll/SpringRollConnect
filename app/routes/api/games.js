@@ -31,8 +31,8 @@ router.get('/', function(req, res)
 	statuses = statuses.slice(statuses.indexOf(status));
 
 	var populateOptions = {
-		path: 'releases', 
-		select: 'status updated commitId version',
+		path: 'releases',
+		select: 'status updated commitId version debugCompressedSize debugUncompressedSize releaseCompressedSize releaseUncompressedSize',
 		match: {'status': {$in: statuses}},
 		options: {
 			sort: {updated: -1},
@@ -85,13 +85,13 @@ router.get('/', function(req, res)
 			{
 				game.releases.forEach(function(release)
 				{
-					release.url = game.location + '/' + 
+					release.url = game.location + '/' +
 						release.commitId + '/' +
 						(req.query.debug == "true" ? 'debug' : 'release') +
 						(req.query.archive == "true" ? '.zip' : '/index.html');
 				});
 			});
-			
+
 			response.call(res, err, games);
 		}
 	);
