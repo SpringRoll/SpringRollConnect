@@ -103,41 +103,41 @@ var ReleaseSchema = new Schema({
 		default: ""
   },
 
-      /**
-     * Size of the debug version compressed
-     * @property {String} compressedSize
-     */
-    debugCompressedSize: {
-      type: String,
-      default: "0"
-    },
+	/**
+	 * Size of the debug version compressed
+	 * @property {String} compressedSize
+	 */
+	debugCompressedSize: {
+		type: String,
+		default: "0"
+	},
 
-    /**
-     * Size of the debug version uncompressed
-     * @property {String} compressedSize
-     */
-    debugUncompressedSize: {
-      type: String,
-      default: "0"
-    },
+	/**
+	 * Size of the debug version uncompressed
+	 * @property {String} compressedSize
+	 */
+	debugUncompressedSize: {
+		type: String,
+		default: "0"
+	},
 
-    /**
-     * Size of the game compressed
-     * @property {String} compressedSize
-     */
-    releaseCompressedSize: {
-      type: String,
-      default: "0"
-    },
+	/**
+	 * Size of the game compressed
+	 * @property {String} compressedSize
+	 */
+	releaseCompressedSize: {
+		type: String,
+		default: "0"
+	},
 
-    /**
-     * Size of the game uncompressed
-     * @property {String} compressedSize
-     */
-    releaseUncompressedSize: {
-      type: String,
-      default: "0"
-    },
+	/**
+	 * Size of the game uncompressed
+	 * @property {String} compressedSize
+	 */
+	releaseUncompressedSize: {
+		type: String,
+		default: "0"
+	},
 
 	/**
 	 * Definition of what features, sizes and ui
