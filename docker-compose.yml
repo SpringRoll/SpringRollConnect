@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+    db:
+        image: mongo:3
+        expose:
+            - "27017"
+        ports:
+            - "27017:27017"
+    app:
+        build: ./
+        depends_on:
+            - db
+        environment:
+            env: development
+            PORT: 3000
+            MONGO_DATABASE: mongodb://db:27017
+            SECRET_KEY: springrollconnect
+            OUTPUT_LOG: /dev/null
+        ports:
+            - "3000:3000"
+
