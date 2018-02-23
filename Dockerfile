@@ -1,9 +1,9 @@
 FROM node:8
 
-COPY .env /.env
 COPY package.json /package.json
-COPY app/ /app
-COPY server.js /server.js
-
 RUN npm install
+COPY server.js /server.js
+COPY .env /.env
+COPY app/ /app
+
 CMD node server.js
