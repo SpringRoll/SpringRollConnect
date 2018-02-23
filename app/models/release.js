@@ -101,6 +101,42 @@ var ReleaseSchema = new Schema({
 	url: {
 		type: String,
 		default: ""
+  },
+
+	/**
+	 * Size of the debug version compressed
+	 * @property {String} compressedSize
+	 */
+	debugCompressedSize: {
+		type: String,
+		default: "0"
+	},
+
+	/**
+	 * Size of the debug version uncompressed
+	 * @property {String} compressedSize
+	 */
+	debugUncompressedSize: {
+		type: String,
+		default: "0"
+	},
+
+	/**
+	 * Size of the game compressed
+	 * @property {String} compressedSize
+	 */
+	releaseCompressedSize: {
+		type: String,
+		default: "0"
+	},
+
+	/**
+	 * Size of the game uncompressed
+	 * @property {String} compressedSize
+	 */
+	releaseUncompressedSize: {
+		type: String,
+		default: "0"
 	},
 
 	/**
@@ -156,9 +192,9 @@ ReleaseSchema.statics.getByIdsAndStatus = function(ids, status, callback)
 {
 	return this.find(
 		{
-			_id: { $in: ids }, 
+			_id: { $in: ids },
 			status: status
-		}, 
+		},
 		callback
 	);
 };
@@ -173,7 +209,7 @@ ReleaseSchema.statics.getByIdsAndStatus = function(ids, status, callback)
  * @param {String} [options.token] The token for accessing non-prod releases
  * @param {String} [options.version] The current version
  * @param {String} [options.commitId] The git commit hash
- * @param {Boolean} [options.multi=false] If we s 
+ * @param {Boolean} [options.multi=false] If we s
  * @param {function} callback
  * @return {Promise} Promise for async request
  */
@@ -188,7 +224,7 @@ ReleaseSchema.statics.getByGame = function(slug, options, callback)
 	}
 
 	// Set the defaults
-	options = _.extend({ 
+	options = _.extend({
 		multi: false,
 		status: null,
 		token: null,
@@ -200,12 +236,12 @@ ReleaseSchema.statics.getByGame = function(slug, options, callback)
 
 	function addUrl(r)
 	{
-		r.url = r.game.location + '/' + 
+		r.url = r.game.location + '/' +
 			r.commitId + '/' +
 			(options.debug ? 'debug' : 'release') +
 			(options.archive ? '.zip' : '/index.html');
 	}
-	
+
 	async.waterfall([
 		function(done)
 		{
@@ -238,11 +274,11 @@ ReleaseSchema.statics.getByGame = function(slug, options, callback)
 				done(null, game, { status: { "$in": statuses } }, requiresToken);
 			}
 			// get all releases
-			else 
+			else
 			{
 				done(null, game, null, true);
 			}
-		}, 
+		},
 		function(game, query, requiresToken, done)
 		{
 			if (requiresToken)
@@ -269,7 +305,7 @@ ReleaseSchema.statics.getByGame = function(slug, options, callback)
 			select.sort('-created');
 
 			select
-				.select('version url capabilities commitId game updated -_id')
+				.select('version url capabilities commitId game updated debugCompressedSize debugUncompressedSize releaseCompressedSize releaseUncompressedSize -_id')
 				.populate('game', 'slug location title -_id')
 				.exec(done);
 		}],
@@ -308,8 +344,8 @@ ReleaseSchema.statics.removeById = function(id, callback)
 			callback(err);
 		}
 		Game.update(
-			{ releases : { $in : [id] } }, 
-			{ $pull: { releases : id }}, 
+			{ releases : { $in : [id] } },
+			{ $pull: { releases : id }},
 			callback
 		);
 	});
