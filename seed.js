@@ -3,6 +3,13 @@ var dotenv = require('dotenv');
 dotenv.load();
 process.env.MONGO_DATABASE = 'mongodb://localhost:27017/connect';
 
+// create a password
+var crypto = require('crypto');
+var password = ''
+crypto.randomBytes(16).forEach(value => {
+  password += (value % 16).toString(16);
+})
+
 var app = require('express')();
 
 // stub out the schema
@@ -16,19 +23,19 @@ console.log('Creating admin user...');
 User.createUser(
   {
     username: 'admin',
-    password: 'password',
+    password: password,
     email: 'empty@email.com',
     name: 'Admin'
   }, 
   access.privilege.admin,
   function(err, user)
   {
-    console.log('Done!');
     if (err) {
       throw err;
       process.exit(1)
     }
 
+    console.log(`User admin created with password ${password}`);
     process.exit(0);
   }
 );
