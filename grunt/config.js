@@ -1,7 +1,33 @@
+var glob = require('glob');
+var mainJsFiles = ['src/plugins/jquery-search'].concat(glob.sync('src/widgets/*.js'));
+
 // initial grunt config. register-module, appends onto this with tasks
 module.exports = {
-  concat: {},
-  less: {},
+  concat: {
+    'app/public/js/main.js': mainJsFiles,
+    'app/public/js/embed.js': [
+			"src/plugins/jquery-menuToggle.js",
+			"src/embed.js"
+    ],
+    'app/public/js/libraries.js': [
+      "components/jquery/dist/jquery.min.js",
+      "components/jquery-ui/jquery-ui.min.js",
+      "components/bootstrap/dist/js/bootstrap.min.js",
+      "components/modernizr/modernizr.js",
+      "components/bellhop/dist/bellhop.min.js",
+      "components/springroll-container/dist/container.min.js",
+      "components/autogrow-textarea/jquery.autogrowtextarea.min.js",
+      "src/libs/jquery.mobile.custom.min.js"
+    ]
+  },
+  less: {
+    main: {
+      'app/public/css/main.css': 'src/main.less'
+    },
+    embed: {
+      'app/public/css/embed.css': 'src/embed.less'
+    }
+  },
   copy: {
     libraries: {
       files: [
@@ -11,6 +37,10 @@ module.exports = {
           src: ['components/bootstrap/dist/fonts/**'],
           dest: 'app/public/fonts',
           filter: 'isFile'
+        },
+        {
+          src: ['components/bootstrap/dist/css/bootstrap.css'],
+          dest: 'app/public/css/libraries.css'
         }
       ]
     }
