@@ -1,5 +1,5 @@
 // the task aliases
 module.exports = {
-  'default': [],
-  'debug': []
+  'default': ['copy:libraries'],
+  'debug': ['copy:libraries']
 }
