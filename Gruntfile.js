@@ -52,6 +52,5 @@ module.exports = function(grunt)
     }
   });
 
-  grunt.registerTask('debug', ['copy', 'concat', 'less']);
-  grunt.registerTask('default', ['debug']); // TODO: add minify tasks
+  grunt.registerTask('default', ['copy', 'concat', 'less']);
 };
