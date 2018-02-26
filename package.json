@@ -1,41 +1,42 @@
 {
-	"version": "1.3.12",
-	"private": true,
-	"devDependencies": {
-		"grunt": "^0.4.5",
-		"grunt-express-server": "^0.4.19",
-		"grunt-contrib-copy": "^0.8.0",
-		"project-grunt": "^0.6.2"
-	},
-	"dependencies": {
-		"async": "^1.0.0",
-		"bash-vars": "^1.1.0",
-		"bcrypt-nodejs": "0.0.3",
-		"body-parser": "^1.11.0",
-		"bunyan": "^1.5.1",
-		"colors": "^1.0.3",
-		"connect-flash": "^0.1.1",
-		"connect-mongodb-session": "^1.0.5",
-		"dotenv": "^1.1.0",
-		"errorhandler": "^1.3.3",
-		"express": "^4.11.2",
-		"express-mongoose": "^0.1.0",
-		"express-session": "^1.10.3",
-		"express-validator": "^2.8.0",
-		"jade": "^1.9.2",
-		"lodash": "^3.5.0",
-		"marky-markdown": "^5.3.0",
-		"moment": "^2.9.0",
-		"mongoose": "^4.0.4",
-		"mongoose-deep-populate": "^1.0.1",
-		"mongoose-types": "^1.0.3",
-		"mongoose-unique-validator": "^0.4.1",
-		"nodemailer": "^1.3.2",
-		"passport": "^0.2.1",
-		"passport-local": "^1.0.0",
-		"semver": "^5.0.1"
-	},
-	"scripts": {
-		"test": "grunt default --verbose"
-	}
+  "version": "1.3.12",
+  "private": true,
+  "devDependencies": {
+    "glob": "^7.1.2",
+    "grunt": "1.0.*",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-less": "^1.4.1"
+  },
+  "dependencies": {
+    "async": "^1.0.0",
+    "bash-vars": "^1.1.0",
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.11.0",
+    "bunyan": "^1.5.1",
+    "colors": "^1.0.3",
+    "connect-flash": "^0.1.1",
+    "connect-mongodb-session": "^1.0.5",
+    "dotenv": "^1.1.0",
+    "errorhandler": "^1.3.3",
+    "express": "^4.11.2",
+    "express-mongoose": "^0.1.0",
+    "express-session": "^1.10.3",
+    "express-validator": "^2.8.0",
+    "jade": "^1.9.2",
+    "lodash": "^3.5.0",
+    "marky-markdown": "^5.3.0",
+    "moment": "^2.9.0",
+    "mongoose": "^4.0.4",
+    "mongoose-deep-populate": "^1.0.1",
+    "mongoose-types": "^1.0.3",
+    "mongoose-unique-validator": "^0.4.1",
+    "nodemailer": "^1.3.2",
+    "passport": "^0.2.1",
+    "passport-local": "^1.0.0",
+    "semver": "^5.0.1"
+  },
+  "scripts": {
+    "test": "grunt default --verbose"
+  }
 }
