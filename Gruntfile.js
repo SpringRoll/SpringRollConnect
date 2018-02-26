@@ -9,7 +9,7 @@ module.exports = function(grunt)
   // load the configuration
   grunt.initConfig({
     concat: {
-      'app/public/js/main.js': ['src/plugins/jquery-search'].concat(glob.sync('src/widgets/*.js')),
+      'app/public/js/main.js': ['src/plugins/jquery-search.js'].concat(glob.sync('src/widgets/*.js')),
       'app/public/js/embed.js': [
         "src/plugins/jquery-menuToggle.js",
         "src/embed.js"
