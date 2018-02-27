@@ -1,4 +1,6 @@
 var mongoose = require('mongoose');
+require('mongoose-type-email');
+
 var Schema = mongoose.Schema;
 var Email = mongoose.SchemaTypes.Email;
 var ObjectId = Schema.Types.ObjectId;

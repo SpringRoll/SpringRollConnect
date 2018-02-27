@@ -6,9 +6,13 @@ var express = require('express'),
 	expressValidator = require('express-validator'),
 	errorHandler = require('errorhandler'),
 	bodyParser = require('body-parser'),
-    dotenv = require('dotenv');
-// Load the environment file
-dotenv.load();
+	fs = require('fs');
+	dotenv = require('dotenv');
+
+if(fs.existsSync('.env')) {
+	// Load the environment file
+	dotenv.load();
+}
 
 // Create sever
 var app = express();
