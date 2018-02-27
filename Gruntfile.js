@@ -15,13 +15,11 @@ module.exports = function(grunt)
         "src/embed.js"
       ],
       'app/public/js/libraries.js': [
-        "components/jquery/dist/jquery.min.js",
-        "components/jquery-ui/jquery-ui.min.js",
-        "components/bootstrap/dist/js/bootstrap.min.js",
-        "components/modernizr/modernizr.js",
-        "components/bellhop/dist/bellhop.min.js",
-        "components/springroll-container/dist/container.min.js",
-        "components/autogrow-textarea/jquery.autogrowtextarea.min.js",
+        "node_modules/jquery/dist/jquery.min.js",
+        "node_modules/bootstrap/dist/js/bootstrap.min.js",
+        "node_modules/bellhop-iframe/dist/bellhop.min.js",
+        "node_modules/springroll-container/dist/container.min.js",
+        "src/libs/jquery.autogrowtextarea.min.js",
         "src/libs/jquery.mobile.custom.min.js"
       ]
     },
@@ -39,12 +37,12 @@ module.exports = function(grunt)
           {
             expand: true,
             flatten: true,
-            src: ['components/bootstrap/dist/fonts/**'],
+            src: ['node_modules/bootstrap/dist/fonts//**'],
             dest: 'app/public/fonts',
             filter: 'isFile'
           },
           {
-            src: ['components/bootstrap/dist/css/bootstrap.css'],
+            src: ['node_modules/bootstrap/dist/css/bootstrap.css'],
             dest: 'app/public/css/libraries.css'
           }
         ]
