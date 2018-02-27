@@ -9,10 +9,11 @@ SpringRoll Connect is a content management system built using [NodeJS](https://n
 
 ## Installation
 
-* Download the latest version of SpringRoll Connect
-* Make sure MongoDB is running
-* Run the server `node server.js` (suggest using [nodemon](http://nodemon.io/), [forever](https://www.npmjs.org/package/forever) or [Amazon OpsWorks](http://aws.amazon.com/opsworks/))
-* Navigate to your server in a browser and follow the instructions
+* Install the latest version of [Docker](https://www.docker.com/)
+* Copy `sample.env` to `.env`. You can modify these values, but for development you shouldn't have to
+* Run `docker-compose up --build` which should build both the mongo db server and start the node service
+* The website should then be available at `localhost:3000`
+* You can then seed the database with some information by running `node seed.js`
 
 ## License
 
