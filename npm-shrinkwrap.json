@@ -3113,13 +3113,6 @@
       "resolved": "https://registry.npmjs.org/spdx-license-ids/-/spdx-license-ids-2.0.1.tgz",
       "integrity": "sha1-AgF7zDU07k/+9tWNIOfT6aHDyOw="
     },
-    "springroll-container": {
-      "version": "github:SpringRoll/SpringRollContainer#a31371904b631c6109bc98b1d11549a51905096a",
-      "requires": {
-        "bellhop-iframe": "1.2.0",
-        "jquery": "2.2.4"
-      }
-    },
     "sprintf-js": {
       "version": "1.0.3",
       "resolved": "https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz",
@@ -3380,9 +3373,7 @@
     "uuid": {
       "version": "3.2.1",
       "resolved": "https://registry.npmjs.org/uuid/-/uuid-3.2.1.tgz",
-      "integrity": "sha512-jZnMwlb9Iku/O3smGWvZhauCf6cvvpKi4BKRiliS3cxnI+Gz9j5MEpTz2UFuXiKPJocb7gnsLHwiS05ige5BEA==",
-      "dev": true,
-      "optional": true
+      "integrity": "sha512-jZnMwlb9Iku/O3smGWvZhauCf6cvvpKi4BKRiliS3cxnI+Gz9j5MEpTz2UFuXiKPJocb7gnsLHwiS05ige5BEA=="
     },
     "validate-npm-package-license": {
       "version": "3.0.2",

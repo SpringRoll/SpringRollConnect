@@ -40,7 +40,8 @@
     "passport": "^0.2.1",
     "passport-local": "^1.0.0",
     "semver": "^5.0.1",
-    "springroll-container": "SpringRoll/SpringRollContainer#0.5.3"
+    "springroll-container": "SpringRoll/SpringRollContainer#0.5.3",
+    "uuid": "^3.2.1"
   },
   "scripts": {
     "test": "grunt default --verbose"
