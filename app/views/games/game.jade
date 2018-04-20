@@ -5,15 +5,11 @@ append gameContent
 		.panel-heading
 			if isEditor
 				include modal-edit
-				button.pull-right.btn.btn-default.btn-sm(data-toggle="modal" data-target="#editGame") 
-					span.glyphicon.glyphicon-pencil 
+				button.pull-right.btn.btn-default.btn-sm(data-toggle="modal" data-target="#editGame")
+					span.glyphicon.glyphicon-pencil
 					|  Edit
 			h3.panel-title Properties
 		.panel-body
-			.row
-				.col-sm-2: strong GUID
-				.col-sm-10: p
-					code=game.bundleId
 			.row
 				.col-sm-2: strong Location
 				.col-sm-10: p
@@ -55,7 +51,7 @@ append gameContent
 								|  Large
 							li
 								span.glyphicon(class=game.capabilities.sizes.xlarge ? "glyphicon-ok yes" : "glyphicon-remove no")
-								|  Extra-Large					
+								|  Extra-Large
 					.col-sm-4.capabilities
 						p: strong Features
 						ul.list-unstyled
@@ -85,7 +81,7 @@ append gameContent
 			.row
 				.col-sm-2: strong Updated
 				.col-sm-10: p.help-inline=moment(game.updated).fromNow()
-				
+
 	.panel.panel-default
 		.panel-heading
 			h3.panel-title Deployments
@@ -99,8 +95,8 @@ append gameContent
 							a.btn.btn-default(href="http://#{host}/embed/#{game.slug}?controls=1&title=1")
 								span.glyphicon.glyphicon-play
 							a.btn.btn-default(href="http://#{host}/embed/#{game.slug}?debug=1&controls=1&title=1")
-								span.glyphicon.glyphicon-wrench  
-								|  
+								span.glyphicon.glyphicon-wrench
+								|
 								span.glyphicon.glyphicon-play
 			.row.deployment
 				.col-sm-2: strong Staging
@@ -111,8 +107,8 @@ append gameContent
 							a.btn.btn-default(href="http://#{host}/embed/#{game.slug}?status=stage&controls=1&title=1&token=#{token}")
 								span.glyphicon.glyphicon-play
 							a.btn.btn-default(href="http://#{host}/embed/#{game.slug}?status=stage&debug=1&controls=1&title=1&token=#{token}")
-								span.glyphicon.glyphicon-wrench  
-								|  
+								span.glyphicon.glyphicon-wrench
+								|
 								span.glyphicon.glyphicon-play
 			.row.deployment
 				.col-sm-2: strong QA
@@ -123,8 +119,8 @@ append gameContent
 							a.btn.btn-default(href="http://#{host}/embed/#{game.slug}?status=qa&controls=1&title=1&token=#{token}")
 								span.glyphicon.glyphicon-play
 							a.btn.btn-default(href="http://#{host}/embed/#{game.slug}?status=qa&debug=1&controls=1&title=1&token=#{token}")
-								span.glyphicon.glyphicon-wrench  
-								|  
+								span.glyphicon.glyphicon-wrench
+								|
 								span.glyphicon.glyphicon-play
 
 			.row.deployment
@@ -136,6 +132,6 @@ append gameContent
 							a.btn.btn-default(href="http://#{host}/embed/#{game.slug}?status=dev&controls=1&title=1&token=#{token}")
 								span.glyphicon.glyphicon-play
 							a.btn.btn-default(href="http://#{host}/embed/#{game.slug}?status=dev&debug=1&controls=1&title=1&token=#{token}")
-								span.glyphicon.glyphicon-wrench  
-								|  
+								span.glyphicon.glyphicon-wrench
+								|
 								span.glyphicon.glyphicon-play
