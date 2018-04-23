@@ -18,6 +18,9 @@ append gameContent
 				.col-sm-2: strong Repository
 				.col-sm-10: p
 					a(href=game.repository)=game.repository
+			.row
+				.col-sm-2: strong GUID
+				.col-sm-10: p=game.bundleId
 			if game.description
 				.row
 					.col-sm-2: strong Description
