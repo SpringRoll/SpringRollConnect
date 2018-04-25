@@ -1,7 +1,7 @@
 extend ../templates/normal
 
 append title
-	| Add Game - 
+	| Add Game -
 
 append content
 	.col-md-8.col-md-offset-2.col-sm-10.col-sm-offset-1
@@ -14,12 +14,6 @@ append content
 					label.col-sm-3.control-label(for="title") Title
 					.col-sm-9
 						input.form-control#title(type="text" name="title" data-uri="#slug" required)
-				.form-group(data-unique="/games/search")
-					label.col-sm-3.control-label(for="bundleId") GUID
-					.col-sm-9
-						input.form-control#bundleId(type="text" name="bundleId" required)
-						span.yes.glyphicon.glyphicon-ok.form-control-feedback
-						span.no.glyphicon.glyphicon-remove.form-control-feedback
 				.form-group(data-unique="/games/search")
 					label.col-sm-3.control-label(for="slug") Slug
 					.col-sm-9
@@ -74,19 +68,19 @@ append content
 										|  Screens &lt; 480px
 								.checkbox
 									label
-										input(type="checkbox" name="capabilities[sizes][small]" checked=true) 
+										input(type="checkbox" name="capabilities[sizes][small]" checked=true)
 										|  Screens &lt; 768px
 								.checkbox
 									label
-										input(type="checkbox" name="capabilities[sizes][medium]" checked=true) 
+										input(type="checkbox" name="capabilities[sizes][medium]" checked=true)
 										|  Screens &lt; 992px
 								.checkbox
 									label
-										input(type="checkbox" name="capabilities[sizes][large]" checked=true) 
+										input(type="checkbox" name="capabilities[sizes][large]" checked=true)
 										|  Screens &lt; 1200px
 								.checkbox
 									label
-										input(type="checkbox" name="capabilities[sizes][xlarge]" checked=true) 
+										input(type="checkbox" name="capabilities[sizes][xlarge]" checked=true)
 										|  Screens &gt;= 1200px
 						.form-group
 							label.col-sm-3.control-label Features
@@ -97,19 +91,19 @@ append content
 										|  WebGL required
 								.checkbox
 									label
-										input(type="checkbox" name="capabilities[features][geolocation]" checked=false) 
+										input(type="checkbox" name="capabilities[features][geolocation]" checked=false)
 										|  Geolocation required
 								.checkbox
 									label
-										input(type="checkbox" name="capabilities[features][webaudio]" checked=false) 
+										input(type="checkbox" name="capabilities[features][webaudio]" checked=false)
 										|  WebAudio API required (no Flash fallback)
 								.checkbox
 									label
-										input(type="checkbox" name="capabilities[features][websockets]" checked=false) 
+										input(type="checkbox" name="capabilities[features][websockets]" checked=false)
 										|  WebSockets API required
 								.checkbox
 									label
-										input(type="checkbox" name="capabilities[features][webworkers]" checked=false) 
+										input(type="checkbox" name="capabilities[features][webworkers]" checked=false)
 										|  WebWorkers API required
 				.form-group.text-center
 					.col-sm-9.col-sm-offset-3

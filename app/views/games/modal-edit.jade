@@ -9,18 +9,13 @@
 					label.col-sm-3.control-label(for="title") Title
 					.col-sm-9
 						input.form-control#title(type="text" name="title" #{disabled} value=game.title required)
-				.form-group(data-unique="/games/search" data-ignore=game.bundleId)
-					label.col-sm-3.control-label(for="bundleId") GUID
-					.col-sm-9
-						input.form-control#bundleId(type="text" name="bundleId" #{disabled} value=game.bundleId required)
-						span.yes.glyphicon.glyphicon-ok.form-control-feedback
-						span.no.glyphicon.glyphicon-remove.form-control-feedback
-				.form-group(data-unique="/games/search" data-ignore=game.slug)
-					label.col-sm-3.control-label(for="slug") Slug
-					.col-sm-9
-						input.form-control#slug(type="text" name="slug" #{disabled} value=game.slug required)
-						span.yes.glyphicon.glyphicon-ok.form-control-feedback
-						span.no.glyphicon.glyphicon-remove.form-control-feedback
+				if isAdmin
+					.form-group(data-unique="/games/search" data-ignore=game.slug)
+						label.col-sm-3.control-label(for="slug") Slug
+						.col-sm-9
+							input.form-control#slug(type="text" name="slug" #{disabled} value=game.slug required)
+							span.yes.glyphicon.glyphicon-ok.form-control-feedback
+							span.no.glyphicon.glyphicon-remove.form-control-feedback
 				.form-group
 					label.col-sm-3.control-label(for="repository") Repository
 					.col-sm-9
