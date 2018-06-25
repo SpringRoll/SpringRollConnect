@@ -15,7 +15,6 @@
     "bellhop-iframe": "^1.2.0",
     "body-parser": "^1.11.0",
     "bootstrap": "^3.3.7",
-    "bower": "^1.8.2",
     "bunyan": "^1.5.1",
     "colors": "^1.0.3",
     "connect-flash": "^0.1.1",
