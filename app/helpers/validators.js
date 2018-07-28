@@ -24,5 +24,9 @@ module.exports = {
 	isBundleId: function(value)
 	{
 		return /^[a-zA-Z0-9\.\-]{3,}$/.test(value);
+	},
+	isBranch: function(value)
+	{
+		return /^[a-zA-Z0-9\_\-\/]*$/.test(value);
 	}
 };
