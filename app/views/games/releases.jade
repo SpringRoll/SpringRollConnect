@@ -27,7 +27,6 @@ append gameContent
 											button.btn.btn-default.btn-block.status.dropdown-toggle(data-toggle="dropdown")
 												span.bullet
 												span.name=release.status.toUpperCase()
-												|
 												span.caret
 											ul.dropdown-menu.statusChange-menu
 												li(class=(release.status == "dev" ? "active" : ""))
@@ -59,14 +58,12 @@ append gameContent
 												span.glyphicon.glyphicon-play
 											a.btn.btn-sm.btn-default.external(data-toggle="tooltip" title="Debug" href="//#{host}/embed/#{game.slug}?version=#{release.version}&debug=1&controls=1&title=1&token=#{token}")
 												span.glyphicon.glyphicon-wrench
-												|
 												span.glyphicon.glyphicon-play
 										else
 											a.btn.btn-sm.btn-default.external(data-toggle="tooltip" title="Release" href="//#{host}/embed/#{game.slug}?commitId=#{release.commitId}&controls=1&title=1&token=#{token}")
 												span.glyphicon.glyphicon-play
 											a.btn.btn-sm.btn-default.external(data-toggle="tooltip" title="Debug" href="//#{host}/embed/#{game.slug}?commitId=#{release.commitId}&debug=1&controls=1&title=1&token=#{token}")
 												span.glyphicon.glyphicon-wrench
-												|
 												span.glyphicon.glyphicon-play
 							.col-sm-9: .row: .col-sm-12
 								if release.version
