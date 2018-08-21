@@ -15,7 +15,7 @@ module.exports = function(app)
 		res.locals.version = app.get('version');
 		res.locals.marked = function(str)
 		{
-			return marky(str).html();
+			return marky(str);
 		};
 		res.locals.isActive = function(url, undefined)
 		{

@@ -5,8 +5,8 @@ append gameContent
 		.panel-heading
 			if isEditor
 				include modal-release
-				button.pull-right.btn.btn-sm.btn-default(data-toggle="modal" data-target="#addRelease") 
-					span.glyphicon.glyphicon-plus 
+				button.pull-right.btn.btn-sm.btn-default(data-toggle="modal" data-target="#addRelease")
+					span.glyphicon.glyphicon-plus
 					|  Add
 			h3.panel-title Releases
 		if !game.releases.length
@@ -27,7 +27,6 @@ append gameContent
 											button.btn.btn-default.btn-block.status.dropdown-toggle(data-toggle="dropdown")
 												span.bullet
 												span.name=release.status.toUpperCase()
-												|  
 												span.caret
 											ul.dropdown-menu.statusChange-menu
 												li(class=(release.status == "dev" ? "active" : ""))
@@ -55,34 +54,32 @@ append gameContent
 								.release-title.clearfix
 									.btn-group.btn-flex-2
 										if release.version
-											a.btn.btn-sm.btn-default.external(data-toggle="tooltip" title="Release" href="http://#{host}/embed/#{game.slug}?version=#{release.version}&controls=1&title=1&token=#{token}")
+											a.btn.btn-sm.btn-default.external(data-toggle="tooltip" title="Release" href="//#{host}/embed/#{game.slug}?version=#{release.version}&controls=1&title=1&token=#{token}")
 												span.glyphicon.glyphicon-play
-											a.btn.btn-sm.btn-default.external(data-toggle="tooltip" title="Debug" href="http://#{host}/embed/#{game.slug}?version=#{release.version}&debug=1&controls=1&title=1&token=#{token}")
+											a.btn.btn-sm.btn-default.external(data-toggle="tooltip" title="Debug" href="//#{host}/embed/#{game.slug}?version=#{release.version}&debug=1&controls=1&title=1&token=#{token}")
 												span.glyphicon.glyphicon-wrench
-												|  
 												span.glyphicon.glyphicon-play
 										else
-											a.btn.btn-sm.btn-default.external(data-toggle="tooltip" title="Release" href="http://#{host}/embed/#{game.slug}?commitId=#{release.commitId}&controls=1&title=1&token=#{token}")
+											a.btn.btn-sm.btn-default.external(data-toggle="tooltip" title="Release" href="//#{host}/embed/#{game.slug}?commitId=#{release.commitId}&controls=1&title=1&token=#{token}")
 												span.glyphicon.glyphicon-play
-											a.btn.btn-sm.btn-default.external(data-toggle="tooltip" title="Debug" href="http://#{host}/embed/#{game.slug}?commitId=#{release.commitId}&debug=1&controls=1&title=1&token=#{token}")
-												span.glyphicon.glyphicon-wrench  
-												|  
+											a.btn.btn-sm.btn-default.external(data-toggle="tooltip" title="Debug" href="//#{host}/embed/#{game.slug}?commitId=#{release.commitId}&debug=1&controls=1&title=1&token=#{token}")
+												span.glyphicon.glyphicon-wrench
 												span.glyphicon.glyphicon-play
 							.col-sm-9: .row: .col-sm-12
 								if release.version
 									include releases-controls
-									h4: strong Version #{release.version} 
+									h4: strong Version #{release.version}
 										small: a.commit(href="#{game.repository}/commits/#{release.commitId}" data-toggle="tooltip" title="View Commit")=release.commitId.substr(0,7)
 								else
 									include releases-controls
-									h4.release-data: strong Commit 
+									h4.release-data: strong Commit
 										a(href="#{game.repository}/commits/#{release.commitId}" data-toggle="tooltip" title="View Commit")=release.commitId.substr(0,7)
 
-									h4.release-data: strong Branch 
+									h4.release-data: strong Branch
 										a(href="#{game.repository}/browse?at=refs/heads/#{release.branch.replace('origin/', '')}" data-toggle="tooltip" title="View Branch")=release.branch
-							
+
 								.help-block.updated
-									span Updated 
+									span Updated
 									span=moment(release.updated).fromNow()
 									if release.updatedBy
 										|  by #{release.updatedBy.name}

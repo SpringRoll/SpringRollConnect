@@ -4,7 +4,7 @@ var crypto = require('crypto');
 var async = require('async');
 var sendmail = require('../helpers/sendmail');
 
-router.post('/', function(req, res)
+router.post('/', function(req, res, next)
 {
 	async.waterfall([
 		function(done)
@@ -13,7 +13,7 @@ router.post('/', function(req, res)
 		},
 		function(token, done)
 		{
-			User.getByEmail(req.body.email, function(err, user) 
+			User.getByEmail(req.body.email, function(err, user)
 			{
 				if (!user)
 				{
@@ -48,7 +48,7 @@ router.post('/', function(req, res)
 				done(err);
 			});
 		}
-	], 
+	],
 	function(err)
 	{
 		if (err) return next(err);

@@ -17,6 +17,6 @@ SpringRoll Connect is a content management system built using [NodeJS](https://n
 
 ## License
 
-Copyright (c) 2015 [CloudKid](https://github.com/cloudkidstudio)
+Copyright (c) 2018 [SpringRoll](https://github.com/SpringRoll)
 
 Released under the MIT License.
