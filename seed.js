@@ -2,6 +2,7 @@
 var dotenv = require('dotenv');
 dotenv.load();
 process.env.MONGO_DATABASE = 'mongodb://localhost:27017/connect';
+process.env.OUTPUT_LOG = './log.txt';
 
 // create a password
 var crypto = require('crypto');
