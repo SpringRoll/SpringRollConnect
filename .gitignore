@@ -2,3 +2,4 @@ node_modules
 *.map
 .env
 springroll.log
+log.txt
