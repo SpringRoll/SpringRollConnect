@@ -18,23 +18,28 @@ var Group = require('./app/models/group');
 var uuid = require('uuid/v1');
 var Release = require('./app/models/release');
 
+function makeRandomString(length){
+  var random = '';
+  crypto.randomBytes(length).forEach(value => {
+    random += (value % length).toString(length);
+  });
+  return random;
+}
+
 async function makeDummyData(){
   var admin = await makeAdmin();
   var game = await makeGame();
   var groups = await makeGroups();
-  return [
+  return Promise.all([
     admin,
     game,
     groups
-  ];
+  ]);
 }
 
 async function makeAdmin() {
   console.log('Creating admin user...');
-  var passwordAdmin = '';
-  crypto.randomBytes(16).forEach(value => {
-    passwordAdmin += (value % 16).toString(16);
-  });
+  var passwordAdmin = makeRandomString(16);
   var adminGroup = new Group({
     name: 'Admin2',
     slug: 'Admin2',
@@ -85,10 +90,7 @@ async function makeGame(){
 
 function addReleases(gameId, releaseLevel){
   console.log('Adding release with level: ' + releaseLevel);
-  var commitHash = '';
-  crypto.randomBytes(16).forEach(value => {
-    commitHash += (value % 16).toString(16);
-  });
+  var commitHash = makeRandomString(16);
   var releaseParams = {
     game: gameId,
     status: releaseLevel,
@@ -136,14 +138,8 @@ async function makeGroups(){
 
 async function addUsers(incGroup){
   console.log('Creating creating non-admin user for group...');
-  var password = '';
-  crypto.randomBytes(16).forEach(value => {
-    password += (value % 16).toString(16);
-  });
-  var userHash = 'user';
-  crypto.randomBytes(4).forEach(value => {
-    userHash += (value % 4).toString(4);
-  });
+  var password = makeRandomString(16);
+  var userHash = 'user' + makeRandomString(4);
   var newUserGroup = new Group({
     name: userHash,
     slug: userHash,
@@ -165,16 +161,11 @@ async function addUsers(incGroup){
 }
 
 makeDummyData()
-.then(results =>{
-  Promise.all(results)
-  .then(()=>{
-    console.log('Dummy data loaded!');
-    process.exit(0);
-  })
-  .catch(err => {
-    throw err;
-  });
+.then(()=>{
+  console.log('Dummy data loaded!');
+  process.exit(0);
 })
 .catch(err => {
   console.log(err);
+  process.exit(-1);
 });
