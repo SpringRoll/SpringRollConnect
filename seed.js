@@ -56,13 +56,18 @@ async function makeAdmin() {
 }
 
 async function makeGame(){
-  console.log('Creating example game with releases...'); 
+  console.log('Creating example game with releases...');
+  //set your values as desired
+  var gameTitle = '';
+  var gameSlug = '';
+  var gameRepo = '';
+  var gameLocation = '';
   var gameParams = {
-    title: 'Empty Game',
-    slug: 'empty-game2',
-    repository: 'https://projects.pbs.org/bitbucket/projects/PKK/repos/empty-game/',
-    location: 'https://springroll-tc.pbskids.org/empty-game',
-    description: 'a placeholder game for testing'
+    title: gameTitle,
+    slug: gameSlug,
+    repository: gameRepo,
+    location: gameLocation,
+    description: 'A placeholder game for testing.'
   };
   gameParams.created = gameParams.updated = Date.now();
   var game = new Game(gameParams);
