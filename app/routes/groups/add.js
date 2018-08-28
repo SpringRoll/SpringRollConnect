@@ -8,7 +8,7 @@ router.post('/', function(req, res)
 {
 	// Validation
 	req.checkBody('name', 'Name is required').notEmpty();
-	req.checkBody('privilege', 'Repository needs to be a URL').isNumeric();
+	req.checkBody('privilege', 'Privilege needs to be a number').isNumeric();
 	req.checkBody('slug', 'Slug must be alpha numeric characters').isSlug();
 
 	var errors = req.validationErrors();
