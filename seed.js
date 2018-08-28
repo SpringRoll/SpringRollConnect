@@ -145,7 +145,7 @@ async function addUsers(incGroup){
     token: userHash,
     tokenExpires: null,
     privilege: 1,
-    isUserGroup: false
+    isUserGroup: true
   });
   newUserGroup.save();
   console.log('Made user specific group, now making user...')
