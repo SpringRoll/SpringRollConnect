@@ -63,15 +63,11 @@ async function makeAdmin() {
 async function makeGame(){
   console.log('Creating example game with releases...');
   //set your values as desired
-  var gameTitle = '';
-  var gameSlug = '';
-  var gameRepo = '';
-  var gameLocation = '';
   var gameParams = {
-    title: gameTitle,
-    slug: gameSlug,
-    repository: gameRepo,
-    location: gameLocation,
+    title: '',
+    slug: '',
+    repository: '',
+    location: '',
     description: 'A placeholder game for testing.'
   };
   gameParams.created = gameParams.updated = Date.now();
