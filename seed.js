@@ -1,25 +1,25 @@
 // Load Environment
-var dotenv = require('dotenv');
+const dotenv = require('dotenv');
 dotenv.load();
 process.env.MONGO_DATABASE = 'mongodb://localhost:27017/connect';
 process.env.OUTPUT_LOG = './log.txt';
 
 // create a password
-var crypto = require('crypto');
-var app = require('express')();
+const crypto = require('crypto');
+const app = require('express')();
 
 // stub out the schema
 require('./app/helpers/database')(app);
 
 // create an admin user
-var User = require('./app/models/user');
-var Game = require('./app/models/game');
-var Group = require('./app/models/group');
-var uuid = require('uuid/v1');
-var Release = require('./app/models/release');
+const User = require('./app/models/user');
+const Game = require('./app/models/game');
+const Group = require('./app/models/group');
+const uuid = require('uuid/v1');
+const Release = require('./app/models/release');
 
 function makeRandomString(length){
-  var random = '';
+  let random = '';
   crypto.randomBytes(length).forEach(value => {
     random += (value % length).toString(length);
   });
@@ -27,20 +27,20 @@ function makeRandomString(length){
 }
 
 async function makeDummyData(){
-  var admin = await makeAdmin();
-  var game = await makeGame();
-  var groups = await makeGroups();
+  let admin = await makeAdmin();
+  // let game = await makeGame();
+  let groups = await makeGroups();
   return Promise.all([
     admin,
-    game,
+    // game,
     groups
   ]);
 }
 
 async function makeAdmin() {
   console.log('Creating admin user...');
-  var passwordAdmin = makeRandomString(16);
-  var adminGroup = new Group({
+  let passwordAdmin = makeRandomString(16);
+  let adminGroup = new Group({
     name: 'Admin2',
     slug: 'Admin2',
     token: 'myAccessToken',
@@ -49,7 +49,7 @@ async function makeAdmin() {
     isUserGroup: true
   });
   adminGroup.save();
-  var admin = new User({
+  let admin = new User({
     username: 'admin',
     password: passwordAdmin,
     email: 'empty@email.com',
@@ -63,22 +63,22 @@ async function makeAdmin() {
 async function makeGame(){
   console.log('Creating example game with releases...');
   //set your values as desired
-  var gameParams = {
-    title: '',
-    slug: '',
-    repository: '',
-    location: '',
+  let gameParams = {
+    title: 'Empty Game',
+    slug: 'empty-game',
+    repository: 'https://projects.pbs.org/bitbucket/projects/PKK/repos/empty-game/',
+    location: 'https://springroll-tc.pbskids.org/empty-game',
     description: 'A placeholder game for testing.'
   };
   gameParams.created = gameParams.updated = Date.now();
-  var game = new Game(gameParams);
+  let game = new Game(gameParams);
   game.bundleId = uuid();
   game.releases = [];
   game.groups = [];
   game.save();
-  var levels = ["dev", "qa", "prod"];
+  let levels = ["dev", "qa", "prod"];
   levels.forEach(level => {
-    var newRelease = addReleases(game.id, level);
+    let newRelease = addReleases(game.id, level);
     game.releases.push(newRelease);
   });
   return game.save()
@@ -86,23 +86,23 @@ async function makeGame(){
 
 function addReleases(gameId, releaseLevel){
   console.log('Adding release with level: ' + releaseLevel);
-  var commitHash = makeRandomString(16);
-  var releaseParams = {
+  let commitHash = makeRandomString(16);
+  let releaseParams = {
     game: gameId,
     status: releaseLevel,
-    branch: 'origin/my-branch',
+    // branch: 'origin/my-branch',
     commitId: commitHash,
     created: Date.now(),
     updated: Date.now(),
   }
-  var release = new Release(releaseParams);
+  let release = new Release(releaseParams);
   release.save();
   return release;
 }
 
 async function makeGroups(){
   console.log('Creating example groups...');
-  var groupA = new Group({
+  let groupA = new Group({
     name: 'GroupA',
     privilege: 0,
     slug: 'groupSlugA',
@@ -116,7 +116,7 @@ async function makeGroups(){
     return addUsers(groupA);
   })
   .then(() => {
-    var groupB = new Group({
+    let groupB = new Group({
       name: 'GroupB',
       privilege: 0,
       slug: 'groupSlugB',
@@ -134,9 +134,9 @@ async function makeGroups(){
 
 async function addUsers(incGroup){
   console.log('Creating creating non-admin user for group...');
-  var password = makeRandomString(16);
-  var userHash = 'user' + makeRandomString(4);
-  var newUserGroup = new Group({
+  let password = makeRandomString(16);
+  let userHash = 'user' + makeRandomString(4);
+  let newUserGroup = new Group({
     name: userHash,
     slug: userHash,
     token: userHash,
@@ -146,7 +146,7 @@ async function addUsers(incGroup){
   });
   newUserGroup.save();
   console.log('Made user specific group, now making user...')
-  var newUser = new User({
+  let newUser = new User({
     username: userHash,
     password: password,
     email: userHash + '@email.com',
