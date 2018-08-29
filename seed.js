@@ -4,14 +4,9 @@ dotenv.load();
 process.env.MONGO_DATABASE = 'mongodb://localhost:27017/connect';
 process.env.OUTPUT_LOG = './log.txt';
 
-// create a password
 const crypto = require('crypto');
 const app = require('express')();
-
-// stub out the schema
 require('./app/helpers/database')(app);
-
-// create an admin user
 const User = require('./app/models/user');
 const Game = require('./app/models/game');
 const Group = require('./app/models/group');
@@ -28,11 +23,11 @@ function makeRandomString(length){
 
 async function makeDummyData(){
   let admin = await makeAdmin();
-  // let game = await makeGame();
+  let game = await makeGame();
   let groups = await makeGroups();
   return Promise.all([
     admin,
-    // game,
+    game,
     groups
   ]);
 }
@@ -64,11 +59,11 @@ async function makeGame(){
   console.log('Creating example game with releases...');
   //set your values as desired
   let gameParams = {
-    title: 'Empty Game',
-    slug: 'empty-game',
-    repository: 'https://projects.pbs.org/bitbucket/projects/PKK/repos/empty-game/',
-    location: 'https://springroll-tc.pbskids.org/empty-game',
-    description: 'A placeholder game for testing.'
+    title: '',
+    slug: '',
+    repository: '',
+    location: '',
+    description: ''
   };
   gameParams.created = gameParams.updated = Date.now();
   let game = new Game(gameParams);
