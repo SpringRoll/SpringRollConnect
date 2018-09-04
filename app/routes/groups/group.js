@@ -99,6 +99,11 @@ router.post('/:slug', access.isAdmin, function(req, res)
 				}
 				case "deleteGroup": 
 				{
+					// Remove reference to group from game
+					Game.removeGroup(null, group._id, function(err)
+					{
+						done(err, "Game remove from " + group.name);
+					});
 					// Remove the group
 					group.remove(function(err)
 					{
