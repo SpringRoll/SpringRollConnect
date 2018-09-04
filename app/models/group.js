@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var _ = require('lodash');
 var crypto = require('crypto');
 
 /**
@@ -222,12 +221,12 @@ GroupSchema.statics.getTokenExpires = function()
 GroupSchema.statics.getBySlug = function(slug, isUserGroup, callback)
 {
 	var query = { slug: slug };
-	if (_.isFunction(isUserGroup))
+	if (typeof(isUserGroup) === 'function')
 	{
 		callback = isUserGroup;
 		isUserGroup = null;
 	}
-	if (_.isBoolean(isUserGroup))
+	if (typeof(isUserGroup) === 'boolean')
 	{
 		query.isUserGroup = isUserGroup;
 	}

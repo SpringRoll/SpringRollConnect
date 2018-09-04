@@ -1,6 +1,5 @@
 var router = require('express').Router(),
 	async = require('async'),
-	_ = require('lodash'),
 	privileges = require('../../helpers/access').privilege,
 	Game = require('../../models/game-archive'),
 	GameRestore = require('../../models/game'),
@@ -150,12 +149,12 @@ function postPage(req, res, minPrivilege, actions)
 
 function defaultCapabilities(capabilities)
 {
-	capabilities.ui = _.assign({
+	capabilities.ui = Object.assign({
 			mouse: false,
 			touch: false
 		}, capabilities.ui);
 
-	capabilities.sizes = _.assign({
+	capabilities.sizes = Object.assign({
 			xsmall: false,
 			small: false,
 			medium: false,

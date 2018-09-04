@@ -2,7 +2,6 @@ var router = require('express').Router();
 var Group = require('../models/group');
 var access = require('../helpers/access');
 var log = require('../helpers/logger');
-var _ = require('lodash');
 var Pagination = require('../helpers/pagination');
 var flash = require('connect-flash');
 router.get('/:local(page)?/:number([0-9]+)?', function(req, res)
@@ -21,7 +20,7 @@ router.get('/:local(page)?/:number([0-9]+)?', function(req, res)
 					.skip(nav.start || 0)
 					.limit(nav.itemsPerPage),
 				pagination: nav.result,
-				groups: _.filter(req.user.groups, 'isUserGroup', false)
+				groups: req.user.groups.filter(group => group.isUserGroup === false)
 			});
 		});
 	}

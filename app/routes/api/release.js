@@ -4,7 +4,6 @@ var router = require('express').Router(),
 	Group = require('../../models/group'),
 	Release = require('../../models/release'),
 	response = require('../../helpers/response'),
-	_ = require('lodash'),
     log = require('../../helpers/logger');
 
 router.use(function(req, res, next) {
@@ -82,7 +81,7 @@ router.post('/:slug', function(req, res)
 				});
 				return;
 			}
-			var values = _.clone(req.body);
+			var values = Object.assign(values, req.body);
 			values.game = game._id;
 			delete values.token;
 			values.created = values.updated = Date.now();
@@ -96,9 +95,9 @@ router.post('/:slug', function(req, res)
 			// Or else update the game defaults
 			else
 			{
-				_.assign(
+				Object.assign(
 					game.capabilities, 
-					_.cloneDeep(values.capabilities)
+					values.capabilities
 				);
 				game.save();
 			}
@@ -122,7 +121,11 @@ router.post('/:slug', function(req, res)
 				var maxDevReleases = CONFIGURATION.maxDevReleases;
 				if (releases.length > maxDevReleases)
 				{
-					_.each(_.dropRight(releases, maxDevReleases), function(release)
+					let toSave = [];
+					while (toSave.length < maxDevReleases){
+						toSave.push(releases.pop());
+					}
+					releases.forEach(function(release)
 					{
 						Release.removeById(release._id, function(){});
 					});
