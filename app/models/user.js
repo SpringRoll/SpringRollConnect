@@ -99,11 +99,11 @@ UserSchema.virtual('privilege').get(function()
 {
 	if (this.groups)
 	{
-		var privileges = groups.map(group => group.privilege)
-		var group = Math.max(privileges);
-		if (group)
+		var privileges = this.groups.map(group => group.privilege);
+		var highestPriority = Math.max(privileges);
+		if (highestPriority)
 		{
-			return group.privilege;
+			return highestPriority;
 		}
 	}
 	return 0;
@@ -201,7 +201,7 @@ UserSchema.methods.getGames = function(callback)
  */
 UserSchema.methods.inGroup = function(group)
 {
-	return groups.find(function(g){
+	return this.groups.find(function(g){
 		return g._id.equals(group._id);
 	});
 };
