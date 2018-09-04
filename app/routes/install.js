@@ -1,7 +1,6 @@
 var router = require('express').Router();
 var fs = require('fs');
 var bash = require('bash-vars');
-var _ = require('lodash');
 var access = require('../helpers/access');
 
 router.get('*',  function(req, res, next)
@@ -65,7 +64,7 @@ router.post('*', function(req, res, next)
 	fs.writeFileSync('../.env', bash.stringify(env));
 
 	// Manually add the site envonmental variables
-	_.extend(process.env, env);
+	Object.assign(env, process.env);
 
 	// Finish bootstrapping connection
 	require('../helpers/database')(req.app);
