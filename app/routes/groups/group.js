@@ -102,14 +102,17 @@ router.post('/:slug', access.isAdmin, function(req, res)
 					// Remove reference to group from game
 					Game.removeGroup(null, group._id, function(err)
 					{
-						done(err, "Game remove from " + group.name);
-					});
+						if(err) {
+							done(err);
+							return
+						}
 					// Remove the group
 					group.remove(function(err)
 					{
 						req.flash('success', 'Deleted ' + group.name + ' successfully.');
 						res.redirect('/groups');
-					});
+					})
+				});
 					break;
 				}
 				case "updateGroup": 
