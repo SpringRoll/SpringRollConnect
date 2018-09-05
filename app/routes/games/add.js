@@ -1,6 +1,5 @@
 var router = require('express').Router(),
   Game = require('../../models/game.js'),
-  _ = require('lodash'),
   log = require('../../helpers/logger'),
   uuid = require('uuid/v1');
 
@@ -21,7 +20,7 @@ router.post('/', function(req, res) {
     return;
   }
 
-  var values = _.clone(req.body);
+  var values = Object.assign({}, req.body);
   values.created = values.updated = Date.now();
   var game = new Game(values);
   game.bundleId = uuid();

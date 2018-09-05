@@ -3,7 +3,6 @@ var Schema = mongoose.Schema;
 var Game = require('./game');
 var Group = require('./group');
 var async = require('async');
-var _ = require('lodash');
 
 /**
  * The sub-doc Release model
@@ -224,7 +223,8 @@ ReleaseSchema.statics.getByGame = function(slug, options, callback)
 	}
 
 	// Set the defaults
-	options = _.extend({
+	options = Object.assign(options, 
+		{
 		multi: false,
 		status: null,
 		token: null,
@@ -232,7 +232,7 @@ ReleaseSchema.statics.getByGame = function(slug, options, callback)
 		commitId: null,
 		debug: false,
 		archive: false
-	}, options);
+	});
 
 	function addUrl(r)
 	{
@@ -315,7 +315,7 @@ ReleaseSchema.statics.getByGame = function(slug, options, callback)
 			{
 				if (Array.isArray(releases))
 				{
-					_.each(releases, addUrl);
+					releases.forEach(release => addUrl(release));
 				}
 				else
 				{

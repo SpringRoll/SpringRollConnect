@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.Types.ObjectId;
-var _ = require('lodash');
 
 /**
  * The game model
@@ -187,7 +186,7 @@ GameArchiveSchema.statics.getGamesByGroups = function(groups, callback)
 {
 	return this.find({
 		"groups.group": {
-			$in: _.pluck(groups, "_id")
+			$in: groups.map(group => group._id)
 		}
 	}, callback);
 };
@@ -297,7 +296,7 @@ GameArchiveSchema.methods.addGroup = function(ids, permissions, callback)
 	}
 
 	var groups = this.groups;
-	_.each(ids, function(id, i)
+	ids.forEach(function(id, i)
 	{
 		groups.push(
 		{
@@ -332,7 +331,7 @@ GameArchiveSchema.methods.getAccess = function(user, callback)
 
 	// Go through all the game groups to determine
 	// if there's a match with the current user
-	_.each(this.groups, function(entry)
+	this.groups.forEach(function(entry)
 	{
 		if (user.inGroup(entry.group) && entry.permission >= result.permission)
 		{
@@ -358,7 +357,7 @@ GameArchiveSchema.methods.getAccess = function(user, callback)
  */
 GameArchiveSchema.methods.hasGroup = function(group)
 {
-	return group.privilege || _.find(this.groups, function(entry)
+	return group.privilege || this.groups.find(function(entry)
 	{
 		// If the groups are populated
 		if (entry.group._id)
@@ -456,7 +455,7 @@ GameArchiveSchema.statics.removeGroup = function(ids, groupId, callback)
  */
 GameArchiveSchema.methods.removeGroup = function(group, callback)
 {
-	this.groups = _.filter(this.groups, function(entry)
+	this.groups = this.groups.filter(function(entry)
 	{
 		return !entry.group._id.equals(group);
 	});
@@ -473,7 +472,7 @@ GameArchiveSchema.methods.removeGroup = function(group, callback)
  */
 GameArchiveSchema.methods.changePermission = function(group, permission, callback)
 {
-	_.each(this.groups, function(entry)
+	this.groups.forEach(function(entry)
 	{
 		if (entry.group._id.equals(group))
 		{

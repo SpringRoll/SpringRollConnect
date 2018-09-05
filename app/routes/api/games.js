@@ -1,6 +1,5 @@
 var router = require('express').Router(),
 	async = require('async'),
-	_ = require('lodash'),
 	Release = require('../../models/release'),
 	Group = require('../../models/group'),
 	Game = require('../../models/game'),
