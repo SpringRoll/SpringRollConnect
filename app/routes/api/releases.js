@@ -1,6 +1,5 @@
 var router = require('express').Router(),
 	async = require('async'),
-	_ = require('lodash'),
 	Release = require('../../models/release'),
 	Group = require('../../models/group'),
 	Game = require('../../models/game'),
@@ -27,7 +26,7 @@ router.post('/clean', function(req, res)
 		{
 			if (releases && releases.length)
 			{
-				Release.removeById(_.pluck(releases, '_id'), function()
+				Release.removeById(releases.map(release => release._id), function()
 				{
 					res.send(releases);
 				});

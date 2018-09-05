@@ -1,4 +1,3 @@
-var _ = require('lodash');
 var privilege = {
 	subscriber: 0,
 	editor: 1,

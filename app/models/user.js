@@ -6,7 +6,6 @@ var Email = mongoose.SchemaTypes.Email;
 var ObjectId = Schema.Types.ObjectId;
 var bcrypt = require('bcrypt-nodejs');
 var crypto = require('crypto');
-var _ = require('lodash');
 var async = require('async');
 
 /**
@@ -100,10 +99,11 @@ UserSchema.virtual('privilege').get(function()
 {
 	if (this.groups)
 	{
-		var group = _.max(this.groups, 'privilege');
-		if (group)
+		var privileges = this.groups.map(group => group.privilege);
+		var highestPriority = Math.max(privileges);
+		if (highestPriority)
 		{
-			return group.privilege;
+			return highestPriority;
 		}
 	}
 	return 0;
@@ -201,7 +201,7 @@ UserSchema.methods.getGames = function(callback)
  */
 UserSchema.methods.inGroup = function(group)
 {
-	return _.find(this.groups, function(g){
+	return this.groups.find(function(g){
 		return g._id.equals(group._id);
 	});
 };
@@ -322,7 +322,7 @@ UserSchema.statics.createUser = function(data, privilege, callback)
 	var Group = this.model('Group');
 	var User = this;
 
-	if (_.isFunction(privilege))
+	if (typeof(privilege)==='function')
 	{
 		callback = privilege;
 		privilege = 0;
