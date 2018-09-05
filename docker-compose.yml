@@ -7,12 +7,4 @@ services:
             - "27017"
         ports:
             - "27017:27017"
-    app:
-        build: ./
-        depends_on:
-            - db
-        env_file:
-            - .env
-        ports:
-            - "3000:3000"
 
