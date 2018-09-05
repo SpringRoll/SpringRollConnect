@@ -97,7 +97,7 @@ router.post('/:slug', function(req, res)
 			{
 				Object.assign(
 					game.capabilities, 
-					values.capabilities
+					Object.assign({}, values.capabilities)
 				);
 				game.save();
 			}
