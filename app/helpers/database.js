@@ -11,9 +11,9 @@ var mongoose = require('mongoose'),
 const notForApi = function (callback) {
 	return function(req, res, next) {
 		if (req.path.indexOf('/api') === 0) {
-				next();
+			next();
 		} else {
-				callback(req, res, next);
+			callback(req, res, next);
 		}
 	}
 }
