@@ -5,16 +5,16 @@ var mongoose = require('mongoose'),
 	routes = require('../routes'),
 	flash = require('connect-flash'),
 	session = require('express-session'),
-	log = require('./logger');
-		MongoDBStore = require('connect-mongodb-session')(session);
+	log = require('./logger'),
+	MongoDBStore = require('connect-mongodb-session')(session);
 		
-notForApi = function (fn) {
+const notForApi = function (callback) {
 	return function(req, res, next) {
-			if (req.path.indexOf('/api') === 0) {
-					next();
-			} else {
-					fn(req, res, next);
-			}
+		if (req.path.indexOf('/api') === 0) {
+				next();
+		} else {
+				callback(req, res, next);
+		}
 	}
 }
 
