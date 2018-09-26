@@ -27,6 +27,6 @@ module.exports = {
 	},
 	isBranch: function(value)
 	{
-		return /^[a-zA-Z0-9\_\-\/]*$/.test(value);
+		return /^[a-zA-Z0-9_\-\/]*[a-zA-Z0-9]$/.test(value);
 	}
 };
