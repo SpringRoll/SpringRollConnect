@@ -5,8 +5,19 @@ var mongoose = require('mongoose'),
 	routes = require('../routes'),
 	flash = require('connect-flash'),
 	session = require('express-session'),
-	log = require('./logger');
-    MongoDBStore = require('connect-mongodb-session')(session);
+	log = require('./logger'),
+	MongoDBStore = require('connect-mongodb-session')(session);
+		
+const notForApi = function (callback) {
+	return function(req, res, next) {
+		if (req.path.indexOf('/api') === 0) {
+			next();
+		} else {
+			callback(req, res, next);
+		}
+	}
+}
+
 // Database connection bootstrap
 module.exports = function(app)
 {
@@ -40,17 +51,17 @@ module.exports = function(app)
     );
 
 	// Authentication stuff
-	app.use(session(
+	app.use(notForApi(session(
 	{
 		secret: process.env.SECRET_KEY,
 		saveUninitialized: true,
 		resave: true,
         store: store
                                        
-	}));
-	app.use(flash());
-	app.use(passport.initialize());
-	app.use(passport.session());
+	})));
+	app.use(notForApi(flash()));
+	app.use(notForApi(passport.initialize()));
+	app.use(notForApi(passport.session()));
 	require('./auth')(passport);
 
 	// Load all the routes
