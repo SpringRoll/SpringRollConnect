@@ -17,6 +17,7 @@ router.post('/:slug', function(req, res)
 	req.checkBody('status', 'Status must be one of: "dev", "qa", "stage", "prod"').isStatus();
 	req.checkBody('commitId', 'Commit ID must be a valid Git commit has').isCommit();
 	req.checkBody('token', 'Token is required').isToken();
+	req.checkBody('branch', 'Branch is required and must be a string').isBranch();
 	
 	if (req.body.verison)
 		req.checkBody('version', 'Not a properly formatted Semantic Version').isSemver();
