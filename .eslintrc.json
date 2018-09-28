@@ -1,0 +1,26 @@
+{
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "globals": {
+    "browser": true,
+    "node": true,
+    "done": true,
+    "render": true,
+    "CONFIGURATION": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2015,
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-undef": [
+      "error"
+    ],
+    "semi": [
+      "error",
+      "always"
+    ]
+  }
+}

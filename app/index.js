@@ -6,7 +6,7 @@ var express = require('express'),
 	expressValidator = require('express-validator'),
 	errorHandler = require('errorhandler'),
 	bodyParser = require('body-parser'),
-	fs = require('fs');
+	fs = require('fs'),
 	dotenv = require('dotenv');
 
 if(fs.existsSync('.env')) {
