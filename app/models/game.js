@@ -91,6 +91,12 @@ var GameSchema = new Schema({
 		ref: 'Release'
 	}],
 
+	isArchived: {
+		type: Boolean,
+		required: true,
+		default: false
+	},
+
 	/**
 	 * The collection of groups that can access
 	 * @property {Array} groups
@@ -152,14 +158,25 @@ GameSchema.pre('save', function(next)
 });
 
 /**
- * Get all the games
+ * Get all the active games
  * @method getAll
  * @param {function} callback The callback
  * @return {Promise} The async Promise
  */
 GameSchema.statics.getAll = function(callback)
 {
-	return this.find({}, callback);
+	return this.find({isArchived: false}, callback);
+};
+
+/**
+ * Get all the archived games
+ * @method getAll
+ * @param {function} callback The callback
+ * @return {Promise} The async Promise
+ */
+GameSchema.statics.getAllArchived = function(callback)
+{
+	return this.find({isArchived: true}, callback);
 };
 
 /**
@@ -272,7 +289,7 @@ GameSchema.statics.getBySearch = function(search, limit, callback)
 {
 	return this.find({ title: new RegExp(search, "i") })
 		.limit(limit)
-		.select('title slug')
+		.select('title slug isArchived')
 		.sort('title')
 		.exec(callback);
 };
@@ -455,7 +472,7 @@ GameSchema.statics.removeGroup = function(ids, groupId, callback)
  */
 GameSchema.methods.removeGroup = function(group, callback)
 {
-	this.groups = groups.filter(function(entry)
+	this.groups = this.groups.filter(function(entry)
 	{
 		return !entry.group._id.equals(group);
 	});

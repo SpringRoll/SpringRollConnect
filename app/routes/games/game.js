@@ -2,7 +2,6 @@ var router = require('express').Router(),
 	async = require('async'),
 	privileges = require('../../helpers/access').privilege,
 	Game = require('../../models/game'),
-	GameArchive = require('../../models/game-archive'),
 	User = require('../../models/user'),
 	Release = require('../../models/release'),
 	log = require('../../helpers/logger');
@@ -152,7 +151,7 @@ function defaultCapabilities(capabilities)
 	capabilities.ui = Object.assign({
 		mouse: false,
 		touch: false
-	}, capabilities.ui)
+	}, capabilities.ui);
 
 	capabilities.sizes = Object.assign({
 			xsmall: false,
@@ -310,42 +309,61 @@ router.post('/:slug', function(req, res)
 		},
 		removeGame: function(done, game)
 		{
-			var gameArchive = new GameArchive(game.toObject());
+			if (game.isArchived){
+				game.remove(function(err)
+				{
+					if (err) {
+						return done(err);
+					};
+					res.redirect('/');
+				});
+			}
+			else {
+				game.isArchived = true;
 
-			gameArchive.save(function(err, archive)
+				game.save(function(err)
 			{
 				if (err)
 				{
 					return done(err);
 				}
-				game.remove(function(err)
-				{
-					if (err) return done(err);
 					res.redirect('/');
 				});
-			});
+			}
+		},
+		restoreGame: function(done, game) {
+			game.isArchived = false;
+
+			game.save(function(err)
+			{
+				if (err)
+				{
+					return done(err);
+				}
+					res.redirect('/');
+				});
 		}
 	});
 });
 
 router.get('/:slug', function(req, res)
 {
-	renderPage(req, res, 'games/game');
+	renderPage(req, res, req.baseUrl.substring(1));
 });
 
 router.get('/:slug/privileges', function(req, res)
 {
-	renderPage(req, res, 'games/privileges');
+	renderPage(req, res, req.baseUrl.substring(1) + '/privileges');
 });
 
 router.get('/:slug/release', function(req, res)
 {
-	res.redirect('/games/game/' + req.params.slug + '/releases');
+	res.redirect(req.baseUrl.substring(1) + '/game/' + req.params.slug + '/releases');
 });
 
 router.get('/:slug/releases', function(req, res)
 {
-	renderPage(req, res, 'games/releases',
+	renderPage(req, res, req.baseUrl.substring(1) + '/releases',
 		['releases'],
 		function(game)
 		{
