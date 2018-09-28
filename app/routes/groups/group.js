@@ -103,14 +103,14 @@ router.post('/:slug', access.isAdmin, function(req, res)
 					{
 						if(err) {
 							done(err);
-							return
+							return;
 						}
 					// Remove the group
 					group.remove(function(err)
 					{
 						req.flash('success', 'Deleted ' + group.name + ' successfully.');
 						res.redirect('/groups');
-					})
+					});
 				});
 					break;
 				}

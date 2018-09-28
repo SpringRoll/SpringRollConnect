@@ -7,7 +7,7 @@ if(cluster.isMaster) {
       });
     
     for(var i = 0; i < totalCpus; i++){
-        cluster.fork()
+        cluster.fork();
     }
 } else {
     var restServer = require('./app');
