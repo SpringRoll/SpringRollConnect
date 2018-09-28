@@ -455,7 +455,7 @@ GameSchema.statics.removeGroup = function(ids, groupId, callback)
  */
 GameSchema.methods.removeGroup = function(group, callback)
 {
-	this.groups = groups.filter(function(entry)
+	this.groups = this.groups.filter(function(entry)
 	{
 		return !entry.group._id.equals(group);
 	});
