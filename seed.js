@@ -59,11 +59,11 @@ async function makeGame(){
   console.log('Creating example game with releases...');
   //set your values as desired
   let gameParams = {
-    title: '',
-    slug: '',
-    repository: '',
-    location: '',
-    description: ''
+    title: 'Empty Game',
+    slug: 'empty-game',
+    repository: 'https://website.com/game',
+    location: 'https://website.com/game',
+    description: 'an empty game entry'
   };
   gameParams.created = gameParams.updated = Date.now();
   let game = new Game(gameParams);
