@@ -15,8 +15,8 @@ const notForApi = function (callback) {
 		} else {
 			callback(req, res, next);
 		}
-	}
-}
+	};
+};
 
 // Database connection bootstrap
 module.exports = function(app)

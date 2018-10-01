@@ -5,9 +5,20 @@ module.exports = function(grunt)
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-eslint');
 
   // load the configuration
   grunt.initConfig({
+    eslint: {
+      options: {
+        configFile: '.eslintrc.json'
+      },
+      target: [
+        'app/index.js',
+        'app/**/*.js',
+        '!app/public/**/*.js'
+      ]
+    },
     concat: {
       'app/public/js/main.js': ['src/plugins/jquery-search.js'].concat(glob.sync('src/widgets/*.js')),
       'app/public/js/embed.js': [
@@ -50,5 +61,5 @@ module.exports = function(grunt)
     }
   });
 
-  grunt.registerTask('default', ['copy', 'concat', 'less']);
+  grunt.registerTask('default', ['copy', 'concat', 'less', 'eslint']);
 };

@@ -152,7 +152,7 @@ function defaultCapabilities(capabilities)
 	capabilities.ui = Object.assign({
 		mouse: false,
 		touch: false
-	}, capabilities.ui)
+	}, capabilities.ui);
 
 	capabilities.sizes = Object.assign({
 			xsmall: false,
