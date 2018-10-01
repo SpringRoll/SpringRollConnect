@@ -15,10 +15,8 @@ module.exports = function(grunt)
       },
       target: [
         'app/index.js',
-        'app/config/*.js',
-        'app/helpers/*.js',
-        'app/models/*.js',
-        'app/routes/**/*.js'
+        'app/**/*.js',
+        '!app/public/**/*.js'
       ]
     },
     concat: {
