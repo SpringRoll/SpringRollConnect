@@ -40,6 +40,8 @@
 						textarea.md.form-control#description(name="description" #{disabled})=game.description
 				include capabilities
 			.modal-footer
+				input(type='hidden', name='_method', value='PATCH')
 				button.btn.btn-primary(type="submit" name="action" value="updateGame") Update
+				input(type='hidden', name='_method', value='DELETE')
 				button.btn.btn-primary(data-toggle="confirm" type="submit" name="action" value="removeGame") Archive
 				button.btn.btn-default(type="button" data-dismiss="modal") Cancel

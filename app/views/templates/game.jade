@@ -10,11 +10,11 @@ append content
 				img.btn-block.preview(src="data:image/png;base64,#{game.thumbnail}")
 		
 		.col-sm-12(class=(game.thumbnail && game.thumbnail.length ? "col-xs-6" : "")): .list-group
-			a.list-group-item(href='/games/game/#{game.slug}' class=isActive('/games/game/#{game.slug}')) Home
-			a.list-group-item(href='/games/game/#{game.slug}/releases' class=isActive(/releases?$/)) Releases
+			a.list-group-item(href='/games/#{game.slug}' class=isActive('/games/#{game.slug}')) Home
+			a.list-group-item(href='/games/#{game.slug}/releases' class=isActive(/releases?$/)) Releases
 				span.badge=game.releases.length
 			if isAdmin
-				a.list-group-item(href='/games/game/#{game.slug}/privileges' class=isActive(/privileges$/)) Privileges
+				a.list-group-item(href='/games/#{game.slug}/privileges' class=isActive(/privileges$/)) Privileges
 	.col-sm-9
 		h2=game.title
 		if isEditor

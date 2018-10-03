@@ -61,6 +61,12 @@ var GameSchema = new Schema({
 		required: true
 	},
 
+	isArchived: {
+		type: Boolean,
+		required: true,
+		default: false
+	},
+
 	/**
 	 * A description of the game
 	 * @property {String} description
@@ -159,7 +165,7 @@ GameSchema.pre('save', function(next)
  */
 GameSchema.statics.getAll = function(callback)
 {
-	return this.find({}, callback);
+	return this.find({ isArchived: false }, callback);
 };
 
 /**
