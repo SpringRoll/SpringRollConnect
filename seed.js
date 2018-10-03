@@ -38,7 +38,7 @@ async function makeAdmin() {
   let adminGroup = new Group({
     name: 'Admin2',
     slug: 'Admin2',
-    token: 'myAccessToken',
+    token: 'f5df675da94c4853e8c9e2a8bad21ac4198462c8',
     tokenExpires: null,
     privilege: 2,
     isUserGroup: true
@@ -81,7 +81,7 @@ async function makeGame(){
 
 function addReleases(gameId, releaseLevel){
   console.log('Adding release with level: ' + releaseLevel);
-  let commitHash = makeRandomString(16);
+  let commitHash = 'f5df675da94c4853e8c9e2a8' + makeRandomString(16);
   let releaseParams = {
     game: gameId,
     status: releaseLevel,
