@@ -282,7 +282,6 @@ ReleaseSchema.statics.getByGame = function(slug, options, callback)
 		{
 			if (requiresToken)
 			{
-				console.log(options);
 				game.hasPermission(options.token, function(err, game)
 				{
 					if (err) return done(err);
