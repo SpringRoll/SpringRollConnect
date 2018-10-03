@@ -15,9 +15,9 @@ const Release = require('./app/models/release');
 
 function makeRandomString(length){
   let random = '';
-  crypto.randomBytes(length).forEach(value => {
-    random += (value % length).toString(length);
-  });
+  for (i=0; i < length; i++ ){
+    random += (Math.random()*10).toString().substring(0,1);
+  }
   return random;
 }
 
@@ -38,7 +38,7 @@ async function makeAdmin() {
   let adminGroup = new Group({
     name: 'Admin2',
     slug: 'Admin2',
-    token: 'myAccessToken',
+    token: makeRandomString(40),
     tokenExpires: null,
     privilege: 2,
     isUserGroup: true
@@ -81,7 +81,7 @@ async function makeGame(){
 
 function addReleases(gameId, releaseLevel){
   console.log('Adding release with level: ' + releaseLevel);
-  let commitHash = makeRandomString(16);
+  let commitHash = makeRandomString(40);
   let releaseParams = {
     game: gameId,
     status: releaseLevel,
