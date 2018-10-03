@@ -223,8 +223,7 @@ ReleaseSchema.statics.getByGame = function(slug, options, callback)
 	}
 
 	// Set the defaults
-	options = Object.assign(options, 
-		{
+	options = Object.assign({
 		multi: false,
 		status: null,
 		token: null,
@@ -232,7 +231,7 @@ ReleaseSchema.statics.getByGame = function(slug, options, callback)
 		commitId: null,
 		debug: false,
 		archive: false
-	});
+	}, options);
 
 	function addUrl(r)
 	{
@@ -283,6 +282,7 @@ ReleaseSchema.statics.getByGame = function(slug, options, callback)
 		{
 			if (requiresToken)
 			{
+				console.log(options);
 				game.hasPermission(options.token, function(err, game)
 				{
 					if (err) return done(err);
