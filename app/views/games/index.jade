@@ -25,7 +25,7 @@ append content
 				.row
 					for game in games
 						.col-md-2.col-sm-3.col-xs-6
-							a.game(data-toggle="tooltip" title=game.title href="/games/game/#{game.slug}")
+							a.game(data-toggle="tooltip" title=game.title href="/games/#{game.slug}")
 								if game.thumbnail && game.thumbnail.length
 									img.preview(src="data:image/png;base64,#{game.thumbnail}")
 								else
