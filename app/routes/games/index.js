@@ -6,28 +6,47 @@
 // src.pbk.org/games/:game_id PATCH - update game info
 
 var router = require('express').Router(),
-	privileges = require('../../helpers/access').privilege,
 	Game = require('../../models/game'),
+	Release = require('../../models/release'),
 	Pagination = require('../../helpers/pagination');
 const { renderPage, postPage, defaultCapabilities, validateRequest } = require('./helpers');
 
 router.get('/:order(alphabetical|latest)?/:local(page)?/:number([0-9]+)?', function(req, res)
 {
 	var order = req.params.order || 'alphabetical';
-	Game.getAll().count(function(err, count)
-	{
-		var nav = new Pagination('/games/'+order, count, req.params.number);
-		res.render('games/index',
+	if (req.originalUrl.startsWith('/games')){
+		Game.getAll().count( function(err, count)
 		{
-			pagination: nav.result,
-			order: order,
-			games: Game.getAll()
-				.select('title slug thumbnail releases')
-				.sort(order == 'alphabetical' ? 'title' : '-updated')
-				.skip(nav.start || 0)
-				.limit(nav.itemsPerPage)
+			var nav = new Pagination('/games/'+order, count, req.params.number);
+			res.render('games/index',
+			{
+				pagination: nav.result,
+				order: order,
+				games: Game.getAll()
+					.select('title slug thumbnail releases')
+					.sort(order == 'alphabetical' ? 'title' : '-updated')
+					.skip(nav.start || 0)
+					.limit(nav.itemsPerPage)
+			});
 		});
-	});
+	}
+	else if (req.originalUrl.startsWith('/archive')){
+		Game.getAllArchived().count( function(err, count)
+		{
+			var nav = new Pagination('/games/'+order, count, req.params.number);
+			res.render('games/index',
+			{
+				pagination: nav.result,
+				order: order,
+				games: Game.getAllArchived()
+					.select('title slug thumbnail releases')
+					.sort(order == 'alphabetical' ? 'title' : '-updated')
+					.skip(nav.start || 0)
+					.limit(nav.itemsPerPage)
+			});
+		});
+	}
+
 });
 
 router.get('/:slug', function(req, res)
@@ -47,20 +66,20 @@ router.get('/:slug/releases', function(req, res)
 	renderPage(req, res, 'games/releases', ['releases']);
 });
 
-router.get('/:slug/release/:commit_id', function(req, res)
+router.get('/:slug/release/:commit_id', async function(req, res)
 {
-	res.redirect('/games/game/' + req.params.slug + '/releases');
+	res.redirect('/releases/')
 });
 
 router.post('/:slug', function(req, res)
 {
+	//TODO: implement this
 	let errors = validateRequest(req);
 	if (errors) return done(errors);
 	
 });
 
 router.patch('/:slug', function(req, res){
-	console.log('in patch');
 	let errors = validateRequest(req);
 	if (errors) return done(errors);
 
@@ -72,14 +91,20 @@ router.patch('/:slug', function(req, res){
 	.then(game => {
 		return Game.findByIdAndUpdate(game._id, req.body);
 	})
-	.then(()=>{
-		res.redirect('/games/' + req.params.slug);
+	.then(() =>{
+		// have to re-get game b/c archived status may have been changed
+		Game.getBySlug(req.params.slug).then(game => {
+			if (game.isArchived){
+				res.redirect('/archive/' + req.params.slug);
+			}
+			else {
+				res.redirect('/games/' + req.params.slug);
+			}
+		});
 	});
 });
 
-router.delete('/:slug', function(req, res){
-	console.log('in delete');
-	
+router.delete('/:slug', function(req, res){	
 	Game.getBySlug(req.params.slug)
 	.then(game => {
 		if (game.isArchived){
@@ -87,14 +112,13 @@ router.delete('/:slug', function(req, res){
 		}
 		else {
 			game.isArchived = true;
-		}
-		game.save(function(err)
-		{
-			if (err)
-			{
-				return done(err);
-			}
-		});
+			game.save(function(err) {
+				if (err)
+				{
+					return done(err);
+				}
+			});
+		}	
 	})
 	.then(() => {
 		res.redirect('/');

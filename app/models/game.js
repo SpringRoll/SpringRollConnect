@@ -169,6 +169,17 @@ GameSchema.statics.getAll = function(callback)
 };
 
 /**
+ * Get all the archived games
+ * @method getAll
+ * @param {function} callback The callback
+ * @return {Promise} The async Promise
+ */
+GameSchema.statics.getAllArchived = function(callback)
+{
+	return this.find({ isArchived: true }, callback);
+};
+
+/**
  * Get a game by ID
  * @method getById
  * @param {string} id The Object id
@@ -352,7 +363,12 @@ GameSchema.methods.getAccess = function(user, callback)
 	}
 	else
 	{
-		callback(null, this, result);
+		if (callback !== undefined) {
+			callback(null, this, result);
+		}
+		else {
+			return result;
+		}
 	}
 };
 
