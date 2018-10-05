@@ -54,10 +54,10 @@ function renderPage(req, res, template, populate=null)
 		[
 			function(done)
 			{
-        var game = Game.getBySlug(req.params.slug, done)
+        var game = Game.getBySlug(req.params.slug, done);
         if (populate){
           game.populate(populate);
-        };
+				};
       },
 			function(game, done)
 			{
@@ -72,16 +72,16 @@ function renderPage(req, res, template, populate=null)
 			{
 				return res.status(401).render('401');
 			}
-        res.render(template, {
-				game: game,
-				capabilities: game.capabilities,
-				host: req.headers.host,
-				isEditor: access.permission > 0,
-				isAdmin: access.permission > 1,
-				token: access.token,
-				errors: req.flash('errors'),
-				success: req.flash('success'),
-				error: req.flash('error')
+			res.render(template, {
+			game: game,
+			capabilities: game.capabilities,
+			host: req.headers.host,
+			isEditor: access.permission > 0,
+			isAdmin: access.permission > 1,
+			token: access.token,
+			errors: req.flash('errors'),
+			success: req.flash('success'),
+			error: req.flash('error')
 			});
 		}
 	);
