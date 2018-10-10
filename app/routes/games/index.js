@@ -1,7 +1,6 @@
 // Okay so what the hell is happening here.
 // src.pbk.org/games/:game_id should be the ONLY ROUTE DEFINED HERE
 // The any addtl logic can live here as REDIRECTS.
-// src.pbk.org/games/:game_id POST - create a new game
 // src.pbk.org/games/:game_id GET - display game info
 // src.pbk.org/games/:game_id PATCH - update game info
 
@@ -68,15 +67,8 @@ router.get('/:slug/releases', function(req, res)
 
 router.get('/:slug/release/:commit_id', async function(req, res)
 {
-	res.redirect('/releases/')
-});
-
-router.post('/:slug', function(req, res)
-{
-	//TODO: implement this
-	let errors = validateRequest(req);
-	if (errors) return done(errors);
-	
+	// p sure this isn't implemented right
+	res.redirect('/releases' + req.body.release);
 });
 
 router.patch('/:slug', function(req, res){
