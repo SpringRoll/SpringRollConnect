@@ -39,7 +39,7 @@ module.exports = function(app)
 	});
 
 	app.use(methodOverride(function (req, res) {
-		if (req.originalUrl.startsWith('/games') || req.originalUrl.startsWith('/archive')){
+		if (req.originalUrl.startsWith('/games') || req.originalUrl.startsWith('/archive') || req.originalUrl.startsWith('/releases')){
 			if (req.body && typeof req.body === 'object' && 'action' in req.body) {
 				if (req.body.action === 'RESTORE'){
 					req.body.isArchived = false;
@@ -58,6 +58,7 @@ module.exports = function(app)
 	app.use('/games/search', access.isAdmin, require('./games/search'));
 	app.use('/groups/add', access.isAdmin, require('./groups/add'));
 	app.use('/games', access.isEditor, require('./games/index'));
+	app.use('/releases', access.isEditor, require('./releases/release'));
 	app.use('/archive', access.isEditor, require('./games/index'));
 	app.use('/groups/group', access.isAuthenticated, require('./groups/group'));
 	app.use('/groups/search', access.isAdmin, require('./groups/search'));

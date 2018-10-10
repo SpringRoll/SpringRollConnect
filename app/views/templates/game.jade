@@ -5,10 +5,10 @@ append title
 
 append content
 	.col-sm-3: .row
-		if url.startsWith('/games')
-			- active = 'games'
-		if url.startsWith('/archive')
-			- active = 'archive'
+		if game.isArchived
+			- active = "archive"
+		else
+			- active = "games"
 		if game.thumbnail && game.thumbnail.length
 			.col-xs-6.col-sm-12
 				img.btn-block.preview(src="data:image/png;base64,#{game.thumbnail}")
