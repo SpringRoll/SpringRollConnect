@@ -82,7 +82,8 @@ router.post('/:slug', function(req, res)
 				});
 				return;
 			}
-			var values = Object.assign(values, req.body);
+			var values = {};
+			Object.assign(values, req.body);
 			values.game = game._id;
 			delete values.token;
 			values.created = values.updated = Date.now();
@@ -159,7 +160,8 @@ router.post('/:slug', function(req, res)
 
 		if (req.body.redirect)
 		{
-			req.flash('success', 'Release added successfully');
+			// commenting this out until we figure out what to do about this
+			//req.flash('success', 'Release added successfully');
 			res.redirect(req.body.redirect);
 		}
 		else

@@ -65,15 +65,15 @@ router.get('/:slug/releases', function(req, res)
 	renderPage(req, res, 'games/releases', ['releases']);
 });
 
-router.get('/:slug/release/:commit_id', async function(req, res)
+router.patch('/:slug/releases/:commit_id', async function(req, res)
 {
-	// p sure this isn't implemented right
-	res.redirect('/releases' + req.body.release);
+	// 307 maintains PATCH verb
+	res.redirect(307, '/releases/' + req.body.commitId);
 });
 
 router.patch('/:slug', function(req, res){
 	let errors = validateRequest(req);
-	if (errors) return done(errors);
+	if (errors) return handleError(errors);
 
 	defaultCapabilities(req.body.capabilities);
 

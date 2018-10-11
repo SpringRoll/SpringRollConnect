@@ -289,7 +289,7 @@ GameSchema.statics.getBySearch = function(search, limit, callback)
 {
 	return this.find({ title: new RegExp(search, "i") })
 		.limit(limit)
-		.select('title slug')
+		.select('title slug isArchived')
 		.sort('title')
 		.exec(callback);
 };
