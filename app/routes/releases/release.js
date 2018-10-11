@@ -8,7 +8,7 @@
 var router = require('express').Router(),
 	Game = require('../../models/game'),
 	Release = require('../../models/release');
-const { defaultCapabilities } = require('../games/helpers');
+const { defaultCapabilities, handleError } = require('../games/helpers');
 
 router.get('/:commit_id', async function(req, res)
 {
@@ -29,7 +29,7 @@ router.get('/:commit_id', async function(req, res)
 	});
 });
 
-router.patch('/:commit_id', function(req, res)
+router.patch('/:commit_id', async function(req, res)
 {
 	req.checkBody('commitId', 'Commit is a Git hash').isCommit();
 	req.checkBody('status', 'Status must be a valid status').isStatus();
@@ -38,26 +38,44 @@ router.patch('/:commit_id', function(req, res)
 	if (req.body.version)
 		req.checkBody('version', 'Version must be a valid semantic version').isSemver();
 
-	defaultCapabilities(req.body.capabilities);
+	if(req.body.capabilities){
+		defaultCapabilities(req.body.capabilities);
+	}
 
 	var errors = req.validationErrors();
 
-	if (errors) return done(errors);
+	if (errors) return handleError(errors);
 
 	req.body.updated = Date.now();
-	Release.findByIdAndUpdate(req.body.release, req.body)
-	.then(() => {
-		res.redirect('/releases/' + req.body.commitId);
-	});
+	await Release.findByIdAndUpdate(req.body.release, req.body);
+	let release = await Release.getByCommitId(req.body.commitId);
+	let game = await Game.getById(release.game);
+	let baseUrl = '';
+	if (!game.isArchived){
+		baseUrl = '/games'
+	}
+	else {
+		baseUrl = '/archive'
+	}
+	res.redirect(baseUrl + '/' + game.slug + '/releases');
 });
 
 router.delete('/:commit_id', function(req, res)
 {
-	Release.removeById(req.body.release, function(err)
+	Release.removeById(req.body.release, async function(err)
 			{
-				if (err) return done(err);
+				if (err) return handleError(err);
 				req.flash('success', 'Deleted release');
-				res.redirect('/games');
+				let release = await Release.getByCommitId(req.body.commitId);
+				let game = await Game.getById(release.game);
+				let baseUrl = '';
+				if (!game.isArchived){
+					baseUrl = '/games'
+				}
+				else {
+					baseUrl = '/archive'
+				}
+				res.redirect(baseUrl + '/' + game.slug + '/releases');
 			});
 });
 

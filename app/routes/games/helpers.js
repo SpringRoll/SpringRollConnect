@@ -156,4 +156,4 @@ function defaultCapabilities(capabilities)
 		}, capabilities.sizes);
 }
 
-module.exports = {renderPage, postPage, defaultCapabilities, validateRequest};
+module.exports = {renderPage, postPage, defaultCapabilities, validateRequest, handleError};

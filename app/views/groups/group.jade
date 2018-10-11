@@ -44,7 +44,11 @@ append content
 		if games.length
 			ul.list-group
 				for game in games
-					li.list-group-item: a.btn-block(href="/games/game/#{game.slug}")=game.title
+					if game.isArchived
+						- active = "archive"
+					else
+						- active = "games"
+					li.list-group-item: a.btn-block(href="/#{active}/#{game.slug}")=game.title
 						if user.privilege == privilege.admin
 							form.pull-right(method="post" action=url)
 								input(type="hidden" name="game" value=game._id)
