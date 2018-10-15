@@ -6,7 +6,7 @@ const { defaultCapabilities, handleError } = require('../games/helpers');
 router.get('/:commit_id', async function(req, res)
 {
 	let release = await Release.getByCommitId(req.params.commit_id);
-	let game = await Game.getById(release.game)
+	let game = await Game.getById(release.game);
 	let access = game.getAccess(req.user);
 	res.render("games/release", {
 		game: game,
@@ -45,10 +45,10 @@ router.patch('/:commit_id', async function(req, res)
 	let game = await Game.getById(release.game);
 	let baseUrl = '';
 	if (!game.isArchived){
-		baseUrl = '/games'
+		baseUrl = '/games';
 	}
 	else {
-		baseUrl = '/archive'
+		baseUrl = '/archive';
 	}
 	res.redirect(baseUrl + '/' + game.slug + '/releases');
 });
@@ -63,10 +63,10 @@ router.delete('/:commit_id', function(req, res)
 				let game = await Game.getById(release.game);
 				let baseUrl = '';
 				if (!game.isArchived){
-					baseUrl = '/games'
+					baseUrl = '/games';
 				}
 				else {
-					baseUrl = '/archive'
+					baseUrl = '/archive';
 				}
 				res.redirect(baseUrl + '/' + game.slug + '/releases');
 			});
