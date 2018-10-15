@@ -37,7 +37,9 @@ router.patch('/:commit_id', async function(req, res)
 
 	var errors = req.validationErrors();
 
-	if (errors) return handleError(errors);
+	if (errors) {
+		return handleError(errors);
+	}
 
 	req.body.updated = Date.now();
 	await Release.findByIdAndUpdate(req.body.release, req.body);
@@ -57,7 +59,9 @@ router.delete('/:commit_id', function(req, res)
 {
 	Release.removeById(req.body.release, async function(err)
 			{
-				if (err) return handleError(err);
+				if (err) {
+					return handleError(err);
+				}
 				req.flash('success', 'Deleted release');
 				let release = await Release.getByCommitId(req.body.commitId);
 				let game = await Game.getById(release.game);

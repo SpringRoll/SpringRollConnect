@@ -30,12 +30,7 @@ function validateRequest(req){
 	req.checkBody('description').optional();
   req.checkBody('thumbnail').optional();
   var errors = req.validationErrors();
-	if (errors) {
-    return errors;
-  } 
-  else {
-    return false;
-  }
+	return errors ? errors : false
 }
 
 /**
@@ -61,7 +56,9 @@ function renderPage(req, res, template, populate=null)
       },
 			function(game, done)
 			{
-				if (!game) return res.status(404).render('404');
+				if (!game){ 
+					return res.status(404).render('404');
+				}
 
 				game.getAccess(req.user, done);
 			}
@@ -106,7 +103,9 @@ function postPage(req, res, minPrivilege, actions)
 			},
 			function(game, done)
 			{
-				if (!game) return res.status(404).render('404');
+				if (!game) {
+					return res.status(404).render('404');
+				}
 
 				game.getAccess(req.user, done);
 			},
@@ -114,7 +113,9 @@ function postPage(req, res, minPrivilege, actions)
 			{
 				var response = function(err)
 				{
-					if (err) return done(err);
+					if (err) {
+						return done(err);
+					}
 					done(null, game);
 				};
 
@@ -132,7 +133,9 @@ function postPage(req, res, minPrivilege, actions)
 		],
 		function(err, game)
 		{
-			if (err) return handleError(req, res, err);
+			if (err) {
+				return handleError(req, res, err);
+			}
 
 			req.flash('success', game.title + " updated successfully");
 			res.redirect(req.body.slug ? req.baseUrl + `/${req.body.slug}` : req.originalUrl);

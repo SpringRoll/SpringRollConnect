@@ -39,14 +39,14 @@ module.exports = function(app)
 	});
 
 	app.use(methodOverride(function (req, res) {
-		if (req.originalUrl.startsWith('/games') || req.originalUrl.startsWith('/archive') || req.originalUrl.startsWith('/releases')){
-			if (req.body && typeof req.body === 'object' && 'action' in req.body) {
-				if (req.body.action === 'RESTORE'){
-					req.body.isArchived = false;
-					return 'PATCH';
-				}
-				return req.body.action;
+		const route = req.originalUrl.startsWith('/games') || req.originalUrl.startsWith('/archive') || req.originalUrl.startsWith('/releases');
+		const contents = req.body && typeof req.body === 'object' && 'action' in req.body;
+		if (route && contents) {
+			if (req.body.action === 'RESTORE') {
+				req.body.isArchived = false;
+				return 'PATCH';
 			}
+			return req.body.action;
 		}
 	}));
 
