@@ -61,6 +61,11 @@ var GameSchema = new Schema({
 		required: true
 	},
 
+	/**
+	 * Whether the game is archived
+	 * @property {Boolean} isArchived
+	 */
+
 	isArchived: {
 		type: Boolean,
 		required: true,

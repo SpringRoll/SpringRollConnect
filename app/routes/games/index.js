@@ -67,7 +67,9 @@ router.patch('/:slug/releases/:commit_id', async function(req, res)
 
 router.patch('/:slug', function(req, res){
 	let errors = validateRequest(req);
-	if (errors) return handleError(errors);
+	if (errors) { 
+		return handleError(errors);
+	}
 
 	defaultCapabilities(req.body.capabilities);
 

@@ -81,8 +81,7 @@ router.post('/:slug', function(req, res)
 				});
 				return;
 			}
-			var values = {};
-			Object.assign(values, req.body);
+			var values = Object.assign({}, values, req.body);
 			values.game = game._id;
 			delete values.token;
 			values.created = values.updated = Date.now();
