@@ -31,10 +31,10 @@ function validateRequest(req){
   req.checkBody('thumbnail').optional();
   var errors = req.validationErrors();
 	if (errors) {
-    return errors
+    return errors;
   } 
   else {
-    return false
+    return false;
   }
 }
 
