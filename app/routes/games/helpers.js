@@ -30,7 +30,7 @@ function validateRequest(req){
 	req.checkBody('description').optional();
   req.checkBody('thumbnail').optional();
   var errors = req.validationErrors();
-	return errors ? errors : false
+	return errors ? errors : false;
 }
 
 /**
