@@ -2,7 +2,7 @@ var router = require('express').Router(),
 	Game = require('../../models/game'),
 	Release = require('../../models/release'),
 	Pagination = require('../../helpers/pagination');
-const { renderPage, postPage, defaultCapabilities, validateRequest } = require('./helpers');
+const { renderPage, handleError, defaultCapabilities, validateRequest } = require('./helpers');
 
 router.get('/:order(alphabetical|latest)?/:local(page)?/:number([0-9]+)?', function(req, res)
 {
@@ -108,7 +108,7 @@ router.delete('/:slug', function(req, res){
 	})
 	.then(() => {
 		res.redirect('/');
-	})
+	});
 		
 });
 
