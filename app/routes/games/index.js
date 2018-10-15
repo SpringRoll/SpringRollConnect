@@ -1,9 +1,3 @@
-// Okay so what the hell is happening here.
-// src.pbk.org/games/:game_id should be the ONLY ROUTE DEFINED HERE
-// The any addtl logic can live here as REDIRECTS.
-// src.pbk.org/games/:game_id GET - display game info
-// src.pbk.org/games/:game_id PATCH - update game info
-
 var router = require('express').Router(),
 	Game = require('../../models/game'),
 	Release = require('../../models/release'),
