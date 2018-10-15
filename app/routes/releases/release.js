@@ -1,9 +1,3 @@
-// This file will control the behavior of the following route:
-// sr.pbk.org/releases/:commit_id
-// GET - redirect to sr.pbk.org/games/:game_slug/releases/:commit_id
-// PATCH - update resource and redirect to above
-// DELETE - delete resource and redirect to sr.pbk.org/games/:game_slug/releases
-
 var router = require('express').Router(),
 	Game = require('../../models/game'),
 	Release = require('../../models/release');
