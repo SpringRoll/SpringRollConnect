@@ -117,6 +117,7 @@ function postPage(req, res, minPrivilege, actions)
 						return done(err);
 					}
 					done(null, game);
+					return;
 				};
 
 				if (access.permission < minPrivilege)
