@@ -4,28 +4,37 @@ append title
 	| Edit Game - 
 
 append content
+	- var active = ''
+	if url.startsWith('/games')
+		- active = 'games'
+	if url.startsWith('/archive')
+		- active = 'archive'
 	.col-sm-12: .panel.panel-default
 		.panel-heading
 			.pull-right
 				| Sort by: 
 				.btn-group
-					a.btn.btn-sm.btn-default(class=(order=='alphabetical' ? 'disabled' : '') href="/games/alphabetical") title
-					a.btn.btn-sm.btn-default(class=(order=='latest' ? 'disabled' : '') href="/games/latest") updated
+					a.btn.btn-sm.btn-default(class=(order=='alphabetical' ? 'disabled' : '') href="/#{active}/alphabetical") title
+					a.btn.btn-sm.btn-default(class=(order=='latest' ? 'disabled' : '') href="/#{active}/latest") updated
 				| 
-				a.btn.btn-sm.btn-default(href="/games/add")
-					span.glyphicon.glyphicon-pencil
-					|  Add
+				if url.startsWith('/games')
+					a.btn.btn-sm.btn-default(href="/games/add")
+						span.glyphicon.glyphicon-pencil
+						|  Add
 			h3.panel-title Games 
 		.panel-body
 			if !games.length
-				.alert.alert-warning.text-center No games have been added.
-					|    
-					a.btn.btn-warning.btn-sm(href="/games/add") Add Game
+				if url.startsWith('/games')
+					.alert.alert-warning.text-center No games have been added.
+						|    
+						a.btn.btn-warning.btn-sm(href="/games/add") Add Game
+				if url.startsWith('/archive')
+					.alert.alert-warning.text-center No games have been archived.
 			else
 				.row
 					for game in games
 						.col-md-2.col-sm-3.col-xs-6
-							a.game(data-toggle="tooltip" title=game.title href="/games/game/#{game.slug}")
+							a.game(data-toggle="tooltip" title=game.title href="/#{active}/#{game.slug}")
 								if game.thumbnail && game.thumbnail.length
 									img.preview(src="data:image/png;base64,#{game.thumbnail}")
 								else

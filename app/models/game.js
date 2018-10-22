@@ -62,6 +62,17 @@ var GameSchema = new Schema({
 	},
 
 	/**
+	 * Whether the game is archived
+	 * @property {Boolean} isArchived
+	 */
+
+	isArchived: {
+		type: Boolean,
+		required: true,
+		default: false
+	},
+
+	/**
 	 * A description of the game
 	 * @property {String} description
 	 */
@@ -159,7 +170,18 @@ GameSchema.pre('save', function(next)
  */
 GameSchema.statics.getAll = function(callback)
 {
-	return this.find({}, callback);
+	return this.find({ isArchived: false }, callback);
+};
+
+/**
+ * Get all the archived games
+ * @method getAll
+ * @param {function} callback The callback
+ * @return {Promise} The async Promise
+ */
+GameSchema.statics.getAllArchived = function(callback)
+{
+	return this.find({ isArchived: true }, callback);
 };
 
 /**
@@ -272,7 +294,7 @@ GameSchema.statics.getBySearch = function(search, limit, callback)
 {
 	return this.find({ title: new RegExp(search, "i") })
 		.limit(limit)
-		.select('title slug')
+		.select('title slug isArchived')
 		.sort('title')
 		.exec(callback);
 };
@@ -346,7 +368,12 @@ GameSchema.methods.getAccess = function(user, callback)
 	}
 	else
 	{
-		callback(null, this, result);
+		if (callback !== undefined) {
+			callback(null, this, result);
+		}
+		else {
+			return result;
+		}
 	}
 };
 

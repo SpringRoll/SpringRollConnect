@@ -28,7 +28,6 @@ router.post('/:slug', function(req, res)
 	{
 		if (req.body.redirect)
 		{
-			req.flash('errors', errors);
 			res.redirect(req.body.redirect);
 		}
 		else
@@ -82,7 +81,7 @@ router.post('/:slug', function(req, res)
 				});
 				return;
 			}
-			var values = Object.assign(values, req.body);
+			var values = Object.assign({}, values, req.body);
 			values.game = game._id;
 			delete values.token;
 			values.created = values.updated = Date.now();
@@ -141,7 +140,6 @@ router.post('/:slug', function(req, res)
 		{			
 			if (req.body.redirect)
 			{
-				req.flash('error', 'Unable to add the release: ' + err);
 				res.redirect(req.body.redirect);
 			}
 			else
@@ -159,7 +157,6 @@ router.post('/:slug', function(req, res)
 
 		if (req.body.redirect)
 		{
-			req.flash('success', 'Release added successfully');
 			res.redirect(req.body.redirect);
 		}
 		else
