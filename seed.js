@@ -63,7 +63,8 @@ async function makeGame(){
     slug: 'empty-game',
     repository: 'https://website.com/game',
     location: 'https://website.com/game',
-    description: 'an empty game entry'
+    description: 'an empty game entry',
+    isArchived: false
   };
   gameParams.created = gameParams.updated = Date.now();
   let game = new Game(gameParams);

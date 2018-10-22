@@ -1,8 +1,9 @@
 module.exports = function(app)
 {
-	var access = require('../helpers/access');
-	var marky = require("marky-markdown");
-	var Config = require('../models/config');
+	const access = require('../helpers/access');
+	const marky = require("marky-markdown");
+	const Config = require('../models/config');
+	const methodOverride = require('method-override');
 
 	// Add the user to whatever template
 	app.use(function(req, res, next)
@@ -37,17 +38,28 @@ module.exports = function(app)
 		});
 	});
 
+	app.use(methodOverride(function (req, res) {
+		const route = req.originalUrl.startsWith('/games') || req.originalUrl.startsWith('/archive') || req.originalUrl.startsWith('/releases');
+		const contents = req.body && typeof req.body === 'object' && 'action' in req.body;
+		if (route && contents) {
+			if (req.body.action === 'RESTORE') {
+				req.body.isArchived = false;
+				return 'PATCH';
+			}
+			return req.body.action;
+		}
+	}));
+
 	// Site pages
 	app.use('/', require('./home'));
 	app.use('/embed', require('./embed'));
 	app.use('/docs', access.isAuthenticated, require('./docs'));
 	app.use('/games/add', access.isEditor, require('./games/add'));
-	app.use('/games/game', access.isAuthenticated, require('./games/game'));
-	app.use('/archive/game', access.isAuthenticated, require('./archive/game'));
 	app.use('/games/search', access.isAdmin, require('./games/search'));
 	app.use('/groups/add', access.isAdmin, require('./groups/add'));
 	app.use('/games', access.isEditor, require('./games/index'));
-	app.use('/archive', access.isEditor, require('./archive/index'));
+	app.use('/releases', access.isEditor, require('./releases/release'));
+	app.use('/archive', access.isEditor, require('./games/index'));
 	app.use('/groups/group', access.isAuthenticated, require('./groups/group'));
 	app.use('/groups/search', access.isAdmin, require('./groups/search'));
 	app.use('/groups', access.isAdmin, require('./groups/index'));
