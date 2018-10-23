@@ -100,7 +100,7 @@ UserSchema.virtual('privilege').get(function()
 	if (this.groups)
 	{
 		var privileges = this.groups.map(group => group.privilege);
-		var highestPriority = Math.max(privileges);
+		var highestPriority = Math.max.apply(Math, privileges);
 		if (highestPriority)
 		{
 			return highestPriority;
