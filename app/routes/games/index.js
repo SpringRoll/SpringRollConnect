@@ -79,14 +79,14 @@ router.patch('/:slug', function(req, res){
 	.then(game => {
 		return Game.findByIdAndUpdate(game._id, req.body);
 	})
-	.then(() =>{
-		// have to re-get game b/c archived status may have been changed
-		Game.getBySlug(req.params.slug).then(game => {
+	.then(game => {
+		// have to re-get because slug may have changed
+		Game.findById(game._id).then(game => {
 			if (game.isArchived){
-				res.redirect('/archive/' + req.params.slug);
+				res.redirect('/archive/' + game.slug);
 			}
 			else {
-				res.redirect('/games/' + req.params.slug);
+				res.redirect('/games/' + game.slug);
 			}
 		});
 	});
