@@ -63,8 +63,7 @@ router.delete('/:commit_id', function(req, res)
 					return handleError(err);
 				}
 				req.flash('success', 'Deleted release');
-				let release = await Release.getByCommitId(req.body.commitId);
-				let game = await Game.getById(release.game);
+				let game = await Game.getBySlug(req.body.game);
 				let baseUrl = '';
 				if (!game.isArchived){
 					baseUrl = '/games';
