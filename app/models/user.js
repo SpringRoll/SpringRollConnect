@@ -14,78 +14,78 @@ var async = require('async');
  * @extends mongoose.Schema
  */
 var UserSchema = new Schema({
-	
-	/**
-	 * The username
-	 * @property {String} username
-	 */
-	username: {
-		type: String,
-		unique: true,
-		lowercase: true,
-		trim: true,
-		required: true
-	},
-	/**
-	 * The password hash
-	 * @property {String} password
-	 */
-	password: {
-		type: String,
-		required: true
-	},
+  /**
+   * The username
+   * @property {String} username
+   */
+  username: {
+    type: String,
+    unique: true,
+    lowercase: true,
+    trim: true,
+    required: true
+  },
+  /**
+   * The password hash
+   * @property {String} password
+   */
+  password: {
+    type: String,
+    required: true
+  },
 
-	/**
-	 * User's email address for notifications
-	 * @property {String} email
-	 */
-	email: {
-		type: Email,
-		unique: true,
-		required: true,
-		lowercase: true
-	},
+  /**
+   * User's email address for notifications
+   * @property {String} email
+   */
+  email: {
+    type: Email,
+    unique: true,
+    required: true,
+    lowercase: true
+  },
 
-	/**
-	 * User's email address for notifications
-	 * @property {Boolean} active
-	 */
-	active: {
-		type:Boolean,
-		default:true
-	},
+  /**
+   * User's email address for notifications
+   * @property {Boolean} active
+   */
+  active: {
+    type: Boolean,
+    default: true
+  },
 
-	/**
-	 * The collection of favorites
-	 * @property {Array} favorites
-	 */
-	groups: 
-	[{
-		type: Schema.Types.ObjectId,
-		ref: 'Group'
-	}],
+  /**
+   * The collection of favorites
+   * @property {Array} favorites
+   */
+  groups: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Group'
+    }
+  ],
 
-	/**
-	 * The user's full name
-	 * @property {String} name
-	 */
-	name: {
-		type: String,
-		trim: true,
-		required: true
-	},
+  /**
+   * The user's full name
+   * @property {String} name
+   */
+  name: {
+    type: String,
+    trim: true,
+    required: true
+  },
 
-	/**
-	 * A random string of characters for resetting password
-	 * @property {String} resetPasswordToken
-	 */
-	resetPasswordToken: String,
+  /**
+   * A random string of characters for resetting password
+   * @property {String} resetPasswordToken
+   */
+  resetPasswordToken: String,
 
-	/**
-	 * The date when the reset token expires
-	 * @property {Date} resetPasswordExpires
-	 */
-	resetPasswordExpires: Date
+  /**
+   * The date when the reset token expires
+   * @property {Date} resetPasswordExpires
+   */
+  resetPasswordExpires: Date
 });
 
 UserSchema.plugin(require('mongoose-unique-validator'));
@@ -95,18 +95,15 @@ UserSchema.plugin(require('mongoose-deep-populate'));
  * The global user privilege
  * @property {int} privilege
  */
-UserSchema.virtual('privilege').get(function()
-{
-	if (this.groups)
-	{
-		var privileges = this.groups.map(group => group.privilege);
-		var highestPriority = Math.max.apply(Math, privileges);
-		if (highestPriority)
-		{
-			return highestPriority;
-		}
-	}
-	return 0;
+UserSchema.virtual('privilege').get(function() {
+  if (this.groups) {
+    var privileges = this.groups.map(group => group.privilege);
+    var highestPriority = Math.max.apply(Math, privileges);
+    if (highestPriority) {
+      return highestPriority;
+    }
+  }
+  return 0;
 });
 
 /**
@@ -118,19 +115,17 @@ UserSchema.virtual('privilege').get(function()
  * @param {function} callback The callback with result
  * @return {Promise} The promise object for async action
  */
-UserSchema.statics.removeGroup = function(ids, groupId, callback)
-{
-	var query = {};
-	if (ids)
-	{
-		if (!Array.isArray(ids)) ids = [ids];
-		query = { _id: { $in: ids }};
-	}
-	return this.update(
-		query,
-		{ $pull: { groups : groupId }},
-		{ multi: true }
-	).exec(callback);
+UserSchema.statics.removeGroup = function(ids, groupId, callback) {
+  var query = {};
+  if (ids) {
+    if (!Array.isArray(ids)) ids = [ids];
+    query = { _id: { $in: ids } };
+  }
+  return this.update(
+    query,
+    { $pull: { groups: groupId } },
+    { multi: true }
+  ).exec(callback);
 };
 
 /**
@@ -142,14 +137,13 @@ UserSchema.statics.removeGroup = function(ids, groupId, callback)
  * @param {function} callback The callback with result
  * @return {Promise} The promise object for async action
  */
-UserSchema.statics.addGroup = function(ids, groupId, callback)
-{
-	if (!Array.isArray(ids)) ids = [ids];
-	return this.update(
-		{ _id: { $in: ids }},
-		{ $push: { groups: groupId }},
-		{ multi: true }
-	).exec(callback);
+UserSchema.statics.addGroup = function(ids, groupId, callback) {
+  if (!Array.isArray(ids)) ids = [ids];
+  return this.update(
+    { _id: { $in: ids } },
+    { $push: { groups: groupId } },
+    { multi: true }
+  ).exec(callback);
 };
 
 /**
@@ -160,9 +154,8 @@ UserSchema.statics.addGroup = function(ids, groupId, callback)
  * @param {function} callback The callback with result
  * @return {Promise} The promise object for async action
  */
-UserSchema.statics.getByGroup = function(group, callback)
-{
-	return this.find({ groups: group.id }, callback).sort('name');
+UserSchema.statics.getByGroup = function(group, callback) {
+  return this.find({ groups: group.id }, callback).sort('name');
 };
 
 /**
@@ -173,9 +166,8 @@ UserSchema.statics.getByGroup = function(group, callback)
  * @param {function} callback The callback with result
  * @return {Promise} The promise object for async action
  */
-UserSchema.statics.getByEmail = function(email, callback)
-{
-	return this.findOne({ email: email }, callback);
+UserSchema.statics.getByEmail = function(email, callback) {
+  return this.findOne({ email: email }, callback);
 };
 
 /**
@@ -184,12 +176,8 @@ UserSchema.statics.getByEmail = function(email, callback)
  * @param {function} callback The callback with result
  * @return {Promise} The promise object for async action
  */
-UserSchema.methods.getGames = function(callback)
-{
-	return this.model('Game').getGamesByGroups(
-		this.groups,
-		callback
-	);
+UserSchema.methods.getGames = function(callback) {
+  return this.model('Game').getGamesByGroups(this.groups, callback);
 };
 
 /**
@@ -199,11 +187,10 @@ UserSchema.methods.getGames = function(callback)
  * @param {function} callback The callback with result
  * @return {Promise} The promise object for async action
  */
-UserSchema.methods.inGroup = function(group)
-{
-	return this.groups.find(function(g){
-		return g._id.equals(group._id);
-	});
+UserSchema.methods.inGroup = function(group) {
+  return this.groups.find(function(g) {
+    return g._id.equals(group._id);
+  });
 };
 
 /**
@@ -214,10 +201,8 @@ UserSchema.methods.inGroup = function(group)
  * @param {function} callback The callback with result
  * @return {Promise} The promise object for async action
  */
-UserSchema.statics.getAll = function(excludeId, callback)
-{
-	return this.find({_id: {$ne: excludeId}}, callback)
-		.sort('name');
+UserSchema.statics.getAll = function(excludeId, callback) {
+  return this.find({ _id: { $ne: excludeId } }, callback).sort('name');
 };
 
 /**
@@ -228,12 +213,14 @@ UserSchema.statics.getAll = function(excludeId, callback)
  * @param {function} callback The callback with result
  * @return {Promise} The promise object for async action
  */
-UserSchema.statics.getByToken = function(token, callback)
-{
-	return this.findOne({ 
-		resetPasswordToken: token,
-		resetPasswordExpires: { $gt: Date.now() } 
-	}, callback).populate('groups');
+UserSchema.statics.getByToken = function(token, callback) {
+  return this.findOne(
+    {
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() }
+    },
+    callback
+  ).populate('groups');
 };
 
 /**
@@ -241,12 +228,10 @@ UserSchema.statics.getByToken = function(token, callback)
  * @method generateToken
  * @param {function} callback The callback with result
  */
-UserSchema.statics.generateToken = function(callback)
-{
-	crypto.randomBytes(20, function(err, buffer)
-	{
-		callback(err, buffer.toString('hex'));
-	});
+UserSchema.statics.generateToken = function(callback) {
+  crypto.randomBytes(20, function(err, buffer) {
+    callback(err, buffer.toString('hex'));
+  });
 };
 
 /**
@@ -257,11 +242,13 @@ UserSchema.statics.generateToken = function(callback)
  * @param {function} callback The callback with result
  * @return {Promise} The promise object for async action
  */
-UserSchema.statics.getByUsername = function(username, callback)
-{
-	return this.findOne({ 
-		username: username
-	}, callback).populate('groups');
+UserSchema.statics.getByUsername = function(username, callback) {
+  return this.findOne(
+    {
+      username: username
+    },
+    callback
+  ).populate('groups');
 };
 
 /**
@@ -272,9 +259,8 @@ UserSchema.statics.getByUsername = function(username, callback)
  * @param {function} callback The callback with result
  * @return {Promise} The promise object for async action
  */
-UserSchema.statics.getById = function(id, callback)
-{
-	return this.findById(id, callback).populate('groups');
+UserSchema.statics.getById = function(id, callback) {
+  return this.findById(id, callback).populate('groups');
 };
 
 /**
@@ -286,27 +272,24 @@ UserSchema.statics.getById = function(id, callback)
  * @param {function} callback The callback with result
  * @return {Promise} The promise object for async action
  */
-UserSchema.statics.getBySearch = function(search, limit, callback)
-{
-	return this.find({ name: new RegExp(search, "i") })
-		.limit(limit)
-		.sort('name')
-		.select('name')
-		.exec(callback);
+UserSchema.statics.getBySearch = function(search, limit, callback) {
+  return this.find({ name: new RegExp(search, 'i') })
+    .limit(limit)
+    .sort('name')
+    .select('name')
+    .exec(callback);
 };
 
 // Hash the password after every save of the user
-UserSchema.pre('save', function(next)
-{
-	if (this.isModified('password'))
-	{
-		this.password = bcrypt.hashSync(
-			this.password, 
-			bcrypt.genSaltSync(10), 
-			null
-		);
-	}
-	return next();
+UserSchema.pre('save', function(next) {
+  if (this.isModified('password')) {
+    this.password = bcrypt.hashSync(
+      this.password,
+      bcrypt.genSaltSync(10),
+      null
+    );
+  }
+  return next();
 });
 
 /**
@@ -317,52 +300,46 @@ UserSchema.pre('save', function(next)
  * @param {function|int} [privilege=0] The global user privilege
  * @param {function} callback The callback with result
  */
-UserSchema.statics.createUser = function(data, privilege, callback)
-{
-	var Group = this.model('Group');
-	var User = this;
+UserSchema.statics.createUser = function(data, privilege, callback) {
+  var Group = this.model('Group');
+  var User = this;
 
-	if (typeof(privilege)==='function')
-	{
-		callback = privilege;
-		privilege = 0;
-	}
+  if (typeof privilege === 'function') {
+    callback = privilege;
+    privilege = 0;
+  }
 
-	// Editors and Admin get tokens that don't expire
-	var tokenExpires = !privilege ? Group.getTokenExpires() : null;
+  // Editors and Admin get tokens that don't expire
+  var tokenExpires = !privilege ? Group.getTokenExpires() : null;
 
-	async.waterfall([
-		function(done)
-		{
-			Group.generateToken(done);
-		},
-		function(token, done)
-		{
-			var group = new Group({
-				name: data.name,
-				slug: data.username,
-				token: token,
-				tokenExpires: tokenExpires,
-				privilege: parseInt(privilege || 0),
-				isUserGroup: true
-			});
-			group.save(function(err)
-			{
-				done(err, group);
-			});
-		},
-		function(group, done)
-		{
-			var user = new User({
-				username: data.username,
-				password: data.password,
-				email: data.email,
-				name: data.name,
-				groups: [group._id]
-			});
-			user.save(callback);
-		}
-	]);
+  async.waterfall([
+    function(done) {
+      Group.generateToken(done);
+    },
+    function(token, done) {
+      var group = new Group({
+        name: data.name,
+        slug: data.username,
+        token: token,
+        tokenExpires: tokenExpires,
+        privilege: parseInt(privilege || 0),
+        isUserGroup: true
+      });
+      group.save(function(err) {
+        done(err, group);
+      });
+    },
+    function(group, done) {
+      var user = new User({
+        username: data.username,
+        password: data.password,
+        email: data.email,
+        name: data.name,
+        groups: [group._id]
+      });
+      user.save(callback);
+    }
+  ]);
 };
 
 /**
@@ -372,49 +349,39 @@ UserSchema.statics.createUser = function(data, privilege, callback)
  * @param {object} data The user data object
  * @param {function} callback The callback with result
  */
-UserSchema.statics.addUser = function(data, callback)
-{
-	var User = this;
+UserSchema.statics.addUser = function(data, callback) {
+  var User = this;
 
-	// find a user in Mongo with provided username
-	this.getByUsername(data.username, function(err, user)
-	{
-		// In case of any error return
-		if (err)
-		{
-			return callback(err);
-		}
-		// already exists
-		if (user)
-		{
-			return callback('User Already Exists');
-		}
-		else if (data.confirm != data.password)
-		{
-			return callback('Password and confirm password do not match');
-		}
-		else
-		{
-			User.createUser(
-				{
-					username: data.username,
-					password: data.password,
-					email: data.email,
-					name: data.name
-				},
-				data.privilege,
-				function(err, user)
-				{
-					if (err)
-					{
-						callback('Unable to add Account');
-						throw err;
-					}
-					callback(null, user);
-				}
-			);
-		}
-	});
+  // find a user in Mongo with provided username
+  this.getByUsername(data.username, function(err, user) {
+    // In case of any error return
+    if (err) {
+      return callback(err);
+    }
+    // already exists
+    if (user) {
+      return callback('User Already Exists');
+    } else if (data.confirm != data.password) {
+      return callback('Password and confirm password do not match');
+    } else {
+      User.createUser(
+        {
+          username: data.username,
+          password: data.password,
+          email: data.email,
+          name: data.name
+        },
+        data.privilege,
+        function(err, user) {
+          if (err) {
+            callback('Unable to add Account');
+            throw err;
+          }
+          callback(null, user);
+        }
+      );
+    }
+  });
 };
 
 /**
@@ -424,9 +391,8 @@ UserSchema.statics.addUser = function(data, callback)
  * @param {function} callback The callback with result
  * @return {Promise} The promise object for async action
  */
-UserSchema.methods.comparePassword = function(candidatePassword, callback)
-{
-	return bcrypt.compareSync(candidatePassword, this.password);
+UserSchema.methods.comparePassword = function(candidatePassword, callback) {
+  return bcrypt.compareSync(candidatePassword, this.password);
 };
 
 module.exports = mongoose.model('User', UserSchema);

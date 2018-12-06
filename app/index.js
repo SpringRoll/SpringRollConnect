@@ -2,16 +2,16 @@
 
 // Include libraries
 var express = require('express'),
-	colors = require('colors'),
-	expressValidator = require('express-validator'),
-	errorHandler = require('errorhandler'),
-	bodyParser = require('body-parser'),
-	fs = require('fs'),
-	dotenv = require('dotenv');
+  colors = require('colors'),
+  expressValidator = require('express-validator'),
+  errorHandler = require('errorhandler'),
+  bodyParser = require('body-parser'),
+  fs = require('fs'),
+  dotenv = require('dotenv');
 
-if(fs.existsSync('.env')) {
-	// Load the environment file
-	dotenv.load();
+if (fs.existsSync('.env')) {
+  // Load the environment file
+  dotenv.load();
 }
 
 // Create sever
@@ -26,9 +26,11 @@ process.chdir(__dirname);
 // Setup the app
 var port = process.env.PORT || 3000;
 app.listen(port);
-app.use(bodyParser.urlencoded({
-	extended: true
-}));
+app.use(
+  bodyParser.urlencoded({
+    extended: true
+  })
+);
 app.use(bodyParser.json());
 app.set('json spaces', config.spaces);
 
@@ -36,10 +38,11 @@ app.set('json spaces', config.spaces);
 app.set('version', require('../package.json').version);
 
 // Custom validators
-app.use(expressValidator(
-{
-	customValidators: require('./helpers/validators')
-}));
+app.use(
+  expressValidator({
+    customValidators: require('./helpers/validators')
+  })
+);
 
 // Rendering engine for mark-up
 app.set('views', __dirname + '/views');
@@ -54,12 +57,9 @@ app.use(errorHandler(config.errorHandlerOptions));
 // Start the server
 console.log(('SpringRoll API running on http://localhost:' + port).green);
 
-if (!process.env.MONGO_DATABASE)
-{
-	app.use(require('./routes/install'));
-}
-else
-{
-	// bootstrap the database connection
-	require('./helpers/database')(app);
+if (!process.env.MONGO_DATABASE) {
+  app.use(require('./routes/install'));
+} else {
+  // bootstrap the database connection
+  require('./helpers/database')(app);
 }
