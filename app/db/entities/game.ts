@@ -4,7 +4,7 @@ import { Entity, Column, ObjectID, ObjectIdColumn } from 'typeorm';
 export class Game {
   @ObjectIdColumn()
   id: ObjectID;
-  @Column()
+  @Column({})
   title: string;
   @Column()
   slug: string;
