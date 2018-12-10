@@ -12,9 +12,9 @@
     "@types/connect-mongodb-session": "^0.0.0",
     "@types/dotenv": "^6.1.0",
     "@types/errorhandler": "^0.0.32",
+    "@types/express": "^4.16.0",
     "@types/express-session": "^1.15.11",
     "@types/express-validator": "^3.0.0",
-    "@types/express": "^4.16.0",
     "@types/glob": "^7.1.1",
     "@types/grunt": "^0.4.24",
     "@types/jade": "^0.0.30",
@@ -22,20 +22,21 @@
     "@types/method-override": "^0.0.31",
     "@types/moment": "^2.13.0",
     "@types/mongodb": "^3.1.17",
+    "@types/mongoose": "^5.3.3",
     "@types/mongoose-deep-populate": "^2.0.31",
     "@types/mongoose-unique-validator": "^1.0.1",
-    "@types/mongoose": "^5.3.3",
     "@types/nodemailer": "^4.6.5",
-    "@types/passport-local": "^1.0.33",
     "@types/passport": "^0.4.7",
+    "@types/passport-local": "^1.0.33",
     "@types/semver": "^5.5.0",
     "@types/uuid": "^3.4.4",
     "glob": "^7.1.2",
+    "grunt": "0.4.*",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-less": "^1.4.1",
     "grunt-eslint": "^21.0.0",
-    "grunt": "0.4.*",
+    "nodemon": "^1.18.7",
     "types-installer": "^1.4.0"
   },
   "dependencies": {
@@ -47,6 +48,7 @@
     "body-parser": "^1.11.0",
     "bootstrap": "^3.3.7",
     "bunyan": "^1.5.1",
+    "class-validator": "^0.9.1",
     "colors": "^1.0.3",
     "connect-flash": "^0.1.1",
     "connect-mongodb-session": "^1.0.5",
@@ -80,6 +82,7 @@
   "scripts": {
     "test": "grunt default --verbose",
     "start": "ts-node server.js",
+    "dev": "nodemon -e ts -w ./app -x npm run start",
     "install-types": "types-installer"
   }
 }

@@ -6,7 +6,8 @@ import * as fs from 'fs';
 import * as dotenv from 'dotenv';
 import connect from './db/connect';
 import 'colors';
-// import { Game } from './db/entities/games';
+import { Game } from './db/entities';
+
 require('colors');
 const expressValidator = require('express-validator');
 const errorHandler = require('errorhandler');

@@ -1,5 +1,6 @@
 var cluster = require('cluster');
 var totalCpus = require('os').cpus().length;
+// TODO: Re-enable
 // if (cluster.isMaster) {
 //   //If a thread dies, respawn it.
 //   cluster.on('exit', function(worker, code, signal) {
