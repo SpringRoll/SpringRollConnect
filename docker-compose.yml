@@ -7,3 +7,9 @@ services:
       - '27017'
     ports:
       - '27017:27017'
+  postgres:
+    image: postgres:11.1
+    expose:
+      - '5432'
+    ports:
+      - '5432:5432'

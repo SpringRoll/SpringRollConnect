@@ -3,17 +3,10 @@ import { getConnection } from 'typeorm';
 import { validate } from 'class-validator';
 const GameRepository = getConnection().getMongoRepository(Game);
 
-const router = require('express').Router(),
-  uuid = require('uuid/v4');
+const router = require('express').Router();
 
 router.post('/', function(req, res) {
   const date = new Date();
-  req.body.releases = [];
-  req.body.groups = [];
-  req.body.bundleId = uuid();
-  req.body.updated = date;
-  req.body.created = date;
-  req.body.isArchived = false;
 
   const game = GameRepository.create(<object>req.body);
 

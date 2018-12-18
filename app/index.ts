@@ -6,7 +6,6 @@ import * as fs from 'fs';
 import * as dotenv from 'dotenv';
 import connect from './db/connect';
 import 'colors';
-import { Game } from './db/entities';
 
 require('colors');
 const expressValidator = require('express-validator');
@@ -69,5 +68,4 @@ async function start() {
     require('./helpers/database')(app);
   }
 }
-
 start();

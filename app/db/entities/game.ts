@@ -20,6 +20,7 @@ import {
   IsOptional,
   IsDefined
 } from 'class-validator';
+import { v4 } from 'uuid';
 
 @Entity({ name: 'games' })
 export class Game {
@@ -81,4 +82,15 @@ export class Game {
 
   @Column()
   thumbnail: Binary;
+
+  constructor() {
+    const date = new Date();
+    this.capabilities = new Capabilities();
+    this.releases = [];
+    this.groups = [];
+    this.bundleId = v4();
+    this.updated = date;
+    this.updated = date;
+    this.isArchived = false;
+  }
 }
