@@ -51,7 +51,10 @@ function renderPage(req, res, template, populate=null)
 			{
         var game = Game.getBySlug(req.params.slug, done);
         if (populate){
-          game.populate(populate);
+          game.populate({
+						path: populate,
+						options: { sort: { 'updated': -1 } }
+					});
 				};
       },
 			function(game, done)
