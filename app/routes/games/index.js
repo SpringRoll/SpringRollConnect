@@ -50,13 +50,13 @@ router.get('/:slug', function(req, res)
 router.get('/:slug/privileges', function(req, res)
 {
 	// have to pass addt'l param to resolve Group objects
-	renderPage(req, res, 'games/privileges', ['groups.group']);
+	renderPage(req, res, 'games/privileges', 'groups.group');
 });
 
 router.get('/:slug/releases', function(req, res)
 {
 	// have to pass addt'l param to resolve Release objects
-	renderPage(req, res, 'games/releases', ['releases']);
+	renderPage(req, res, 'games/releases', 'releases');
 });
 
 router.patch('/:slug/releases/:commit_id', async function(req, res)
