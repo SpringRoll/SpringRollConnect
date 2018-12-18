@@ -42,8 +42,9 @@ router.patch('/:commit_id', async function(req, res)
 	}
 
 	req.body.updated = Date.now();
-	await Release.findByIdAndUpdate(req.body.release, req.body);
 	let release = await Release.getByCommitId(req.body.commitId);
+	req.body.game = release.game;
+	await Release.findByIdAndUpdate(release._id, req.body);
 	let game = await Game.getById(release.game);
 	let baseUrl = '';
 	if (!game.isArchived){
