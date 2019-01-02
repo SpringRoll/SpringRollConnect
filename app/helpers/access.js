@@ -18,7 +18,7 @@ module.exports = {
 		}
 		else {
 			req.flash('redirect', req.originalUrl);
-			res.redirect('/login');
+			res.redirect('/');
 		}		
 	},
 
