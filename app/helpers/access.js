@@ -13,17 +13,26 @@ module.exports = {
 	isAuthenticated : function(req, res, next) 
 	{
 		if (req.isAuthenticated())
+		{
 			return next();
-		req.flash('redirect', req.originalUrl);
-		res.redirect('/login');
+		}
+		else {
+			req.flash('redirect', req.originalUrl);
+			res.redirect('/login');
+		}		
 	},
 
 	// Access function if user is not logged in
 	isAnonymous: function(req, res, next)
 	{
 		if (!req.isAuthenticated())
+		{
 			return next();
-		res.redirect('/');
+		}
+		else {
+			req.flash('redirect', req.originalUrl);
+			res.redirect('/login');
+		}		
 	},
 	// Editor privilege can:
 	// - create a new project
@@ -34,11 +43,17 @@ module.exports = {
 		if (req.isAuthenticated())
 		{
 			if (req.user.privilege >= privilege.editor)
+			{
 				return next();
-			res.redirect('/');
+			}
+			else {
+				return res.redirect('/');
+			}
+		}
+		else {
+			req.flash('redirect', req.originalUrl);
+			res.redirect('/login');
 		}			
-		req.flash('redirect', req.originalUrl);
-		res.redirect('/login');
 	},
 	// Admin can:
 	// - create a new group
@@ -49,10 +64,16 @@ module.exports = {
 		if (req.isAuthenticated())
 		{
 			if (req.user.privilege >= privilege.admin)
+			{
 				return next();
-			return res.redirect('/');
+			}
+			else {
+				return res.redirect('/');
+			}
 		}
-		req.flash('redirect', req.originalUrl);
-		res.redirect('/login');
+		else {
+			req.flash('redirect', req.originalUrl);
+			res.redirect('/login');
+		}		
 	}
 };
