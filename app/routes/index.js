@@ -3,7 +3,6 @@ module.exports = function(app)
 	const access = require('../helpers/access');
 	const marky = require("marky-markdown");
 	const Config = require('../models/config');
-	const methodOverride = require('method-override');
 
 	// Add the user to whatever template
 	app.use(function(req, res, next)
@@ -38,17 +37,23 @@ module.exports = function(app)
 		});
 	});
 
-	app.use(methodOverride(function (req, res) {
+	app.use(function (req, res, next) {
 		const route = req.originalUrl.startsWith('/games') || req.originalUrl.startsWith('/archive') || req.originalUrl.startsWith('/releases');
 		const contents = req.body && typeof req.body === 'object' && 'action' in req.body;
+		// if fails cases, can just pass through w/ no change
 		if (route && contents) {
+			// Map RESTORE keyword to PATCH action, w/ isArchived flag change
 			if (req.body.action === 'RESTORE') {
 				req.body.isArchived = false;
-				return 'PATCH';
+				req.method = 'PATCH';
 			}
-			return req.body.action;
+			// Set POST to PATCH / DELETE based on value in form
+			else {
+				req.method = req.body.action;
+			}
 		}
-	}));
+		next();
+	});
 
 	// Site pages
 	app.use('/', require('./home'));
