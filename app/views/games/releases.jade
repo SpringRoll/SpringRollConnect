@@ -81,7 +81,7 @@ append gameContent
 											a(href="#{game.repository}/browse?at=refs/heads/#{release.branch.replace('origin/', '')}" data-toggle="tooltip" title="View Branch")=' '+release.branch
 
 								.help-block.updated
-									span Updated
+									span Updated &nbsp;
 									span=moment(release.updated).fromNow()
 									if release.updatedBy
 										|  by #{release.updatedBy.name}
