@@ -396,6 +396,27 @@ GameSchema.methods.hasGroup = function(group)
 };
 
 /**
+ * Returns the highest level privilege a group has on this game
+ * @param {Group} group The group to check privileges for
+ * @return {Number}
+ */
+GameSchema.methods.groupPrivilege = function(group)
+{
+	let highestPrivilege = -1;
+	this.groups.forEach(function(entry) {
+		// If entry.group._id, the groups array has been populated and we can use the model. Otherwise, use the value
+		// directly (indicating that groups has NOT been populated)
+		const entryGroupId = entry.group._id ? entry.group._id : entry.group;
+
+		if(entryGroupId.toString() == group._id.toString()) {
+			highestPrivilege = Math.max(highestPrivilege, entry.permission);
+		}
+	});
+
+	return highestPrivilege;
+};
+
+/**
  * Check to see if a token has permission to view/edit game
  * @method  hasPermission
  * @param  {String}   token    The user or group token
