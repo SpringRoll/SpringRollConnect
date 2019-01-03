@@ -30,7 +30,12 @@ app.use(bodyParser.urlencoded({
 	extended: true
 }));
 app.use(bodyParser.json());
-app.set('json spaces', config.spaces);
+
+let spaces = 4;
+if(process.env.NODE_ENV === 'production') {
+  spaces = 0;
+}
+app.set('json spaces', spaces);
 
 // Set the version
 app.set('version', require('../package.json').version);
