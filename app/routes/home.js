@@ -39,7 +39,6 @@ router.post('/', function(req, res)
 	{
 		if (err)
 		{
-			console.log(String(err).red);
 			log.error("Unable to change personal token");
 			log.error(err);
 			req.flash('error', 'Something went wrong');

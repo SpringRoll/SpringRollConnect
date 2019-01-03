@@ -1,3 +1,5 @@
+var log = require('../helpers/logger');
+
 module.exports = function(app)
 {
 	const access = require('../helpers/access');
@@ -90,5 +92,33 @@ module.exports = function(app)
 	app.all('*', function(req, res)
 	{
 		res.status(404).render('404');
+	});
+
+	// Setup the error handler. Note that this code is declared AFTER all of the other routes as per the recommendation
+	// here: https://stackoverflow.com/a/32671421/10200077
+	app.use(function(err, req, res, next) {
+		// log the error occurring
+		log.error('Uncaught error');
+		log.error(err);
+
+		// only show the stack when we're not in production
+		const showStack = process.env.NODE_ENV !== 'production';
+
+		// if it's an ajax request, respond with JSON
+		if (req.xhr) {
+			const response = {
+				success: false,
+				message: err.toString()
+			};
+
+			if(showStack) {
+				response.stack = err.stack;
+			}
+
+			res.status(500).send(response);
+		} else {
+			// Otherwise, render our 500 view which renders the same info, but as HTML
+			res.status(500).render('500', { err, showStack });
+		}
 	});
 };
