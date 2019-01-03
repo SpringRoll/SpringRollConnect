@@ -51,9 +51,6 @@ app.use(express.static(__dirname + '/public'));
 // Setup the error handler
 app.use(errorHandler(config.errorHandlerOptions));
 
-// Start the server
-console.log(('SpringRoll API running on http://localhost:' + port).green);
-
 if (!process.env.MONGO_DATABASE)
 {
 	app.use(require('./routes/install'));
