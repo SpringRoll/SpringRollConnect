@@ -29,7 +29,7 @@ router.post('/', function(req, res) {
 
   game.save(function(err, game) {
     if (err) {
-      console.log(String(err).red);
+      log.error(err);
       return res.render('game/add', {
         error: 'Unable to add the game'
       });
