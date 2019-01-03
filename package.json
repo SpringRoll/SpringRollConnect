@@ -42,6 +42,7 @@
     "uuid": "^3.2.1"
   },
   "scripts": {
-    "test": "grunt default --verbose"
+    "test": "grunt default --verbose",
+    "tinker": "node --experimental-repl-await tinker.js"
   }
 }
