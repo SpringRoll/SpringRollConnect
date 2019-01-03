@@ -75,7 +75,7 @@ router.post('/', function(req, res)
 			{
 				log.error("Unable to add group");
 				log.error(err);
-				console.log(String(err).red);
+
 				return res.render('groups/add', {
 					error: 'Unable to add the group: ' + err
 				});

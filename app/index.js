@@ -4,7 +4,6 @@
 var express = require('express'),
 	colors = require('colors'),
 	expressValidator = require('express-validator'),
-	errorHandler = require('errorhandler'),
 	bodyParser = require('body-parser'),
 	fs = require('fs'),
 	dotenv = require('dotenv');
@@ -17,9 +16,6 @@ if(fs.existsSync('.env')) {
 // Create sever
 var app = express();
 
-// Get the configuration
-var config = require('./config/environment.js')[app.get('env')];
-
 // Change the working directory to here
 process.chdir(__dirname);
 
@@ -30,7 +26,12 @@ app.use(bodyParser.urlencoded({
 	extended: true
 }));
 app.use(bodyParser.json());
-app.set('json spaces', config.spaces);
+
+let spaces = 4;
+if(process.env.NODE_ENV === 'production') {
+  spaces = 0;
+}
+app.set('json spaces', spaces);
 
 // Set the version
 app.set('version', require('../package.json').version);
@@ -47,12 +48,6 @@ app.set('view engine', 'jade');
 
 // Expose the "public" folder
 app.use(express.static(__dirname + '/public'));
-
-// Setup the error handler
-app.use(errorHandler(config.errorHandlerOptions));
-
-// Start the server
-console.log(('SpringRoll API running on http://localhost:' + port).green);
 
 if (!process.env.MONGO_DATABASE)
 {

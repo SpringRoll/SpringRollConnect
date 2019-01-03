@@ -40,7 +40,8 @@ module.exports = function(app)
 	var db = mongoose.connection;
 	db.on('error', function(err)
 	{
-		console.error(String("Connection error : " + err).red);
+    log.error('Database connection error');
+    log.error(err);
 	});
     
     var store = new MongoDBStore(

@@ -59,7 +59,6 @@ router.post('/', function(req, res)
 					if (err) 
 					{
 						log.error(err);
-						console.error(err);
 						req.flash('error', 'Unable to update the user');
 						return render(user, req, res);
 					}
@@ -69,7 +68,6 @@ router.post('/', function(req, res)
 						if (err)
 						{
 							log.error(err);
-							console.error(err);
 							req.flash('error', 'Unable to update the user');
 						}
 						else
