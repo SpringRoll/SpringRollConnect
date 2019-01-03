@@ -400,7 +400,7 @@ GameSchema.methods.hasGroup = function(group)
  * @param {Group} group The group to check privileges for
  * @return {Number}
  */
-GameSchema.methods.groupPrivilege = function(group)
+GameSchema.methods.getHighestPrivilegeFor = function(group)
 {
 	let highestPrivilege = -1;
 	this.groups.forEach(function(entry) {
