@@ -1,3 +1,5 @@
+var log = require('../helpers/logger');
+
 module.exports = function(app)
 {
 	const access = require('../helpers/access');
@@ -90,5 +92,13 @@ module.exports = function(app)
 	app.all('*', function(req, res)
 	{
 		res.status(404).render('404');
+	});
+
+	// Setup the error handler
+	app.use(function(err, req, res, next) {
+		log.error('Uncaught error');
+		log.error(err);
+
+		res.status(500).send('An error has occurred');
 	});
 };

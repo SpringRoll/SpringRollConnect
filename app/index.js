@@ -4,7 +4,6 @@
 var express = require('express'),
 	colors = require('colors'),
 	expressValidator = require('express-validator'),
-	errorHandler = require('errorhandler'),
 	bodyParser = require('body-parser'),
 	fs = require('fs'),
 	dotenv = require('dotenv');
@@ -16,9 +15,6 @@ if(fs.existsSync('.env')) {
 
 // Create sever
 var app = express();
-
-// Get the configuration
-var config = require('./config/environment.js')[app.get('env')];
 
 // Change the working directory to here
 process.chdir(__dirname);
@@ -52,9 +48,6 @@ app.set('view engine', 'jade');
 
 // Expose the "public" folder
 app.use(express.static(__dirname + '/public'));
-
-// Setup the error handler
-app.use(errorHandler(config.errorHandlerOptions));
 
 if (!process.env.MONGO_DATABASE)
 {
