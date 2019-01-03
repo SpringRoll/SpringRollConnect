@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.Types.ObjectId;
+var User = require('./user');
 
 /**
  * The game model
@@ -413,11 +414,23 @@ GameSchema.methods.hasPermission = function(token, callback)
 		{
 			return callback('Token is invalid');
 		}
-		if (!game.hasGroup(group))
-		{
-			return callback('Unauthorized token');
-		}
-		callback(null, game);
+		User.getByUsername(group.slug)
+		.then(accessingUser => {
+			let hasAccess = false;
+			for (let group of accessingUser.groups){
+				hasAccess = game.hasGroup(group);
+				if (hasAccess)
+				{
+					break;
+				}
+			}
+			if (!hasAccess){
+				return callback('Unauthorized token');
+			}
+			else {
+				callback(null, game);
+			}
+		});
 	});
 };
 
