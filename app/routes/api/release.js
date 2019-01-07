@@ -26,15 +26,16 @@ router.post('/:slug', function(req, res)
 
 	if (errors)
 	{
+		log.error("Validation error adding release from token " + req.body.token);
+		log.error(errors);
+
 		if (req.body.redirect)
 		{
+			log.warn('Redirecting to ' + req.body.redirect);
 			res.redirect(req.body.redirect);
 		}
 		else
 		{
-			log.error("Validation error adding release");
-			log.error(errors);
-
 			res.send({
 				success:false,
 				data: errors
