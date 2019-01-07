@@ -139,15 +139,15 @@ router.post('/:slug', function(req, res)
 	{
 		if (err)
 		{			
+			log.error('Unable to add the release for token ' + req.body.token);
+			log.error(err);
+
 			if (req.body.redirect)
 			{
 				res.redirect(req.body.redirect);
 			}
 			else
 			{
-				log.error('Unable to add the release');
-				log.error(err);
-
 				res.status(500).send({
 					success:false,
 					data: 'Unable to add the release'
