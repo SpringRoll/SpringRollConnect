@@ -424,35 +424,51 @@ GameSchema.methods.groupPrivilege = function(group)
  */
 GameSchema.methods.hasPermission = function(token, callback)
 {
-	var game = this;
-	if (!token)
-	{
-		return callback('Token is required');
-	}
-	this.model('Group').getByToken(token, function(err, group)
-	{
-		if (!group)
-		{
-			return callback('Token is invalid');
-		}
-		User.getByUsername(group.slug)
-		.then(accessingUser => {
-			let hasAccess = false;
-			for (let group of accessingUser.groups){
-				hasAccess = game.hasGroup(group);
-				if (hasAccess)
-				{
-					break;
-				}
-			}
-			if (!hasAccess){
-				return callback('Unauthorized token');
-			}
-			else {
-				callback(null, game);
-			}
-		});
-	});
+  var game = this;
+  if (!token)
+  {
+    return callback('Token is required');
+  }
+
+  // Find the associated group that this token 
+  return this.model('Group').getByToken(token)
+    .then(function(group) {
+      // if no group is found, reject the query
+      if (!group) {
+        return Promise.reject('Token is invalid');
+      }
+
+      // if the group is a plain group, return just that single group as an array for the next step in the promise
+      // chain to query with
+      if (!group.isUserGroup) {
+        return [group];
+      }
+
+      // if it's a user group, get the associated user and then all the groups that user is a part of
+      return User.getByGroup(group)
+        .populate('groups')
+        .then(user => {
+					// have to dereference because returned as Array for some reason
+          return user[0].groups;
+        });
+    })
+    .then(function(groups) {
+      const ids = groups.map(group => group._id.toString());
+			const gameGroups = game.groups.map(entry => entry.group._id.toString());
+
+      // at least ONE of the entries from ids must be in the list of groups attached to the game
+      for (const id of ids) {
+        if(gameGroups.indexOf(id) > -1) {
+					callback(null, game);
+					return;
+        }
+      }
+			callback('Unauthorized token');
+			return;
+    })
+    .catch(function(error) {
+      return callback(error);
+    });
 };
 
 /**
