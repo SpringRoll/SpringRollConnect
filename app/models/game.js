@@ -499,12 +499,21 @@ GameSchema.statics.addGroup = function(ids, groupId, permission, callback)
 		permission: permission
 	};
 
+	// logic implements overwrite of existing with incoming
+	// first remove any old entries associated with the group in question
 	this.update(
-		{_id: {$in: ids}}, 
-		{$push: {groups: group}},
-		{multi: true}, 
-		callback
-	);
+		{_id: {$in: ids}},
+		{$pull: {groups: {group: {$in: [groupId]}}}}
+	)
+	// then add the 'new' permission level
+	.then(()=>{
+		this.update(
+			{_id: {$in: ids}}, 
+			{$push: {groups: group}},
+			{multi: true}, 
+			callback
+		);
+	});
 };
 
 /**
