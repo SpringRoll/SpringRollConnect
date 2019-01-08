@@ -454,7 +454,15 @@ GameSchema.methods.hasPermission = function(token, callback)
     })
     .then(function(groups) {
       const ids = groups.map(group => group._id.toString());
-			const gameGroups = game.groups.map(entry => entry.group._id.toString());
+			const gameGroups = game.groups.map(entry => {
+				if(entry.group._id) {
+					// if the group relationship has been populated, use the id from the model
+					return entry.group._id.toString();
+				} else {
+					// otherwise, use the raw group property which is the id of the group
+					return entry.group.toString();
+				}
+			});
 
       // at least ONE of the entries from ids must be in the list of groups attached to the game
       for (const id of ids) {
