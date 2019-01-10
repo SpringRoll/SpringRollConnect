@@ -1,5 +1,5 @@
-const webdriver = require('selenium-webdriver');
-const chromedriver = require('chromedriver');
+const webdriver = require("selenium-webdriver");
+const chromedriver = require("chromedriver");
 
 const selenium = {
   /**
@@ -8,9 +8,7 @@ const selenium = {
    * @see selenium.browser
    */
   init: () => {
-    selenium.browser = new webdriver.Builder()
-      .forBrowser('chrome')
-      .build();
+    selenium.browser = new webdriver.Builder().forBrowser("chrome").build();
 
     return selenium.browser;
   },
@@ -28,6 +26,6 @@ const selenium = {
    * @see {@link https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/index_exports_By.html}
    */
   By: webdriver.By
-}
+};
 
 module.exports = selenium;
