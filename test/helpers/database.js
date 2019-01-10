@@ -25,10 +25,10 @@ const database = {
         }
 
         database.connection = mongoose.connection;
-        database.models.release = require('../../app/models/release');
-        database.models.game = require('../../app/models/game');
-        database.models.group = require('../../app/models/group');
-        database.models.user = require('../../app/models/user');
+        database.models.Release = require('../../app/models/release');
+        database.models.Game = require('../../app/models/game');
+        database.models.Group = require('../../app/models/group');
+        database.models.User = require('../../app/models/user');
         
         // load extended Mongoose model types for email and URL
         mongooseTypes.loadTypes(mongoose);
