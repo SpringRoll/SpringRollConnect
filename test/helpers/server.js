@@ -1,4 +1,4 @@
-const spawn = require('child_process').spawn;
+const spawn = require("child_process").spawn;
 
 const server = {
   /**
@@ -7,7 +7,7 @@ const server = {
    */
   init: () => {
     return new Promise(resolve => {
-      server.process = spawn('node', ['server.js']);
+      server.process = spawn("node", ["server.js"]);
 
       // wait for the server to be up
       setTimeout(() => {
@@ -21,7 +21,7 @@ const server = {
    * @type ChildProcess
    * @see {@link https://nodejs.org/api/child_process.html#child_process_class_childprocess}
    */
-  process: null,
+  process: null
 };
 
 module.exports = server;

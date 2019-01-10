@@ -1,18 +1,14 @@
-const mongoose = require('mongoose');
-const server = require('./helpers/server');
-const selenium = require('./helpers/selenium');
-const database = require('./helpers/database');
+const mongoose = require("mongoose");
+const server = require("./helpers/server");
+const selenium = require("./helpers/selenium");
+const database = require("./helpers/database");
 
 before(() => {
-  return Promise.all([
-    database.init(),
-    selenium.init(),
-    server.init()
-  ]);
+  return Promise.all([database.init(), selenium.init(), server.init()]);
 });
 
 afterEach(done => {
-  mongoose.connection.db.dropDatabase(done)
+  mongoose.connection.db.dropDatabase(done);
 });
 
 after(() => {
@@ -21,14 +17,15 @@ after(() => {
   database.connection.close();
 });
 
-const expect = require('chai').expect;
+const expect = require("chai").expect;
 
-describe('SpringRollConnect', () => {
-  it('should have the correct title', () => {
-    return selenium.browser.get('http://localhost:3000')
+describe("SpringRollConnect", () => {
+  it("should have the correct title", () => {
+    return selenium.browser
+      .get("http://localhost:3000")
       .then(() => selenium.browser.getTitle())
       .then(title => {
-        expect(title).to.equal('Login - SpringRoll Connect v1.6.4');
+        expect(title).to.equal("Login - SpringRoll Connect v1.6.4");
       });
   });
 });

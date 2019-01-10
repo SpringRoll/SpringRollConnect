@@ -14,29 +14,33 @@ describe("authentication", () => {
       2,
       async function() {
         // attempt to login from the home page
-        await selenium.browser.get("http://localhost:3000")
+        await selenium.browser.get("http://localhost:3000");
 
         // set the username field
-        const usernameInput = await selenium.browser.findElement({ name: "username" });
-        await usernameInput.sendKeys('testuser');
+        const usernameInput = await selenium.browser.findElement({
+          name: "username"
+        });
+        await usernameInput.sendKeys("testuser");
 
         // set the password field
-        const passwordInput = await selenium.browser.findElement({ name: "password" });
+        const passwordInput = await selenium.browser.findElement({
+          name: "password"
+        });
         passwordInput.sendKeys("secret");
 
         // submit the form
-        const form = await selenium.browser.findElement({ tagName: 'form' });
+        const form = await selenium.browser.findElement({ tagName: "form" });
         await form.submit();
 
         // now check that we're on the correct page by looking for a logout link
         const links = await selenium.browser.findElements(
-              selenium.By.css('a[href="/logout"]')
-            );
+          selenium.By.css('a[href="/logout"]')
+        );
 
         try {
           expect(links.length).to.equal(1);
           done();
-        } catch(e) {
+        } catch (e) {
           done(e);
         }
       }
