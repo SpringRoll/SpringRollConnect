@@ -12,40 +12,33 @@ describe("authentication", () => {
         email: "email@springroll.io"
       },
       2,
-      function() {
+      async function() {
         // attempt to login from the home page
-        selenium.browser
-          .get("http://localhost:3000")
+        await selenium.browser.get("http://localhost:3000")
 
-          // set the username field
-          .then(() => {
-            return selenium.browser.findElement({ name: "username" });
-          })
-          .then(element => element.sendKeys("testuser"))
+        // set the username field
+        const usernameInput = await selenium.browser.findElement({ name: "username" });
+        await usernameInput.sendKeys('testuser');
 
-          // set the password field
-          .then(() => {
-            return selenium.browser.findElement({ name: "password" });
-          })
-          .then(element => element.sendKeys("secret"))
+        // set the password field
+        const passwordInput = await selenium.browser.findElement({ name: "password" });
+        passwordInput.sendKeys("secret");
 
-          // submit the form
-          .then(() => {
-            return selenium.browser.findElement({ tagName: "form" });
-          })
-          .then(element => element.submit())
+        // submit the form
+        const form = await selenium.browser.findElement({ tagName: 'form' });
+        await form.submit();
 
-          // now check that we're on the correct page by looking for a logout link
-          .then(() => {
-            return selenium.browser.findElements(
+        // now check that we're on the correct page by looking for a logout link
+        const links = await selenium.browser.findElements(
               selenium.By.css('a[href="/logout"]')
             );
-          })
-          .then(result => {
-            expect(result.length).to.equal(1);
-            done();
-          })
-          .catch(error => done(error));
+
+        try {
+          expect(links.length).to.equal(1);
+          done();
+        } catch(e) {
+          done(e);
+        }
       }
     );
   });
