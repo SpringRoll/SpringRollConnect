@@ -4,6 +4,10 @@ const mongoose = require('mongoose');
 const mongooseTypes = require('mongoose-types');
 
 const database = {
+  /**
+   * Initialize the database testing harness
+   * @return Promise A promise that resolves once the database connection has been made
+   */
   init: () => {
     // don't load the database twice
     if(database.models !== undefined) {
@@ -42,7 +46,18 @@ const database = {
         reject(err);
       });
     });
-  }
+  },
+
+  /**
+   * An object with all of the database models (User, Release, Game, Group).
+   * For instance, after init finishes, database.models.User is a reference to the user model
+   */
+  models: undefined,
+
+  /**
+   * A reference to the raw mongo database connection. Useful for manually closing the connection, or for raw queries
+   */
+  connection: undefined
 };
 
 module.exports = database;
