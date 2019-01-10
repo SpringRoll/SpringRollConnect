@@ -1,5 +1,22 @@
+const server = require('./helpers/server');
+const selenium = require('./helpers/selenium');
+const database = require('./helpers/database');
+
+beforeEach(() => {
+  return Promise.all([
+    database.init(),
+    selenium.init(),
+    server.init()
+  ]);
+});
+
+afterEach(() => {
+  selenium.browser.quit();
+  server.process.kill();
+  database.connection.close();
+});
+
 const expect = require('chai').expect;
-const selenium = require('./selenium');
 
 describe('SpringRollConnect', () => {
   it('should have the correct title', () => {
