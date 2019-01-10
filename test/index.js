@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const server = require('./helpers/server');
 const selenium = require('./helpers/selenium');
 const database = require('./helpers/database');
@@ -8,6 +9,10 @@ before(() => {
     selenium.init(),
     server.init()
   ]);
+});
+
+afterEach(done => {
+  mongoose.connection.db.dropDatabase(done)
 });
 
 after(() => {
