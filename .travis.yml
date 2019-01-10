@@ -4,6 +4,9 @@ node_js:
 services:
   - mongodb
 before_install:
+  - 'export CHROME_BIN=chromium-browser' # https://stackoverflow.com/a/27873086/10200077
+  - 'export DISPLAY=:99.0'
+  - 'sh -e /etc/init.d/xvfb start'
   - npm install -g grunt-cli
   - sleep 5 # give time for mongo to wake up: https://docs.travis-ci.com/user/database-setup/#mongodb
   - cp sample.env .env
