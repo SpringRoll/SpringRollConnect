@@ -2,7 +2,7 @@ const server = require('./helpers/server');
 const selenium = require('./helpers/selenium');
 const database = require('./helpers/database');
 
-beforeEach(() => {
+before(() => {
   return Promise.all([
     database.init(),
     selenium.init(),
@@ -10,7 +10,7 @@ beforeEach(() => {
   ]);
 });
 
-afterEach(() => {
+after(() => {
   selenium.browser.quit();
   server.process.kill();
   database.connection.close();
