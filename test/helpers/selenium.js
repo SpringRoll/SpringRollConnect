@@ -1,4 +1,5 @@
 const webdriver = require("selenium-webdriver");
+const Options = require("selenium-webdriver/chrome").Options;
 const chromedriver = require("chromedriver");
 
 const selenium = {
@@ -8,12 +9,14 @@ const selenium = {
    * @see selenium.browser
    */
   init: () => {
+    // Chrome command-line options that fix Travis CI builds: https://stackoverflow.com/a/50725918/10200077
+    const options = new Options();
+    options.addArguments('--no-sandbox');
+    options.addArguments('--disable-dev-shm-usage');
+
     selenium.browser = new webdriver.Builder()
       .forBrowser("chrome")
-      .setChromeOptions({
-        '--no-sandbox' : true,
-        '--disable-dev-shm-usage' : true
-      })
+      .setChromeOptions(options)
       .build();
 
     return selenium.browser;
