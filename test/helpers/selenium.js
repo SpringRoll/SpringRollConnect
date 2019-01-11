@@ -8,7 +8,13 @@ const selenium = {
    * @see selenium.browser
    */
   init: () => {
-    selenium.browser = new webdriver.Builder().forBrowser("chrome").build();
+    selenium.browser = new webdriver.Builder()
+      .forBrowser("chrome")
+      .setChromeOptions({
+        '--no-sandbox' : true,
+        '--disable-dev-shm-usage' : true
+      })
+      .build();
 
     return selenium.browser;
   },
