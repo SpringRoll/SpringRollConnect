@@ -22,6 +22,12 @@ import {
 } from 'class-validator';
 import { v4 } from 'uuid';
 
+interface GroupPermission {
+  _id: ObjectID;
+  group: ObjectID;
+  permission: number;
+}
+
 @Entity({ name: 'games' })
 export class Game {
   @IsMongoId()
@@ -78,7 +84,7 @@ export class Game {
   @IsMongoId({ each: true })
   @IsDefined()
   @Column({ nullable: false, default: [] })
-  groups: ObjectID[];
+  groups: GroupPermission[];
 
   @Column()
   thumbnail: Binary;

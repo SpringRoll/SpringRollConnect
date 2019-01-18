@@ -1,4 +1,4 @@
-import { Entity, Column, Binary, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import {
   IsString,
   IsBoolean,
@@ -16,20 +16,20 @@ export class Group {
   id: number;
 
   @IsString()
-  @Column({ type: 'text', nullable: false })
+  @Column({ type: 'text', nullable: true })
   name: string;
 
   @IsBoolean()
-  @Column({ type: 'boolean', nullable: false })
+  @Column({ type: 'boolean', nullable: false, default: false })
   isUserGroup: boolean;
 
   @IsString()
   @IsLowercase()
-  @Column({ type: 'text', nullable: false, unique: true })
+  @Column({ type: 'text', nullable: true, unique: true })
   slug: string;
 
   @IsString()
-  @Column({ type: 'text', nullable: false, unique: true })
+  @Column({ type: 'text', nullable: true, unique: true })
   token: string;
 
   @IsDate()

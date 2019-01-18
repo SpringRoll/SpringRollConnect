@@ -36,7 +36,7 @@ export class User {
     cascadeUpdate: false,
     cascadeInsert: false
   })
-  @JoinTable()
+  @JoinTable({ name: 'user_groups' })
   groups: Group[];
 
   @IsString()

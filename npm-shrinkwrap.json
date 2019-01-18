@@ -204,13 +204,19 @@
       "dev": true
     },
     "@types/jquery": {
-      "version": "3.3.23",
-      "resolved": "https://registry.npmjs.org/@types/jquery/-/jquery-3.3.23.tgz",
-      "integrity": "sha512-pHsP+vJn89UOhKFGCgdX3aPzv3QEoBmj1Rl76TAV5N5OS5G0Jf1S7mxzP7/5ZDmCiYAY6KpAT/b8XP09iem4cw==",
+      "version": "3.3.29",
+      "resolved": "https://registry.npmjs.org/@types/jquery/-/jquery-3.3.29.tgz",
+      "integrity": "sha512-FhJvBninYD36v3k6c+bVk1DSZwh7B5Dpb/Pyk3HKVsiohn0nhbefZZ+3JXbWQhFyt0MxSl2jRDdGQPHeOHFXrQ==",
       "dev": true,
       "requires": {
         "@types/sizzle": "*"
       }
+    },
+    "@types/lodash": {
+      "version": "4.14.119",
+      "resolved": "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.119.tgz",
+      "integrity": "sha512-Z3TNyBL8Vd/M9D9Ms2S3LmFq2sSMzahodD6rCS9V2N44HUMINb75jNkSuwAx7eo2ufqTdfOdtGQpNbieUjPQmw==",
+      "dev": true
     },
     "@types/method-override": {
       "version": "0.0.31",
@@ -253,9 +259,9 @@
       }
     },
     "@types/mongoose": {
-      "version": "5.3.3",
-      "resolved": "https://registry.npmjs.org/@types/mongoose/-/mongoose-5.3.3.tgz",
-      "integrity": "sha512-otsck0ymHaLYXZdv1WyfCI/4zmDQyMajiPq63r0Do3D0AVNXYJo9YpSpMAlNbebpJ3fWk09QuSV6illg5TRmfA==",
+      "version": "5.3.7",
+      "resolved": "https://registry.npmjs.org/@types/mongoose/-/mongoose-5.3.7.tgz",
+      "integrity": "sha512-VawmiFqxLcyRr04fF8imWrre/soDD0I4LZBYbIPx6MTy9V3shT6dUpt1u8Ia2tUmGbBsYIfwitbcih5NegLARw==",
       "dev": true,
       "requires": {
         "@types/mongodb": "*",
@@ -364,6 +370,15 @@
       "resolved": "https://registry.npmjs.org/@types/sizzle/-/sizzle-2.3.2.tgz",
       "integrity": "sha512-7EJYyKTL7tFR8+gDbB6Wwz/arpGa0Mywk1TJbNzKzHtzbwVmY4HR9WqS5VV7dsBUKQmPNr192jHr/VpBluj/hg==",
       "dev": true
+    },
+    "@types/typescript": {
+      "version": "2.0.0",
+      "resolved": "https://registry.npmjs.org/@types/typescript/-/typescript-2.0.0.tgz",
+      "integrity": "sha1-xDNTnJi64oaCswfqp6D9IRW4PCg=",
+      "dev": true,
+      "requires": {
+        "typescript": "*"
+      }
     },
     "@types/uuid": {
       "version": "3.4.4",
@@ -4940,7 +4955,7 @@
     "method-override": {
       "version": "3.0.0",
       "resolved": "https://registry.npmjs.org/method-override/-/method-override-3.0.0.tgz",
-      "integrity": "sha1-arDV1XTjII8VsMnPRatSAARo16I=",
+      "integrity": "sha512-IJ2NNN/mSl9w3kzWB92rcdHpz+HjkxhDJWNDBqSlas+zQdP8wBiJzITPg08M/k2uVvMow7Sk41atndNtt/PHSA==",
       "requires": {
         "debug": "3.1.0",
         "methods": "~1.1.2",
@@ -4951,7 +4966,7 @@
         "debug": {
           "version": "3.1.0",
           "resolved": "https://registry.npmjs.org/debug/-/debug-3.1.0.tgz",
-          "integrity": "sha1-W7WgZyYotkFJVmuhaBnmFRjGcmE=",
+          "integrity": "sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g==",
           "requires": {
             "ms": "2.0.0"
           }

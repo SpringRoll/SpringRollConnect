@@ -1,9 +1,27 @@
-import { createConnections, Connection } from 'typeorm';
+import { createConnections } from 'typeorm';
 import * as mEntities from '../db/entities';
 import * as pEntities from '../db/entities-post';
-import combos from 'combos';
-import { isEqual } from 'lodash';
-const values = [true, false];
+import { uniqBy } from 'lodash';
+
+function mapUserGroups(
+  groups: any,
+  mGroups: mEntities.Group[],
+  pGroups: pEntities.Group[]
+) {
+  const userMongoGroups = groups
+    .map(group =>
+      mGroups.find(mGroup => mGroup.id.toString() === group.toString())
+    )
+
+    .filter(group => 'undefined' !== typeof group);
+  return uniqBy(
+    userMongoGroups.map(mGroup =>
+      pGroups.find(pGroup => pGroup.slug === mGroup.slug)
+    ),
+    group => (<any>group).slug
+  );
+}
+
 createConnections([
   {
     type: 'mongodb',
@@ -24,92 +42,62 @@ createConnections([
     dropSchema: true
   }
 ]).then(([mongo, postgres]) => {
-    constants(postgres)
-    .then(result => capabilities(result, postgres).then(result => {
-      mongo.getMongoRepository(mEntities.User).find(),
-      mongo.getMongoRepository(mEntities.Group).find(),
-      mongo.getMongoRepository(mEntities.Game).find(),
-      mongo.getMongoRepository(mEntities.Release).find()
-    });
-//         ])
-//     )
-//     .then(
-//       ([capabilities, users, allGroups, games, releases]: [
-//         any,
-//         mEntities.User[],
-//         mEntities.Group[],
-//         any,
-//         any
-//       ]) => {
-//         postgres
-//           .getRepository(pEntities.Group)
-//           .save(allGroups.map(group => {
-//             const { id, ...g } = group;
-//             return g;
-//           }) as any)
-//           .then((newGroups: pEntities.Group[]) => {
-//             const newUsers = users.map(data => {
-//               const { id, groups, ...user } = data;
+  Promise.all([
+    mongo.getMongoRepository(mEntities.User).find(),
+    mongo.getMongoRepository(mEntities.Group).find(),
+    mongo.getMongoRepository(mEntities.Game).find(),
+    mongo.getMongoRepository(mEntities.Release).find()
+  ]).then(([mUsers, mGroups, mGames, mReleases]) => {
+    //GROUPS
+    postgres
+      .getRepository(pEntities.Group)
+      .save(mGroups.map(group => {
+        const { id, ...g } = group;
+        return g;
+      }) as any)
+      //USERS
+      .then((pGroups: pEntities.Group[]) => {
+        const pUsers = mUsers.map(data => {
+          const { id, groups, ...user } = data;
 
-//               const mappedGroups = groups.map(userGroup => {
-//                 const match = allGroups.find(
-//                   group => group.id.toString() === userGroup.toString()
-//                 );
-//                 return newGroups.find(g => g.slug === match.slug);
-//               });
+          (<any>user).groups = mapUserGroups(groups, mGroups, pGroups);
 
-//               (<any>user).groups = mappedGroups;
+          return user;
+        });
+        postgres
+          .getRepository(pEntities.User)
+          .save(pUsers)
+          .then(() => {
+            const pGameRepository = postgres.getRepository(pEntities.Game);
+            const games = mGames.map(mGame => {
+              const { id, thumbnail, releases, groups, ...game } = mGame;
+              (<any>game).thumbnail = thumbnail ? thumbnail.value() : undefined;
+              return game;
+            });
+            pGameRepository.save(games).then(pGames => {
+              mGames.map(({ groups }) => {
+                const g = groups.map(({ group }) => group);
+                const x = mapUserGroups(g, mGroups, pGroups).map(
+                  ({ id, slug, privilege }) => ({ id, slug, privilege })
+                );
 
-//               return user;
-//             });
-//             postgres
-//               .getRepository(pEntities.User)
-//               .save(newUsers)
-//               .then(data => {});
-//           });
-//         // console.log(capabilities);
-//       }
-//     );
-// });
+                // const x = mapGameGroups(g, mGroups, pGroups);
+                console.log(x);
+              });
+            });
+            // const pGames = pGameRepository.find();
+            //   const groupPermissions = mGames.map(mGame => {
+            //     const { groups = [] } = mGame;
+            //     return mapGroups(groups, mGroups, pGroups, true);
+            //   });
 
-function constants(postgres: Connection) {
-  return Promise.all([
-    postgres.getRepository(pEntities.Sizes).save(
-      combos({
-        xsmall: values,
-        small: values,
-        medium: values,
-        large: values,
-        xlarge: values
-      })
-    ),
-    postgres.getRepository(pEntities.Features).save(
-      combos({
-        webworkers: values,
-        websockets: values,
-        webaudio: values,
-        geolocation: values,
-        webgl: values
-      })
-    ),
-    postgres.getRepository(pEntities.Ui).save(
-      combos({
-        touch: values,
-        mouse: values
-      })
-    )
-  ]);
-}
-
-function capabilities([sizes, features, ui]: [
-  pEntities.Sizes[],
-  pEntities.Features[],
-  pEntities.Ui[]
-], postgres: Connection) {
-  postgres.getRepository(pEntities.Capabilities).save(
-          combos({
-            sizes: sizes,
-            features: features,
-            ui
-          })
-}
+            //   postgres
+            //     .getRepository(pEntities.GroupPermission)
+            //     .save(groupPermissions)
+            //     .then(() => console.log('success'))
+            //     .catch(err => console.log(err));
+            // });
+          });
+      });
+  });
+});

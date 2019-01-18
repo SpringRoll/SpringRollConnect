@@ -5,24 +5,22 @@ import {
   UpdateDateColumn,
   PrimaryGeneratedColumn,
   OneToMany,
-  ManyToMany,
-  ManyToOne,
-  Generated
+  JoinColumn
 } from 'typeorm';
-import { Capabilities } from './capabilities';
 import {
   IsBoolean,
   IsDate,
   IsInt,
   IsString,
   IsUrl,
-  IsUUID,
   Matches,
   ValidateNested,
-  IsBase64
+  IsBase64,
+  IsInstance
 } from 'class-validator';
 import { Release } from './release';
 import { Group } from './group';
+import { GroupPermission } from './group-permission';
 
 @Entity()
 export class Game {
@@ -39,9 +37,9 @@ export class Game {
   @Column({ type: 'text', unique: true, nullable: false })
   slug: string;
 
-  @IsUUID('4')
-  @Column({ type: 'uuid', unique: true, nullable: false })
-  @Generated('uuid')
+  @IsString()
+  @Column({ type: 'text', unique: true, nullable: false })
+  // @Generated('uuid')
   bundleId: string;
 
   @IsUrl()
@@ -68,12 +66,9 @@ export class Game {
   @UpdateDateColumn()
   updated: Date;
 
-  @IsInt()
-  @ManyToOne(type => Capabilities, capabilities => capabilities.id, {
-    cascadeAll: false,
-    nullable: false
-  })
-  capabilities: Capabilities;
+  @IsInstance(Object)
+  @Column({ type: 'jsonb' })
+  capabilities: object;
 
   @ValidateNested({ each: true })
   @OneToMany(type => Release, release => release.id, {
@@ -83,11 +78,12 @@ export class Game {
   releases: Release[];
 
   @ValidateNested({ each: true })
-  @ManyToMany(type => Group, group => group.id, {
-    cascadeInsert: false,
-    cascadeUpdate: false
+  @OneToMany(type => Group, group => group.id, {
+    cascadeInsert: true,
+    cascadeUpdate: true
   })
-  groups: Group[];
+  @JoinColumn()
+  groups: GroupPermission[];
 
   @IsBase64()
   @Column({ type: 'text', nullable: true })

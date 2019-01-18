@@ -6,8 +6,14 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne
 } from 'typeorm';
-import { Capabilities } from './capabilities';
-import { IsIn, IsString, IsUrl, IsInt, IsNumber } from 'class-validator';
+import {
+  IsIn,
+  IsString,
+  IsUrl,
+  IsInt,
+  IsNumber,
+  IsInstance
+} from 'class-validator';
 import { Game } from './game';
 import { User } from './user';
 
@@ -83,6 +89,7 @@ export class Release {
   @Column({ type: 'bigint', nullable: false, default: 0 })
   releaseUncompressedSize: number;
 
-  @ManyToOne(type => Capabilities, capabilities => capabilities.id)
-  capabilities: Capabilities;
+  @IsInstance(Object)
+  @Column({ type: 'jsonb' })
+  capabilities: object;
 }
