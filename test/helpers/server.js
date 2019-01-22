@@ -7,7 +7,9 @@ const server = {
    */
   init: () => {
     return new Promise(resolve => {
-      server.process = spawn("node", ["server.js"]);
+      server.process = spawn("node_modules/.bin/nyc", ["app/index.js"], {
+        stdio: "inherit"
+      });
 
       // wait for the server to be up
       setTimeout(() => {
