@@ -6,15 +6,24 @@ const server = {
    * @return Promise A promise that resolves when the server is setup
    */
   init: () => {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       server.process = spawn("node_modules/.bin/nyc", ["app/index.js"], {
-        stdio: "inherit"
+        stdio: ["ipc"]
       });
 
-      // wait for the server to be up
-      setTimeout(() => {
+      // wait for the child process to send a message when it's alive
+      let gotMessage = false;
+      server.process.on('message', () => {
+        gotMessage = true;
         resolve();
-      }, 1000);
+      });
+
+      // if it takes to long, reject it
+      setTimeout(() => {
+        if (!gotMessage) {
+          reject();
+        }
+      }, 5000);
     });
   },
 
