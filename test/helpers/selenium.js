@@ -11,8 +11,12 @@ const selenium = {
   init: () => {
     // Chrome command-line options that fix Travis CI builds: https://stackoverflow.com/a/50725918/10200077
     const options = new Options();
+    options.addArguments('start-maximized'); // open Browser in maximized mode
+    options.addArguments('disable-infobars'); // disabling infobars
+    options.addArguments('--disable-extensions'); // disabling extensions
+    options.addArguments('--disable-gpu'); // applicable to windows os only
+    options.addArguments('--disable-dev-shm-usage'); // overcome limited resource problems
     options.addArguments('--no-sandbox');
-    options.addArguments('--disable-dev-shm-usage');
 
     selenium.browser = new webdriver.Builder()
       .forBrowser('chrome', '71.0.3578.98')
