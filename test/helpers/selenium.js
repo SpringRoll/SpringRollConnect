@@ -16,7 +16,7 @@ const selenium = {
     options.addArguments('--disable-dev-shm-usage');
 
     selenium.browser = new webdriver.Builder()
-      .forBrowser('chrome')
+      .forBrowser('chrome', '71.0.3578.98')
       .setChromeOptions(options)
       .build();
 
