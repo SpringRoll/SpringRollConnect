@@ -11,8 +11,7 @@ const selenium = {
   init: () => {
     // Chrome command-line options that fix Travis CI builds: https://stackoverflow.com/a/50725918/10200077
     const options = new Options();
-    options.addArguments('--headless', 'window-size=1024,768', '--no-sandbox');
-    // options.addArguments('--no-sandbox');
+    options.addArguments('--no-sandbox');
     options.addArguments('--disable-dev-shm-usage');
 
     selenium.browser = new webdriver.Builder()
