@@ -38,7 +38,7 @@ describe('authentication', () => {
         );
 
         try {
-          // expect(links.length).to.equal(1);
+          expect(links.length).to.equal(1);
           done();
         } catch (e) {
           done(e);
