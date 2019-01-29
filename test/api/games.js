@@ -5,7 +5,6 @@ const dataMakers = require("../helpers/data");
 
 describe("api/games", ()=>{
   it("should receive a list of all games with a production release, without requiring a token", done => {
-    // need to uhhh make some games.
     dataMakers.makeGame("prod")
     .then(()=> {
       return request.get("http://localhost:3000/api/games")
@@ -18,7 +17,6 @@ describe("api/games", ()=>{
     });
   });
   it("should receive a list of all games, regardless of release level, if provided a token", done => {
-    // need to uhhh make a user and get their token.
     mongoose.model('User').createUser(
       {
         name: 'Spring Roll',
