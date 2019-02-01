@@ -1,9 +1,8 @@
 const Release = require('../../app/models/release');
 const Game = require('../../app/models/game');
 const uuid = require('uuid/v1');
-const User = require('../../app/models/user');
 const Group = require('../../app/models/group');
-
+const User = require('../../app/models/user');
 
 function makeRandomString(length){
   let random = '';
@@ -28,7 +27,7 @@ async function makeGame(releaseLevel){
   game.bundleId = uuid();
   game.releases = [];
   game.groups = [];
-  game.save();
+  await game.save();
   let newRelease = await makeRelease(game.id, releaseLevel);
   await game.releases.push(newRelease);
   return game.save()
@@ -44,12 +43,12 @@ async function makeRelease(gameId, releaseLevel){
     created: Date.now(),
     updated: Date.now(),
   }
-  let release = new Release(releaseParams);
-  await release.save();
-  return release;
+  let release = await new Release(releaseParams);
+  return release.save();
 }
 
 async function makeUser(privilegeLevel){
+  let password = makeRandomString(16);
   let userHash = 'user' + makeRandomString(4);
   let newUserGroup = new Group({
     name: userHash,
@@ -59,15 +58,20 @@ async function makeUser(privilegeLevel){
     privilege: privilegeLevel,
     isUserGroup: true
   });
-  newUserGroup.save();
+  await newUserGroup.save();
   let newUser = new User({
-    username: 'testuser',
-    password: 'testuser',
+    username: userHash,
+    password: password,
     email: userHash + '@email.com',
-    name: 'testuser',
+    name: userHash,
     groups: [newUserGroup._id]
   });
   return newUser.save();
 }
 
-module.exports = {makeGame, makeRelease, makeRandomString, makeUser}
+async function getUserToken(user){
+  let group = await Group.getById(user.groups[0])
+  return group.token;
+}
+
+module.exports = {makeGame, makeRelease, makeUser, getUserToken}
