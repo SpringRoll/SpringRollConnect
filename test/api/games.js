@@ -11,10 +11,14 @@ describe("api/games", ()=>{
       return request.get("http://localhost:3000/api/games")
     })
     .then(response => {
-      expect(response.body.success).to.equal(true);
-      expect(response.body.data.length).to.equal(1);
-      expect(response.body.data[0].releases.length).to.equal(1);
-      done();
+      try {
+        expect(response.body.success).to.equal(true);
+        expect(response.body.data.length).to.equal(1);
+        expect(response.body.data[0].releases.length).to.equal(1);
+        done();
+      } catch (e){
+        done(e);
+      }
     });
   });
   it("should receive a list of all games, regardless of release level, if provided a token", done => {
@@ -37,9 +41,13 @@ describe("api/games", ()=>{
           .query(`token=${token}`)
         })
         .then(response => {
-          expect(response.body.success).to.equal(true);
-          expect(response.body.data.length).to.equal(1);
-          done();
+          try {
+            expect(response.body.success).to.equal(true);
+            expect(response.body.data.length).to.equal(1);
+            done();
+          } catch (e){
+            done(e);
+          }
         });
       });
   });
