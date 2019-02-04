@@ -53,7 +53,7 @@ async function makeUser(privilegeLevel){
   let newUserGroup = new Group({
     name: userHash,
     slug: userHash,
-    token: userHash,
+    token: makeRandomString(40),
     tokenExpires: null,
     privilege: privilegeLevel,
     isUserGroup: true
@@ -74,4 +74,4 @@ async function getUserToken(user){
   return group.token;
 }
 
-module.exports = {makeGame, makeRelease, makeUser, getUserToken}
+module.exports = {makeGame, makeRelease, makeUser, makeRandomString, getUserToken}
