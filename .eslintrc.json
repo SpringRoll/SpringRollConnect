@@ -8,20 +8,19 @@
     "node": true,
     "done": true,
     "render": true,
-    "CONFIGURATION": true
+    "CONFIGURATION": true,
+    "before": true,
+    "afterEach": true,
+    "after": true,
+    "describe": true,
+    "it": true
   },
   "parserOptions": {
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
   "rules": {
-    "no-console": "error",
-    "no-undef": [
-      "error"
-    ],
-    "semi": [
-      "error",
-      "always"
-    ]
+    "no-undef": ["error"],
+    "semi": ["error", "always"]
   }
 }
