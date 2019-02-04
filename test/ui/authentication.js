@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const selenium = require('./helpers/selenium');
+const selenium = require('../helpers/selenium');
 const expect = require('chai').expect;
 
 describe('authentication', () => {
