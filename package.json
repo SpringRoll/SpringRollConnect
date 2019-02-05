@@ -21,10 +21,8 @@
     "mocha": "^5.2.0",
     "node-fetch": "^2.3.0",
     "nyc": "^13.1.0",
-    "regenerator-runtime": "^0.13.1",
     "selenium-webdriver": "^4.0.0-alpha.1",
-    "ts-node": "^8.0.2",
-    "typescript": "^3.3.1"
+    "superagent": "^4.1.0"
   },
   "dependencies": {
     "async": "^1.0.0",

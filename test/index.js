@@ -23,3 +23,6 @@ describe('SpringRollConnect', () => {
       });
   });
 });
+
+const runAuthentication = require("./ui/authentication");
+const runGamesAPI = require("./api/games");
