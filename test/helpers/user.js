@@ -9,14 +9,14 @@ export async function makeUser({
   groups = [],
   privilege = 2
 } = {}) {
-  const user = await User.create({
+  const user = await new User({
     name,
     username,
     password,
     email,
     groups,
     privilege
-  });
+  }).save();
 
   user.password = password;
   return user;

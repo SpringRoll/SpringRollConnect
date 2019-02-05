@@ -9,5 +9,3 @@ export const makeRelease = async (
     status,
     commitId
   }).save();
-
-// export const addGroupToRelease = async (release, group) => {};
