@@ -47,7 +47,9 @@ export async function makeUser({
  * @param {GroupParams} groupParams
  */
 export async function makeUserWithGroup(userParams = {}, groupParams = {}) {
-  const group = await makeGroup(groupParams);
+  const group = await makeGroup(
+    Object.assign({}, { isUserGroup: true, privilege: 0 }, groupParams)
+  );
   const user = await makeUser(
     Object.assign({}, userParams, { groups: [group._id] })
   );

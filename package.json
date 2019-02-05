@@ -19,6 +19,7 @@
     "grunt-contrib-less": "^1.4.1",
     "grunt-eslint": "^21.0.0",
     "mocha": "^5.2.0",
+    "node-fetch": "^2.3.0",
     "nyc": "^13.1.0",
     "regenerator-runtime": "^0.13.1",
     "selenium-webdriver": "^4.0.0-alpha.1",
@@ -58,6 +59,7 @@
     "uuid": "^3.2.1"
   },
   "scripts": {
-    "test": "mocha --require @babel/register --timeout 10000 test/*"
+    "test": "mocha --require @babel/register --timeout 100000 test/*",
+    "test:loop": "while npm run test; do :; done"
   }
 }
