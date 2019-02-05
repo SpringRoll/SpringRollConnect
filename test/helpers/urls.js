@@ -8,12 +8,16 @@ export const LOGIN_URL = `${DOMAIN}/login`;
 
 export const ROOT_DOMAIN = DOMAIN;
 
-export function releaseURL(
+export function embeddedGameURL({ slug }) {
+  return `${DOMAIN}/embed/${slug}`;
+}
+
+export function embedReleaseURL(
   { status, game },
   token,
   { controls = 0, title = 0 } = {}
 ) {
-  return `${gameURL(
+  return `${embeddedGameURL(
     game
   )}?status=${status}&token=${token}&controls=${controls}&title=${title}`;
 }
@@ -21,8 +25,4 @@ export function releaseURL(
 export function apiReleaseURL({ status, game }, token) {
   const { slug } = game;
   return `${API_URL}/release/${slug}?status=${status}&token=${token}`;
-}
-
-export function gameURL({ slug }) {
-  return `${DOMAIN}/embed/${slug}`;
 }

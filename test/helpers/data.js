@@ -6,7 +6,7 @@ const User = require('../../app/models/user');
 
 function makeRandomString(length) {
   let random = '';
-  for (i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     random += (Math.random() * 10).toString().substring(0, 1);
   }
   return random;

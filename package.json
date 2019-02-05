@@ -57,7 +57,7 @@
     "uuid": "^3.2.1"
   },
   "scripts": {
-    "test": "mocha --require @babel/register --timeout 100000 test/*",
+    "test": "mocha --require @babel/register --timeout 10000 test/*",
     "test:loop": "while npm run test; do :; done"
   }
 }
