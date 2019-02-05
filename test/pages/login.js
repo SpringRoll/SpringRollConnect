@@ -1,10 +1,11 @@
 import { expect } from 'chai';
 import { until, By } from 'selenium-webdriver';
 
-import { Selenium, makeUser, login } from '../helpers';
+import { Selenium, makeUser, login, logout } from '../helpers';
 
 describe('Authentication', () => {
   it('should be able to log a user in', async () => {
+    await logout();
     const user = await makeUser();
     // attempt to login from the home page
 
