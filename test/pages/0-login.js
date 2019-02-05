@@ -3,7 +3,7 @@ import { until, By } from 'selenium-webdriver';
 
 import { Selenium, makeUser, login, logout } from '../helpers';
 
-describe('Authentication', () => {
+describe('Login', () => {
   it('should be able to log a user in', async () => {
     await logout();
     const user = await makeUser();

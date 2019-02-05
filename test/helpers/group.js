@@ -8,12 +8,12 @@ export async function makeGroup({
   isUserGroup = false,
   privilege = 0
 } = {}) {
-  return await Group.create({
+  return await new Group({
     name,
     slug,
     token,
     tokenExpires,
     isUserGroup,
     privilege
-  });
+  }).save();
 }
