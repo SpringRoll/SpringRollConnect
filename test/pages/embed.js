@@ -1,11 +1,11 @@
 import {
-  gameURL,
+  embeddedGameURL,
+  embedReleaseURL,
   login,
   logout,
   makeGame,
   makeRelease,
   makeUserWithGroup,
-  releaseURL,
   Selenium,
   sleep
 } from '../helpers';
@@ -19,7 +19,7 @@ describe('Embed Pages', () => {
     const game = await makeGame();
     await makeRelease(game, 'prod');
 
-    const url = gameURL(game);
+    const url = embeddedGameURL(game);
 
     await Selenium.Browser.get(url);
 
@@ -35,7 +35,7 @@ describe('Embed Pages', () => {
   it('should not allow a user to see anything for a game without a prod release', async () => {
     const game = await makeGame();
     const release = await makeRelease(game, 'dev');
-    const url = releaseURL(release);
+    const url = embedReleaseURL(release);
 
     await Selenium.Browser.get(url).catch(err => err);
     const alert = await Selenium.Browser.switchTo()
@@ -62,7 +62,7 @@ describe('Embed Pages', () => {
       login(user)
     ]);
 
-    const url = releaseURL(release, group.token);
+    const url = embedReleaseURL(release, group.token);
 
     await Selenium.Browser.get(url);
     await sleep(20); // TODO: Figure out why a 20 millisecond delay allows the test to pass
