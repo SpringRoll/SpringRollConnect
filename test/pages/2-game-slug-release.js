@@ -1,15 +1,14 @@
 // import {
 //   gameReleasesURL,
-//   Selenium,
+//   browser,
 //   logout,
 //   createUserGroupGameRelease,
 //   isLoginPage,
 //   login,
-//   MAIN_TITLE,
-//   sleep
+//   MAIN_TITLE
 // } from '../helpers';
 // import { expect } from 'chai';
-// import { By, until } from 'selenium-webdriver';
+// import { until } from 'selenium-webdriver';
 // const page = 'page - games/game/[slug]/releases';
 // const CHANGE_TEST = 'change the promotion level of a game (e.g. DEV to PROD)';
 // const ADD_TEST = 'add a release';
@@ -23,7 +22,7 @@
 //     const { game } = await createUserGroupGameRelease();
 //     await logout();
 //     const url = gameReleasesURL(game);
-//     await Selenium.Browser.get(url);
+//     await browser.get(url);
 //     expect(await isLoginPage()).to.be.true;
 //   };
 //   it(`I can't ${CHANGE_TEST}`, test);
@@ -44,18 +43,18 @@
 //     const url = gameReleasesURL(game);
 //     console.log(url);
 //     await login(user);
-//     await Selenium.Browser.wait(until.titleIs(MAIN_TITLE));
+//     await browser.wait(until.titleIs(MAIN_TITLE));
 
 //     // await sleep(1000 * 10);
 //     // console.log(url);
-//     await Selenium.Browser.get(url);
+//     await browser.get(url);
 
-//     await Selenium.Browser.get(url);
-//     // await Selenium.Browser.wait(
+//     await browser.get(url);
+//     // await browser.wait(
 //     //   until.titleIs(`${game.title} - Game - ${MAIN_TITLE}`)
 //     // );
 
-//     // const text = await Selenium.Browser.findElement(
+//     // const text = await browser.findElement(
 //     //   By.className('panel-title')
 //     // ).getText();
 

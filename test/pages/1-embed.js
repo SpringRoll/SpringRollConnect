@@ -5,14 +5,13 @@ import {
   logout,
   makeGame,
   makeRelease,
-  makeUserWithGroup,
-  Selenium,
-  sleep,
-  createUserGroupGameRelease
+  createUserGroupGameRelease,
+  browser,
+  Release,
+  Game
 } from '../helpers';
 import { until } from 'selenium-webdriver';
 import { expect } from 'chai';
-import fetch from 'node-fetch';
 
 const { NoSuchAlertError } = require('selenium-webdriver').error;
 
@@ -24,10 +23,11 @@ describe('Embed Pages', () => {
 
     const url = embeddedGameURL(game);
 
-    await Selenium.Browser.get(url);
+    await browser.get(url);
 
     // make sure we don't get an "INVALID API" Alert
-    const alert = await Selenium.Browser.switchTo()
+    const alert = await browser
+      .switchTo()
       .alert()
       .accept()
       .catch(err => err);
@@ -40,10 +40,9 @@ describe('Embed Pages', () => {
     const release = await makeRelease(game, 'dev');
     const url = embedReleaseURL(release);
 
-    await Selenium.Browser.get(url).catch(err => err);
-    const alert = await Selenium.Browser.switchTo()
-      .alert()
-      .catch(err => err);
+    browser.get(url);
+    await browser.wait(until.alertIsPresent());
+    const alert = await browser.switchTo().alert();
 
     const text = await alert.getText();
     await alert.accept();
@@ -52,21 +51,24 @@ describe('Embed Pages', () => {
 
   it('should allow valid tokens to view dev releases of a game', async () => {
     await logout();
-    const { game, user, release, group } = await createUserGroupGameRelease({
+    const { game, user, group } = await createUserGroupGameRelease({
       permission: 0,
       gameStatus: 'dev'
     });
     await login(user);
 
+    const releases = await Release.find();
+    const games = await Game.find();
+
     const url = embedReleaseURL({
       status: 'dev',
       slug: game.slug,
-      token: group.token
+      token: group.token,
+      controls: 1,
+      title: 1
     });
-
-    await Selenium.Browser.get(url);
-    Selenium.Browser.wait(unt);
-    await sleep(1500);
+    // await browser.get(url);
+    // await sleep(1500);
     // await sleep(20); // TODO: Figure out why a 20 millisecond delay allows the test to pass
   });
 });
