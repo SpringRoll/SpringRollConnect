@@ -1,35 +1,38 @@
-const mongoose = require("mongoose");
-const server = require("./helpers/server");
-const selenium = require("./helpers/selenium");
-const database = require("./helpers/database");
+const Mongoose = require('mongoose');
+Mongoose.Promise = Promise;
+import {
+  Selenium,
+  Database,
+  ROOT_DOMAIN,
+  browser,
+  VERSION,
+  logout
+} from './helpers';
 
-before(() => {
-  return Promise.all([database.init(), selenium.init(), server.init()]);
-});
+before(() => Promise.all([Selenium.init(), Database.connect()]));
 
-afterEach(done => {
-  mongoose.connection.db.dropDatabase(done);
+afterEach(async () => {
+  await logout();
+  await Mongoose.connection.db.dropDatabase();
 });
 
 after(() => {
-  selenium.browser.quit();
-  server.process.kill();
-  database.connection.close();
+  Selenium.Browser.quit();
+  Database.connection.close();
 });
 
-const expect = require("chai").expect;
+const expect = require('chai').expect;
 
-describe("SpringRollConnect", () => {
-  it("should have the correct title", () => {
-    return selenium.browser
-      .get("http://localhost:3000")
-      .then(() => selenium.browser.getTitle())
-      .then(title => {
-        expect(title).to.equal("Login - SpringRoll Connect v1.6.4");
-      });
+describe('SpringRollConnect', () => {
+  it('should have the correct title', () => {
+    return browser
+      .get(ROOT_DOMAIN)
+      .then(() => browser.getTitle())
+      .then(title =>
+        expect(title).to.equal(`Login - SpringRoll Connect v${VERSION}`)
+      );
   });
 });
 
-const runAuthentication = require("./ui/authentication");
-const runGamesAPI = require("./api/games");
-const runReleaseAPI = require("./api/release");
+const runGamesAPI = require('./api/games');
+const runReleaseAPI = require('./api/release');

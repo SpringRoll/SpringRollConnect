@@ -4,15 +4,15 @@ const uuid = require('uuid/v1');
 const Group = require('../../app/models/group');
 const User = require('../../app/models/user');
 
-function makeRandomString(length){
+function makeRandomString(length) {
   let random = '';
-  for (i=0; i < length; i++ ){
-    random += (Math.random()*10).toString().substring(0,1);
+  for (let i = 0; i < length; i++) {
+    random += (Math.random() * 10).toString().substring(0, 1);
   }
   return random;
 }
 
-async function makeGame(releaseLevel){
+async function makeGame(releaseLevel) {
   //set your values as desired
   let gameParams = {
     title: makeRandomString(40),
@@ -30,10 +30,10 @@ async function makeGame(releaseLevel){
   await game.save();
   let newRelease = await makeRelease(game.id, releaseLevel);
   await game.releases.push(newRelease);
-  return game.save()
+  return game.save();
 }
 
-async function makeRelease(gameId, releaseLevel){
+async function makeRelease(gameId, releaseLevel) {
   let commitHash = makeRandomString(40);
   let releaseParams = {
     game: gameId,
@@ -41,13 +41,13 @@ async function makeRelease(gameId, releaseLevel){
     // branch: 'origin/my-branch',
     commitId: commitHash,
     created: Date.now(),
-    updated: Date.now(),
-  }
+    updated: Date.now()
+  };
   let release = await new Release(releaseParams);
   return release.save();
 }
 
-async function makeUser(privilegeLevel){
+async function makeUser(privilegeLevel) {
   let password = makeRandomString(16);
   let userHash = 'user' + makeRandomString(4);
   let newUserGroup = new Group({
@@ -69,9 +69,15 @@ async function makeUser(privilegeLevel){
   return newUser.save();
 }
 
-async function getUserToken(user){
-  let group = await Group.getById(user.groups[0])
+async function getUserToken(user) {
+  let group = await Group.getById(user.groups[0]);
   return group.token;
 }
 
-module.exports = {makeGame, makeRelease, makeUser, makeRandomString, getUserToken}
+module.exports = {
+  makeGame,
+  makeRelease,
+  makeUser,
+  makeRandomString,
+  getUserToken
+};
