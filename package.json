@@ -12,6 +12,7 @@
     "@babel/runtime": "^7.3.1",
     "chai": "^4.2.0",
     "chromedriver": "^2.45.0",
+    "concurrently": "^4.1.0",
     "glob": "^7.1.2",
     "grunt": "0.4.*",
     "grunt-contrib-concat": "^1.0.1",
@@ -57,7 +58,9 @@
     "uuid": "^3.2.1"
   },
   "scripts": {
-    "test": "mocha --require @babel/register --timeout 10000 test/*",
-    "test:loop": "while npm run test; do :; done"
+    "test": "concurrently 'node server.js' 'npm run test:init' -k --prefix-colors 'yellow,green' --success first",
+    "test:loop": "concurrently 'node server.js' 'npm run test:infinite'  -k --prefix-colors 'yellow,green' --success first",
+    "test:init": "mocha --require @babel/register --timeout 1000000 test/*",
+    "test:infinite": "while npm run test:init; do :; done"
   }
 }

@@ -14,9 +14,7 @@ export class Selenium {
   static async init() {
     _browser = await new webdriver.Builder()
       .forBrowser('chrome', '71.0.3578.98')
-      .setChromeOptions(
-        new Options().addArguments('--no-sandbox', '--headless')
-      )
+      .setChromeOptions(new Options().addArguments('--no-sandbox'))
       .build();
     return;
   }
