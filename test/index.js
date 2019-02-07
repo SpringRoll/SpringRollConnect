@@ -26,3 +26,5 @@ describe('SpringRollConnect', () => {
       );
   });
 });
+
+require('./api/games');
