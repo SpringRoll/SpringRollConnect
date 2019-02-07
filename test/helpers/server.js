@@ -1,5 +1,5 @@
 const { spawn } = require('child_process');
-require('child_process');
+
 let process = undefined;
 export class Server {
   static init() {

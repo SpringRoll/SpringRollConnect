@@ -7,9 +7,12 @@ import {
   makeRelease,
   makeUserWithGroup,
   Selenium,
-  sleep
+  sleep,
+  createUserGroupGameRelease
 } from '../helpers';
+import { until } from 'selenium-webdriver';
 import { expect } from 'chai';
+import fetch from 'node-fetch';
 
 const { NoSuchAlertError } = require('selenium-webdriver').error;
 
@@ -48,23 +51,22 @@ describe('Embed Pages', () => {
   });
 
   it('should allow valid tokens to view dev releases of a game', async () => {
-    const [{ group, user }] = await Promise.all([
-      makeUserWithGroup(),
-      logout()
-    ]);
+    await logout();
+    const { game, user, release, group } = await createUserGroupGameRelease({
+      permission: 0,
+      gameStatus: 'dev'
+    });
+    await login(user);
 
-    const game = await makeGame({
-      groups: [{ permission: 0, group: group._id }]
+    const url = embedReleaseURL({
+      status: 'dev',
+      slug: game.slug,
+      token: group.token
     });
 
-    const [release] = await Promise.all([
-      makeRelease(game, 'dev'),
-      login(user)
-    ]);
-
-    const url = embedReleaseURL(release, group.token);
-
     await Selenium.Browser.get(url);
-    await sleep(20); // TODO: Figure out why a 20 millisecond delay allows the test to pass
+    Selenium.Browser.wait(unt);
+    await sleep(1500);
+    // await sleep(20); // TODO: Figure out why a 20 millisecond delay allows the test to pass
   });
 });

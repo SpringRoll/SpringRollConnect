@@ -12,14 +12,20 @@ export function embeddedGameURL({ slug }) {
   return `${DOMAIN}/embed/${slug}`;
 }
 
-export function embedReleaseURL(
-  { status, game },
-  token,
-  { controls = 0, title = 0 } = {}
-) {
-  return `${embeddedGameURL(
-    game
-  )}?status=${status}&token=${token}&controls=${controls}&title=${title}`;
+export function embedReleaseURL({
+  slug = '',
+  status = 'prod',
+  token = undefined,
+  controls = 0,
+  title = 0
+} = {}) {
+  return `${embeddedGameURL({
+    slug
+  })}?status=${status}&token=${token}&controls=${controls}&title=${title}`;
+}
+
+export function gameReleasesURL({ slug }) {
+  return `${DOMAIN}/games/game/${slug}/releases`;
 }
 
 export function apiReleaseURL({ status, game }, token) {

@@ -1,14 +1,14 @@
 // const mongoose = require('mongoose');
 import Mongoose from 'mongoose';
-import { Selenium, Server, Database, ROOT_DOMAIN } from './helpers';
+import { Selenium, Database, ROOT_DOMAIN, sleep } from './helpers';
+import { beforeEach } from 'mocha';
 
-before(() => Promise.all([Selenium.init(), Server.init(), Database.connect()]));
+before(() => Promise.all([Selenium.init(), Database.connect()]));
 
 afterEach(done => Mongoose.connection.db.dropDatabase(done));
 
 after(() => {
   Selenium.Browser.quit();
-  Server.kill();
   Database.connection.close();
 });
 
@@ -23,4 +23,3 @@ describe('SpringRollConnect', () => {
       });
   });
 });
-require('./api/games');

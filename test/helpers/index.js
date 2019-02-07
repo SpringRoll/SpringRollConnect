@@ -5,7 +5,7 @@ export * from './login';
 export * from './models';
 export * from './release';
 export * from './selenium';
-export * from './server';
+export * from './titles';
 export * from './urls';
 export * from './user';
 export * from './util';
