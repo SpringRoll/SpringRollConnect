@@ -2,7 +2,6 @@ import {
   embeddedGameURL,
   embedReleaseURL,
   login,
-  logout,
   makeGame,
   makeRelease,
   createUserGroupGameRelease,
@@ -15,7 +14,6 @@ const { NoSuchAlertError } = require('selenium-webdriver').error;
 
 describe('Embed Pages', () => {
   it('should allow anyone to see the latest prod release of a game', async () => {
-    await logout();
     const game = await makeGame();
     await makeRelease(game, 'prod');
 
@@ -53,7 +51,6 @@ describe('Embed Pages', () => {
   });
 
   it('should allow valid tokens to view dev releases of a game', async () => {
-    await logout();
     const { game, user, group } = await createUserGroupGameRelease({
       permission: 0,
       gameStatus: 'dev'
