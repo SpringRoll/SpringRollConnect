@@ -1,14 +1,11 @@
 import {
   gameReleasesURL,
   browser,
-  logout,
   createUserGroupGameRelease,
-  isLoginPage,
-  login,
-  MAIN_TITLE
+  login
 } from '../helpers';
 import { expect } from 'chai';
-import { until } from 'selenium-webdriver';
+import { until, By, WebElement } from 'selenium-webdriver';
 const page = 'page - games/game/[slug]/releases';
 const CHANGE_TEST = 'change the promotion level of a game (e.g. DEV to PROD)';
 const ADD_TEST = 'add a release';
@@ -20,11 +17,14 @@ const DOWNLOAD_TEST = 'download release zips';
 describe(`${page} as a public user`, () => {
   const test = async () => {
     const { game } = await createUserGroupGameRelease();
-    await logout();
     const url = gameReleasesURL(game);
     await browser.get(url);
 
-    expect(await isLoginPage()).to.be.true;
+    const loginForm = await browser
+      .findElement(By.className('form-login'))
+      .catch(err => err);
+
+    expect(loginForm).to.be.instanceOf(WebElement);
   };
   it(`I can't ${CHANGE_TEST}`, test);
   it(`I can't ${ADD_TEST}`, test);
@@ -38,19 +38,16 @@ describe(`${page} as a read-only user`, () => {
   const basic = async () => {
     const { user, game } = await createUserGroupGameRelease({
       permission: 2,
-      gameStatus: 'prod'
+      gameStatus: 'dev'
     });
-    await logout();
     const url = gameReleasesURL(game);
-    console.log(url);
     await login(user);
-    await browser.wait(until.titleIs(MAIN_TITLE));
-
-    // await sleep(1000 * 10);
-    // console.log(url);
-    await browser.get(url);
 
     await browser.get(url);
+    // await browser.wait(
+    //   until.elementsLocated(By.css('[data-target="#addRelease"]'))
+    // );
+
     // await browser.wait(
     //   until.titleIs(`${game.title} - Game - ${MAIN_TITLE}`)
     // );
