@@ -1,9 +1,13 @@
-import Mongoose from 'mongoose';
+const Mongoose = require('mongoose');
+Mongoose.Promise = Promise;
 import { Selenium, Database, ROOT_DOMAIN, browser, VERSION } from './helpers';
 
 before(() => Promise.all([Selenium.init(), Database.connect()]));
 
-afterEach(done => Mongoose.connection.db.dropDatabase(done));
+afterEach(async () => {
+  await browser.get(ROOT_DOMAIN);
+  await Mongoose.connection.db.dropDatabase();
+});
 
 after(() => {
   Selenium.Browser.quit();

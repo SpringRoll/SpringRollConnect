@@ -6,11 +6,9 @@ import {
   makeGame,
   makeRelease,
   createUserGroupGameRelease,
-  browser,
-  Release,
-  Game
+  browser
 } from '../helpers';
-import { until } from 'selenium-webdriver';
+import { until, By } from 'selenium-webdriver';
 import { expect } from 'chai';
 
 const { NoSuchAlertError } = require('selenium-webdriver').error;
@@ -36,9 +34,14 @@ describe('Embed Pages', () => {
   });
 
   it('should not allow a user to see anything for a game without a prod release', async () => {
-    const game = await makeGame();
-    const release = await makeRelease(game, 'dev');
-    const url = embedReleaseURL(release);
+    const { game } = await createUserGroupGameRelease({
+      permission: 0,
+      gameStatus: 'dev'
+    });
+    const url = embedReleaseURL({
+      status: 'dev',
+      slug: game.slug
+    });
 
     browser.get(url);
     await browser.wait(until.alertIsPresent());
@@ -57,18 +60,13 @@ describe('Embed Pages', () => {
     });
     await login(user);
 
-    const releases = await Release.find();
-    const games = await Game.find();
-
     const url = embedReleaseURL({
       status: 'dev',
       slug: game.slug,
-      token: group.token,
-      controls: 1,
-      title: 1
+      token: group.token
     });
-    // await browser.get(url);
-    // await sleep(1500);
-    // await sleep(20); // TODO: Figure out why a 20 millisecond delay allows the test to pass
+
+    await browser.get(url);
+    await browser.wait(until.elementLocated(By.id('frame')));
   });
 });

@@ -306,18 +306,14 @@ ReleaseSchema.statics.getByGame = function(slug, options, callback) {
       }
     ],
     async function(err, releases) {
-      Promise.all([Game.find(), Release.find()]).then((...data) => {
-        console.log('all records in the db', data);
-        console.log('DB QUERY RESULTS => ', err, releases);
-        if (!err && releases) {
-          if (Array.isArray(releases)) {
-            releases.forEach(release => addUrl(release));
-          } else {
-            addUrl(releases);
-          }
+      if (!err && releases) {
+        if (Array.isArray(releases)) {
+          releases.forEach(release => addUrl(release));
+        } else {
+          addUrl(releases);
         }
-        callback(err, releases);
-      });
+      }
+      callback(err, releases);
     }
   );
 };
