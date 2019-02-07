@@ -34,4 +34,5 @@ describe('SpringRollConnect', () => {
   });
 });
 
-require('./api/games');
+const runGamesAPI = require('./api/games');
+const runReleaseAPI = require('./api/release');
