@@ -3,7 +3,10 @@ const { WebDriver } = webdriver;
 
 const Options = require('selenium-webdriver/chrome').Options;
 
-let _browser = undefined;
+/**
+ * @type {WebDriver}
+ */
+export let browser = undefined;
 
 /**
  *
@@ -12,7 +15,7 @@ let _browser = undefined;
  */
 export class Selenium {
   static async init() {
-    _browser = await new webdriver.Builder()
+    browser = await new webdriver.Builder()
       .forBrowser('chrome', '71.0.3578.98')
       .setChromeOptions(new Options().addArguments('--no-sandbox'))
       .build();
@@ -28,6 +31,6 @@ export class Selenium {
    * @returns {WebDriver}
    */
   static get Browser() {
-    return _browser;
+    return browser;
   }
 }
