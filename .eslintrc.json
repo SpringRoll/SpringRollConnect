@@ -13,7 +13,8 @@
     "afterEach": true,
     "after": true,
     "describe": true,
-    "it": true
+    "it": true,
+    "beforeEach": true
   },
   "parserOptions": {
     "ecmaVersion": 2018,
