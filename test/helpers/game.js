@@ -14,6 +14,7 @@ import { Game } from './models';
  * @property {string} [GameParams.bundleId]
  * @property {string} [GameParams.repository]
  * @property {string} [GameParams.location]
+ * @property {Array<any>} [GameParams.releases]
  * @property {Array<GroupPermission>} [GameParams.groups]
  */
 
@@ -25,10 +26,11 @@ import { Game } from './models';
 export const makeGame = async ({
   title = 'Test Game',
   slug = 'test-game',
-  bundleId = 'test-game',
+  bundleId = 'com.domain.game.SomeGame',
   repository = 'https://springroll.io',
   location = 'https://springroll.io',
-  groups = []
+  groups = [],
+  releases = []
 } = {}) =>
   await new Game({
     title,
@@ -36,5 +38,6 @@ export const makeGame = async ({
     bundleId,
     repository,
     location,
-    groups
+    groups,
+    releases
   }).save();
