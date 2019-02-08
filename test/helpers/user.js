@@ -23,19 +23,7 @@ export async function makeUser({
 }
 
 /**
- * @typedef {object} UserParams
- * @property {string} [UserParams.name]
- * @property {string} [UserParams.username]
- * @property {string} [UserParams.password]
- * @property {string} [UserParams.email]
- * @property {array} [UserParams.groups]
- *
- *
  * @typedef {object} GroupParams
- * @property {string} [GroupParams.name]
- * @property {string} [GroupParams.token]
- * @property {string} [GroupParams.slug]
- * @property {*} [GroupParams.tokenExpires]
  * @property {boolean} [GroupParams.isUserGroup]
  * @property {0 | 1 | 2} [GroupParams.privilege]
  */
@@ -43,16 +31,14 @@ export async function makeUser({
 /**
  *
  *
- * @param {UserParams} userParams
  * @param {GroupParams} groupParams
  */
-export async function makeUserWithGroup(userParams = {}, groupParams = {}) {
-  const group = await makeGroup(
-    Object.assign({}, { isUserGroup: true, privilege: 0 }, groupParams)
-  );
-  const user = await makeUser(
-    Object.assign({}, userParams, { groups: [group._id] })
-  );
+export async function makeUserWithGroup({
+  isUserGroup = true,
+  privilege = 0
+} = {}) {
+  const group = await makeGroup({ isUserGroup, privilege });
+  const user = await makeUser({ groups: [group._id] });
 
   return { user, group };
 }
