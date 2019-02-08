@@ -1,7 +1,7 @@
 import { makeGame } from './game';
 import { makeUserWithGroup } from './user';
 import { makeRelease } from './release';
-import { Selenium } from './selenium';
+import { browser } from './selenium';
 import { By, WebElement } from 'selenium-webdriver';
 /**
  * Forces the test to pause for a set amount of milliseconds
@@ -19,12 +19,14 @@ export const sleep = ms => {
  * @param {object} param
  * @param {"dev" | "qa" | "stage" | "prod"} [param.gameStatus="prod"]
  * @param {0 | 1 | 2} [param.permission=0]
+ * @param {0 | 1 | 2} [param.privilege=0]
  */
 export const createUserGroupGameRelease = async ({
   gameStatus = 'prod',
-  permission = 0
+  permission = 0,
+  privilege = 0
 } = {}) => {
-  const { group, user } = await makeUserWithGroup();
+  const { group, user } = await makeUserWithGroup({ privilege });
 
   const game = await makeGame({
     groups: [{ permission, group: group._id }]
@@ -34,6 +36,6 @@ export const createUserGroupGameRelease = async ({
 };
 
 export const isLoginPage = async () => {
-  const form = await Selenium.Browser.findElement(By.className('form-login'));
+  const form = await browser.findElement(By.className('form-login'));
   return form instanceof WebElement;
 };

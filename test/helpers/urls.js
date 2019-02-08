@@ -24,8 +24,12 @@ export function embedReleaseURL({
   })}?status=${status}&token=${token}&controls=${controls}&title=${title}`;
 }
 
+export function gameURL({ slug }) {
+  return `${DOMAIN}/games/${slug}`;
+}
+
 export function gameReleasesURL({ slug }) {
-  return `${DOMAIN}/games/game/${slug}/releases`;
+  return `${DOMAIN}/games/${slug}/releases`;
 }
 
 export function apiReleaseURL({ status, game }, token) {
