@@ -8,6 +8,8 @@ export const LOGIN_URL = `${DOMAIN}/login`;
 
 export const ROOT_DOMAIN = DOMAIN;
 
+export const GAME_URL = `${DOMAIN}/games`;
+
 export function embeddedGameURL({ slug }) {
   return `${DOMAIN}/embed/${slug}`;
 }

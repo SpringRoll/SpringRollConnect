@@ -1,14 +1,11 @@
 import {
-  gameReleasesURL,
   browser,
   createUserGroupGameRelease,
   login,
-  sleep,
-  Release,
   gameURL
 } from '../helpers';
 import { expect } from 'chai';
-import { until, By, error, WebElement } from 'selenium-webdriver';
+import { until, By, error } from 'selenium-webdriver';
 
 export const publicUserTest = async () => {
   const { game } = await createUserGroupGameRelease();
