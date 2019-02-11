@@ -8,7 +8,6 @@ import {
 } from '../helpers';
 import { expect } from 'chai';
 import { until, By, error, WebElement } from 'selenium-webdriver';
-import { release } from 'os';
 /**
  *
  * @param {0 | 1 | 2} permission
