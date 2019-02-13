@@ -1,0 +1,9 @@
+import './0-login';
+import './1-embed';
+import './2-game-slug-release';
+import './3-game-slug';
+import './4-game';
+import './5-users';
+import './6-group-slug';
+import './7-group';
+import './8-other';

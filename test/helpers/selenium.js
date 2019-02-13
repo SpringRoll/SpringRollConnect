@@ -18,7 +18,12 @@ export class Selenium {
     browser = await new webdriver.Builder()
       .forBrowser('chrome', '71.0.3578.98')
       .setChromeOptions(
-        new Options().addArguments('--no-sandbox', '--headless')
+        new Options().addArguments(
+          '--no-sandbox',
+          '--headless',
+          //Some Elements are hidden at smaller browser sizes
+          'window-size=1240,720'
+        )
       )
       .build();
     return;
