@@ -6,7 +6,7 @@ import {
   isLoginPage
 } from '../helpers';
 import { expect } from 'chai';
-import { until, By, error } from 'selenium-webdriver';
+import { until, By, error, Key } from 'selenium-webdriver';
 
 export const publicUserTest = async () => {
   const { game } = await createUserGroupGameRelease();
@@ -44,15 +44,12 @@ export const viewTest = async () => {
 };
 
 export const viewReleasesTest = async () => {
-  const element = await browser
+  await browser
     .wait(
       until.elementLocated(By.css(`a.list-group-item[href*="releases"]`)),
       500
     )
-    .catch(err => err);
-  expect(element).to.not.be.instanceOf(error.TimeoutError);
-
-  await element.click();
+    .click();
 
   const releasesTitle = await browser
     .wait(
@@ -65,31 +62,32 @@ export const viewReleasesTest = async () => {
 };
 
 export const editGameTest = async () => {
-  const button = await browser.wait(
-    until.elementLocated(By.css('button[data-target="#editGame"]')),
-    500
-  );
+  const test = 'Test description';
 
-  await button.click();
+  await browser
+    .wait(until.elementLocated(By.css('button[data-target="#editGame"]')), 500)
+    .click();
+
   const formInput = await browser.wait(
     until.elementLocated(By.id('description')),
     500
   );
 
-  expect(formInput).to.not.be.instanceOf(error.TimeoutError);
   await browser.wait(until.elementIsVisible(formInput));
-
-  const test = 'Test description';
   await formInput.sendKeys(test);
 
-  const edit = await browser.findElement(By.css('button[value="PATCH"]'));
-  await edit.click();
+  await browser
+    .findElement(By.css('button[value="PATCH"]'))
+    .sendKeys(Key.ENTER);
 
-  const description = await browser.findElement(
-    By.css(`div:nth-child(4) > div.col-sm-10 > p`)
-  );
+  const description = await browser
+    .wait(
+      until.elementLocated(By.css(`div:nth-child(4) > div.col-sm-10 > p`)),
+      500
+    )
+    .getText();
 
-  expect(await description.getText()).to.equal(test);
+  expect(description).to.equal(test);
 };
 export const privilegeTest = async () => {
   const err = await browser
@@ -100,5 +98,5 @@ export const privilegeTest = async () => {
     .click()
     .catch(err => err);
 
-  expect(err).to.be.instanceOf(error.IError);
+  expect(err).to.not.be.instanceOf(error.IError);
 };
