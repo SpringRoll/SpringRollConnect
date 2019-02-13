@@ -12,31 +12,26 @@ export const GAME_URL = `${DOMAIN}/games`;
 
 export const USERS_URL = `${DOMAIN}/users`;
 
-export function embeddedGameURL({ slug }) {
-  return `${DOMAIN}/embed/${slug}`;
-}
+export const GROUPS_URL = `${DOMAIN}/groups`;
 
-export function embedReleaseURL({
+export const embeddedGameURL = ({ slug }) => `${DOMAIN}/embed/${slug}`;
+
+export const embedReleaseURL = ({
   slug = '',
   status = 'prod',
   token = undefined,
   controls = 0,
   title = 0
-} = {}) {
-  return `${embeddedGameURL({
+} = {}) =>
+  `${embeddedGameURL({
     slug
   })}?status=${status}&token=${token}&controls=${controls}&title=${title}`;
-}
 
-export function gameURL({ slug }) {
-  return `${DOMAIN}/games/${slug}`;
-}
+export const gameURL = ({ slug }) => `${DOMAIN}/games/${slug}`;
 
-export function gameReleasesURL({ slug }) {
-  return `${DOMAIN}/games/${slug}/releases`;
-}
+export const gameReleasesURL = ({ slug }) => `${DOMAIN}/games/${slug}/releases`;
 
-export function apiReleaseURL({ status, game }, token) {
-  const { slug } = game;
-  return `${API_URL}/release/${slug}?status=${status}&token=${token}`;
-}
+export const apiReleaseURL = ({ status, game: { slug } }, token) =>
+  `${API_URL}/release/${slug}?status=${status}&token=${token}`;
+
+export const groupURL = ({ slug }) => `${GROUPS_URL}/group/${slug}`;

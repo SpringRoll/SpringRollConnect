@@ -1,4 +1,10 @@
-import { makeUserWithGroup, login, browser, USERS_URL } from '../helpers';
+import {
+  makeUserWithGroup,
+  login,
+  browser,
+  USERS_URL,
+  isLoginPage
+} from '../helpers';
 import { expect } from 'chai';
 import { until, By, WebElement } from 'selenium-webdriver';
 /**
@@ -8,7 +14,7 @@ import { until, By, WebElement } from 'selenium-webdriver';
 export const basic = async privilege => {
   if ('undefined' === typeof privilege) {
     await browser.get(USERS_URL);
-    await browser.wait(until.elementLocated(By.className('form-login')), 250);
+    await isLoginPage();
     return;
   }
 
@@ -81,20 +87,17 @@ export const editTest = async () => {
   const select = await addTest();
   select.click();
 
-  const option = await browser.findElement(By.css('option:nth-child(2)'));
-  await option.click();
+  await browser.findElement(By.css('option:nth-child(2)')).click();
 
-  const name = browser.findElement(By.css('[name="name"]'));
+  await browser.findElement(By.css('[name="name"]')).sendKeys('Bar');
 
-  await name.sendKeys('Bar');
-
-  const submit = await browser.findElement(By.css('button[type="submit"]'));
-
-  await submit.click();
+  await browser.findElement(By.css('button[type="submit"]')).click();
 
   await browser.get(USERS_URL);
 
-  const newName = await browser.findElement(By.css('option:nth-child(2)'));
+  const text = await browser
+    .findElement(By.css('option:nth-child(2)'))
+    .getText();
 
-  expect(await newName.getText()).to.equal('BarFoo');
+  expect(text).to.equal('BarFoo');
 };

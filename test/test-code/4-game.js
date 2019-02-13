@@ -2,7 +2,8 @@ import {
   browser,
   createUserGroupGameRelease,
   login,
-  GAME_URL
+  GAME_URL,
+  isLoginPage
 } from '../helpers';
 import { until, By, error } from 'selenium-webdriver';
 import { expect } from 'chai';
@@ -13,7 +14,7 @@ const { NoSuchElementError } = error;
 export const publicUserTest = async () => {
   await browser.get(GAME_URL);
 
-  await browser.wait(until.elementLocated(By.className('form-login')), 1000);
+  await isLoginPage();
 };
 
 export const basic = async (permission, privilege, gameStatus) => {

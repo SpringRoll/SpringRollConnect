@@ -4,7 +4,8 @@ import {
   createUserGroupGameRelease,
   login,
   sleep,
-  Release
+  Release,
+  isLoginPage
 } from '../helpers';
 import { expect } from 'chai';
 import { until, By, error, WebElement } from 'selenium-webdriver';
@@ -42,7 +43,7 @@ export const publicUserTest = async () => {
   const url = gameReleasesURL(game);
   await browser.get(url);
 
-  await browser.wait(until.elementLocated(By.className('form-login')), 1000);
+  await isLoginPage();
 };
 
 /**
@@ -89,20 +90,12 @@ export const downloadTest = async () => {
   await browser
     .findElement(
       By.css(
-        'body > div > div > div.col-sm-9 > div > div.panel-body.releases > div:nth-child(1) > div > div.col-sm-9 > div > div > form:nth-child(2) > div > button'
+        'div:nth-child(1) > div > div.col-sm-9 > div > div > form:nth-child(2) > div > button'
       )
     )
     .click();
 
-  await browser
-    .findElement(
-      By.css(
-        'body > div > div > div.col-sm-9 > div > div.panel-body.releases > div:nth-child(1) > div > div.col-sm-9 > div > div > form:nth-child(2) > div > ul > li > a[href*="release"]'
-      )
-    )
-    .click();
-
-  await browser.wait(until.titleContains('Page not found'), 1000);
+  await browser.findElement(By.css('a[href*="release.zip"]')).click();
 };
 
 /**
@@ -115,18 +108,12 @@ export const editTest = async pass => {
   await browser
     .findElement(
       By.css(
-        'body > div > div > div.col-sm-9 > div > div.panel-body.releases > div:nth-child(1) > div > div.col-sm-9 > div > div > form:nth-child(2) > div > button'
+        'div:nth-child(1) > div > div.col-sm-9 > div > div > form:nth-child(2) > div > button'
       )
     )
     .click();
 
-  await browser
-    .findElement(
-      By.css(
-        'body > div > div > div.col-sm-9 > div > div.panel-body.releases > div:nth-child(1) > div > div.col-sm-9 > div > div > form:nth-child(2) > div > ul > li> a > span.glyphicon-pencil'
-      )
-    )
-    .click();
+  await browser.findElement(By.css('span.glyphicon-pencil')).click();
 
   await browser
     .wait(until.elementLocated(By.id('version')), 500)
@@ -136,13 +123,7 @@ export const editTest = async pass => {
     .click();
 
   const text = await browser
-    .wait(
-      until.elementLocated(
-        By.css(
-          `body > div > div > div.col-sm-9 > div > div.panel-body.releases > div:nth-child(1) > div > div.col-sm-9 > div > div > h4 > strong`
-        )
-      )
-    )
+    .wait(until.elementLocated(By.css('h4 > strong')))
     .getText();
 
   expect(text).to.contain('Version 1.1.0');
@@ -191,14 +172,14 @@ export const deleteReleaseTest = async pass => {
   await browser
     .findElement(
       By.css(
-        'body > div > div > div.col-sm-9 > div > div.panel-body.releases > div:nth-child(1) > div > div.col-sm-9 > div > div > form:nth-child(2) > div > button'
+        'div:nth-child(1) > div > div.col-sm-9 > div > div > form:nth-child(2) > div > button'
       )
     )
     .click();
 
   const target = await browser.findElement(
     By.css(
-      'body > div > div > div.col-sm-9 > div > div.panel-body.releases > div:nth-child(1) > div > div.col-sm-9 > div > div > form > button > span.glyphicon-trash'
+      'div:nth-child(1) > div > div.col-sm-9 > div > div > form > button > span.glyphicon-trash'
     )
   );
 

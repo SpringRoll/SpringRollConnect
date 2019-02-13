@@ -2,7 +2,8 @@ import {
   browser,
   createUserGroupGameRelease,
   login,
-  gameURL
+  gameURL,
+  isLoginPage
 } from '../helpers';
 import { expect } from 'chai';
 import { until, By, error } from 'selenium-webdriver';
@@ -12,7 +13,7 @@ export const publicUserTest = async () => {
   const url = gameURL(game);
   await browser.get(url);
 
-  await browser.wait(until.elementLocated(By.className('form-login')), 1000);
+  await isLoginPage();
 };
 
 export const basic = async (permission, privilege, gameStatus) => {
@@ -90,11 +91,14 @@ export const editGameTest = async () => {
 
   expect(await description.getText()).to.equal(test);
 };
-
 export const privilegeTest = async () => {
-  const button = await browser.wait(
-    until.elementLocated(By.css(' a.list-group-item[href*="privileges"]')),
-    500
-  );
-  await button.click();
+  const err = await browser
+    .wait(
+      until.elementLocated(By.css(' a.list-group-item[href*="privileges"]')),
+      500
+    )
+    .click()
+    .catch(err => err);
+
+  expect(err).to.be.instanceOf(error.IError);
 };
