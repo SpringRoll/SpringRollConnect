@@ -1,13 +1,12 @@
 import {
-  makeUserWithGroup,
+  createUserGroupGameRelease,
   makeGroup,
   login,
   browser,
   groupURL,
   sleep,
   isLoginPage,
-  makeUser,
-  makeGame
+  makeUser
 } from '../helpers';
 import { until, By, WebElement, error } from 'selenium-webdriver';
 import { expect } from 'chai';
@@ -15,14 +14,6 @@ import { expect } from 'chai';
 const { NoSuchElementError } = error;
 
 export const basic = async privilege => {
-  const group = await makeGroup({
-    name: 'FooBar',
-    isUserGroup: false,
-    privilege: 0,
-    slug: 'foo-bar',
-    token: 'c7d2a4d0af1b0a6390f83420aaf8bbd5fa068f75'
-  });
-
   const groupTwo = await makeGroup({
     name: 'BarFoo',
     isUserGroup: false,
@@ -30,22 +21,20 @@ export const basic = async privilege => {
     slug: 'bar-foo',
     token: '317b9a82236565332bb1f51f022d2e188d31466b'
   });
-  const { user } = await makeUserWithGroup({ privilege, groups: [group._id] });
   await makeUser({
     username: 'fBar',
     name: 'Foo Bar',
     email: 'foobar@barfoo.ca',
     password: 'foobar'
   });
-
-  await makeGame({
-    groups: 2 > privilege ? [{ permission: privilege, group: group._id }] : []
+  const { user, group } = await createUserGroupGameRelease({
+    privilege
   });
 
   return {
-    user,
     group,
-    groupTwo
+    groupTwo,
+    user
   };
 };
 
@@ -55,7 +44,7 @@ export const before = async privilege => {
   const url = groupURL(group);
   const urlTwo = groupURL(groupTwo);
 
-  return { user, group, groupTwo, url, urlTwo };
+  return { url, urlTwo };
 };
 
 export const publicTest = async () => {
@@ -78,9 +67,6 @@ export const viewGroup = async ({ inGroup = false, privilege = 0 }) => {
     .wait(until.elementLocated(By.css(css)), 250)
     .catch(err => err);
 
-  // if (2 === privilege) {
-  //   await sleep(9999999);
-  // }
   expect(found).to.be.instanceOf(WebElement);
 };
 
@@ -97,8 +83,6 @@ export const addUser = async config => {
   }
 
   await browser.findElement(By.css('button[data-target="#addUser"]')).click();
-
-  // console.log('did run');
 
   const userSearch = await browser.findElement(By.css('#userSearch'));
   await browser.wait(until.elementIsVisible(userSearch));

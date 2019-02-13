@@ -4,7 +4,6 @@ import {
   browser,
   GROUPS_URL,
   isLoginPage,
-  sleep,
   isLandingPage
 } from '../helpers';
 import { expect } from 'chai';

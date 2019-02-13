@@ -3,7 +3,7 @@ Mongoose.Promise = Promise;
 import {
   Selenium,
   Database,
-  ROOT_DOMAIN,
+  MAIN_URL,
   browser,
   VERSION,
   logout
@@ -26,7 +26,7 @@ const expect = require('chai').expect;
 describe('SpringRollConnect', () => {
   it('should have the correct title', () => {
     return browser
-      .get(ROOT_DOMAIN)
+      .get(MAIN_URL)
       .then(() => browser.getTitle())
       .then(title =>
         expect(title).to.equal(`Login - SpringRoll Connect v${VERSION}`)

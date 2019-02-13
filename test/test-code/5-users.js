@@ -99,5 +99,5 @@ export const editTest = async () => {
     .findElement(By.css('option:nth-child(2)'))
     .getText();
 
-  expect(text).to.equal('BarFoo');
+  expect(text).to.equal('FooBar');
 };

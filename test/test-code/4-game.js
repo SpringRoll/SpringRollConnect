@@ -3,7 +3,8 @@ import {
   createUserGroupGameRelease,
   login,
   GAME_URL,
-  isLoginPage
+  isLoginPage,
+  sleep
 } from '../helpers';
 import { until, By, error } from 'selenium-webdriver';
 import { expect } from 'chai';
@@ -32,7 +33,7 @@ export const basic = async (permission, privilege, gameStatus) => {
 
 export const viewTest = async () => {
   const gameTitle = await browser.wait(
-    until.elementLocated(By.css('span.title')),
+    until.elementLocated(By.css('a[href="/games/test-game"] .title')),
     500
   );
 
@@ -42,9 +43,10 @@ export const viewTest = async () => {
 };
 
 export const viewDetailsTest = async () => {
-  const title = await viewTest();
+  await browser
+    .wait(until.elementLocated(By.css('a[href="/games/test-game"]')), 500)
+    .click();
 
-  title.click();
   await gameViewTest();
 };
 

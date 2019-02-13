@@ -1,5 +1,5 @@
 import { browser } from './selenium';
-import { LOGOUT_URL, ROOT_DOMAIN } from './urls';
+import { LOGOUT_URL, MAIN_URL } from './urls';
 import { until, By } from 'selenium-webdriver';
 
 export async function logout() {
@@ -11,7 +11,7 @@ export async function login({ username, password }) {
   // To make sure we are not already logged in, let's log out
   await logout();
 
-  await browser.get(ROOT_DOMAIN);
+  await browser.get(MAIN_URL);
 
   await browser.wait(until.elementsLocated(By.className('form-login')));
 
@@ -32,6 +32,6 @@ export async function login({ username, password }) {
 
   const form = await browser.findElement({ tagName: 'form' });
   await form.submit();
-  await browser.get(ROOT_DOMAIN);
+  await browser.get(MAIN_URL);
   await browser.wait(until.elementsLocated(By.css('a[href="/logout"]')));
 }
