@@ -39,7 +39,7 @@ module.exports = function(app) {
   app.use('/games/add', access.isEditor, require('./games/add'));
   app.use('/games/game', access.isAuthenticated, require('./games/game'));
   app.use('/archive/game', access.isAuthenticated, require('./archive/game'));
-  app.use('/games/search', access.isAdmin, require('./games/search'));
+  app.use('/games/search', access.isEditor, require('./games/search'));
   app.use('/groups/add', access.isAdmin, require('./groups/add'));
   app.use('/games', access.isEditor, require('./games/index'));
   app.use('/archive', access.isEditor, require('./archive/index'));
