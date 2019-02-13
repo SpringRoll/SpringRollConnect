@@ -2,7 +2,8 @@ import { makeGame } from './game';
 import { makeUserWithGroup } from './user';
 import { makeRelease } from './release';
 import { browser } from './selenium';
-import { By, WebElement } from 'selenium-webdriver';
+import { By, WebElement, until } from 'selenium-webdriver';
+import { expect } from 'chai';
 /**
  * Forces the test to pause for a set amount of milliseconds
  * @param {number} ms
@@ -36,6 +37,23 @@ export const createUserGroupGameRelease = async ({
 };
 
 export const isLoginPage = async () => {
-  const form = await browser.findElement(By.className('form-login'));
-  return form instanceof WebElement;
+  const form = await browser
+    .wait(until.elementLocated(By.css('.form-login')), 250)
+    .catch(err => err);
+  expect(form).to.be.instanceof(WebElement);
+  return form;
+};
+
+export const isLandingPage = async () => {
+  const node = await browser
+    .wait(until.elementLocated(By.css('div > h2')), 250)
+    .catch(err => err);
+
+  if (!(node instanceof WebElement)) {
+    return false;
+  }
+
+  const text = await node.getText();
+
+  return text.toLowerCase().includes('welcome');
 };

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { until, By } from 'selenium-webdriver';
 
-import { browser, login, logout, createUserGroupGameRelease } from '../helpers';
+import { browser, login, createUserGroupGameRelease } from '../helpers';
 
 describe('Login', () => {
   it('should be able to log a user in', async () => {
