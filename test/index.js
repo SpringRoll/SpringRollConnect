@@ -1,15 +1,11 @@
 const Mongoose = require('mongoose');
 Mongoose.Promise = Promise;
-import {
-  Selenium,
-  Database,
-  MAIN_URL,
-  browser,
-  VERSION,
-  logout
-} from './helpers';
+import { Selenium, Database, logout } from './helpers';
 
-before(() => Promise.all([Selenium.init(), Database.connect()]));
+before(async () => {
+  await Promise.all([Selenium.init(), Database.connect()]);
+  await Mongoose.connection.db.dropDatabase();
+});
 
 afterEach(async () => {
   await logout();
@@ -20,19 +16,5 @@ after(() => {
   Selenium.Browser.quit();
   Database.connection.close();
 });
-
-const expect = require('chai').expect;
-
-describe('SpringRollConnect', () => {
-  it('should have the correct title', () => {
-    return browser
-      .get(MAIN_URL)
-      .then(() => browser.getTitle())
-      .then(title =>
-        expect(title).to.equal(`Login - SpringRoll Connect v${VERSION}`)
-      );
-  });
-});
-
-const runGamesAPI = require('./api/games');
-const runReleaseAPI = require('./api/release');
+import './api';
+import './pages';

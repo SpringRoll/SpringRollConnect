@@ -1,26 +1,31 @@
-const expect = require('chai').expect;
-
-const request = require('superagent');
-const dataMakers = require('../helpers/data');
+import { expect } from 'chai';
+import { createUserGroupGameRelease, API_GAMES_URL } from '../helpers';
+import fetch from 'node-fetch';
 
 describe('api/games', () => {
   describe('GET', () => {
-    it('should receive a list of all games with a production release, without requiring a token', async function() {
-      await dataMakers.makeGame('prod');
-      let response = await request.get('http://localhost:3000/api/games');
-      expect(response.body.success).to.equal(true);
-      expect(response.body.data.length).to.equal(1);
-      expect(response.body.data[0].releases.length).to.equal(1);
+    it('should receive a list of all games with a production release, without requiring a token', async () => {
+      await createUserGroupGameRelease();
+      const response = await fetch(API_GAMES_URL).then(
+        async r => await r.json()
+      );
+
+      expect(response.success).to.be.true;
+      expect(response.data.length).to.equal(1);
+      expect(response.data[0].releases.length).to.equal(1);
     });
     it('should receive a list of all games, regardless of release level, if provided a token', async function() {
-      let user = await dataMakers.makeUser(2);
-      let token = await dataMakers.getUserToken(user);
-      await dataMakers.makeGame('dev');
-      let response = await request
-        .get('http://localhost:3000/api/games')
-        .send({ token: token });
-      expect(response.body.success).to.equal(true);
-      expect(response.body.data.length).to.equal(1);
+      const { group } = await createUserGroupGameRelease({
+        privilege: 2,
+        permission: 2
+      });
+
+      const response = await fetch(
+        `${API_GAMES_URL}?token=${group.token}`
+      ).then(async r => await r.json());
+
+      expect(response.success).to.be.true;
+      expect(response.data.length).to.equal(1);
     });
   });
 });

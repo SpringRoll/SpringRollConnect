@@ -18,6 +18,8 @@ export const PROFILE_URL = `${MAIN_URL}/profile`;
 
 export const PASSWORD_URL = `${MAIN_URL}/password`;
 
+export const API_GAMES_URL = `${API_URL}/games`;
+
 export const embeddedGameURL = ({ slug }) => `${MAIN_URL}/embed/${slug}`;
 
 export const embedReleaseURL = ({
