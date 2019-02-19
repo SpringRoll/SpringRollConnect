@@ -14,7 +14,9 @@ import { expect } from 'chai';
 const { NoSuchElementError } = error;
 
 /**
- * initializes the test environment with the required data
+ * Initializes the test environment by
+ * - Creating a test user and group
+ * - Then creating a user group game and release (the user performing the actions in the test)
  * @param {0 | 1 | 2} [privilege=0]
  */
 export const init = async (privilege = 0) => {

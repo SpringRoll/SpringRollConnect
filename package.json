@@ -19,6 +19,7 @@
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-less": "^1.4.1",
     "grunt-eslint": "^21.0.0",
+    "grunt-prettier": "^1.1.1",
     "mocha": "^5.2.0",
     "node-fetch": "^2.3.0",
     "nyc": "^13.1.0",
