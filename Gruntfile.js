@@ -69,7 +69,19 @@ module.exports = function(grunt)
         src: [
           'test/**/*.js'
         ]
-      }
+      },
+      // src: {
+      //   src: [
+      //     'src/**/*.js',
+      //     '!src/libs/*.js'
+      //   ]
+      // },
+      // app: {
+      //   src: [
+      //     'app/**/*.js',
+      //     '!app/public/**'
+      //   ]
+      // }
     }
   });
 
