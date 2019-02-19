@@ -26,6 +26,7 @@ export async function makeUser({
  * @typedef {object} GroupParams
  * @property {boolean} [GroupParams.isUserGroup]
  * @property {0 | 1 | 2} [GroupParams.privilege]
+ * @property {Array<*>} [GroupParams.groups]
  */
 
 /**
@@ -35,10 +36,11 @@ export async function makeUser({
  */
 export async function makeUserWithGroup({
   isUserGroup = true,
-  privilege = 0
+  privilege = 0,
+  groups = []
 } = {}) {
   const group = await makeGroup({ isUserGroup, privilege });
-  const user = await makeUser({ groups: [group._id] });
+  const user = await makeUser({ groups: [group._id, ...groups] });
 
   return { user, group };
 }
