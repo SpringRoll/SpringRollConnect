@@ -16,8 +16,6 @@ const VIEW_DOCS = '/docs access the documentation page.';
 const VIEW_PROFILE = '/profile access this page.';
 const VIEW_PASSWORD = '/password access this page.';
 
-//TODO: Search bar does not work if not a admin.
-//TODO: Search bar is not accessible by readonly users
 const USE_SEARCH = 'use the search bar to find a game.';
 
 describe('As a public user', () => {
@@ -35,7 +33,7 @@ describe('As a readonly user', () => {
   it(`I can ${VIEW_DOCS}`, docTest);
   it(`I can ${VIEW_PROFILE}`, profileTest);
   it(`I can ${VIEW_PASSWORD}`, passwordTest);
-  // it(`I can ${USE_SEARCH}`, searchTest);
+  it(`I can ${USE_SEARCH}`, searchTest);
 });
 
 describe('As a edit capable user', () => {
@@ -45,7 +43,7 @@ describe('As a edit capable user', () => {
   it(`I can ${VIEW_DOCS}`, docTest);
   it(`I can ${VIEW_PROFILE}`, profileTest);
   it(`I can ${VIEW_PASSWORD}`, passwordTest);
-  // it(`I can ${USE_SEARCH}`, searchTest);
+  it(`I can ${USE_SEARCH}`, searchTest);
 });
 
 describe('As a admin user', () => {

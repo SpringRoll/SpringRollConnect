@@ -5,7 +5,7 @@ import {
   viewDetailsTest,
   addGameTest
 } from '../test-code/game';
-const VIEW_GAMES = `see games that they have read+ permissions for.`;
+const VIEW_GAMES = `see games that I have read permissions for.`;
 const VIEW_DETAILS = `click on games that they have read+ permissions for, and be taken to that game's /game/[slug] page.`;
 const ADD_GAME = `add a new game entry.`;
 const PAGE = `page - games`;
@@ -13,12 +13,10 @@ describe(`${PAGE} as a public user`, () => {
   it(`I can't access the page`, publicUserTest);
 });
 
-//TODO: Fix read-only user permissions so they can view releases page
 describe(`${PAGE} as a read-only user`, () => {
   beforeEach(async () => await init(0, 0, 'prod'));
   it(`I can ${VIEW_GAMES}`, viewTest);
-  //TODO Fix read-only users so they can view the game details page
-  // it(`I can ${VIEW_DETAILS}`, viewDetailsTest);
+  it(`I can ${VIEW_DETAILS}`, viewDetailsTest);
   it(`I can't ${ADD_GAME}`, async () => await addGameTest(false));
 });
 
