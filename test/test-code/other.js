@@ -17,7 +17,9 @@ export const publicTest = async url => {
 };
 
 /**
- * initializes the test environment with the required data
+ * Initializes the test environment by
+ * - Creating a user group game and associated release
+ * - Logging the user in
  * @param {0 | 1 | 2} [privilege=0]
  */
 export const init = async (privilege = 0) => {
