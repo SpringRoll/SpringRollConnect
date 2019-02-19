@@ -8,11 +8,18 @@ import {
 } from '../helpers';
 import { expect } from 'chai';
 import { until, By, WebElement } from 'selenium-webdriver';
+
 /**
- * initializes the test environment with the required data
+ * Initializes the test environment by
+ * - Creating a user with a group
+ * - Logging them
+ * - Going to the groups page
+ * - If no permission is provided, this setup code will assume the user is anonymous and check that they cannot reach
+ *   the groups page
+ * - If the user doesn't have admin privileges check that they also cannot reach the groups page
  * @param {0 | 1 | 2} [privilege=0]
  */
-export const init = async (privilege = 0) => {
+export const init = async privilege => {
   if ('undefined' === typeof privilege) {
     await browser.get(GROUPS_URL);
     await isLoginPage();
