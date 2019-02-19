@@ -1,7 +1,24 @@
 import { expect } from 'chai';
 import { until, By } from 'selenium-webdriver';
 
-import { browser, login, logout, createUserGroupGameRelease } from '../helpers';
+import {
+  MAIN_URL,
+  VERSION,
+  browser,
+  login,
+  createUserGroupGameRelease
+} from '../helpers';
+
+describe('SpringRollConnect', () => {
+  it('should have the correct title', () => {
+    return browser
+      .get(MAIN_URL)
+      .then(() => browser.getTitle())
+      .then(title =>
+        expect(title).to.equal(`Login - SpringRoll Connect v${VERSION}`)
+      );
+  });
+});
 
 describe('Login', () => {
   it('should be able to log a user in', async () => {
