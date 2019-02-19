@@ -9,8 +9,12 @@ import {
 } from '../helpers';
 import { expect } from 'chai';
 import { until, By, error, WebElement } from 'selenium-webdriver';
+
 /**
- * initializes the test environment with the required data
+ * Initializes the test environment by
+ * - Creating a user group game and associated release
+ * - Logs the user in
+ * - Goes to look at the releases page
  * @param {0 | 1 | 2} permission
  * @param {0 | 1 | 2} privilege
  * @param {"dev" | "qa" | "stage" | "prod"} gameStatus

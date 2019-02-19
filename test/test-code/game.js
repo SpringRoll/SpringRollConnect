@@ -18,7 +18,10 @@ export const publicUserTest = async () => {
 };
 
 /**
- * initializes the test environment with the required data
+ * Initializes the test environment by
+ * - Creating a user group game and associated release
+ * - Logging the new user in
+ * - Going to the game page
  * @param {0 | 1 | 2} permission
  * @param {0 | 1 | 2} privilege
  * @param {"dev" | "qa" | "stage" | "prod"} gameStatus
