@@ -13,7 +13,11 @@ import { expect } from 'chai';
 
 const { NoSuchElementError } = error;
 
-export const basic = async privilege => {
+/**
+ * initializes the test environment with the required data
+ * @param {0 | 1 | 2} [privilege=0]
+ */
+export const init = async (privilege = 0) => {
   const groupTwo = await makeGroup({
     name: 'BarFoo',
     isUserGroup: false,
@@ -39,7 +43,7 @@ export const basic = async privilege => {
 };
 
 export const before = async privilege => {
-  const { user, group, groupTwo } = await basic(privilege);
+  const { user, group, groupTwo } = await init(privilege);
   await login(user);
   const url = groupURL(group);
   const urlTwo = groupURL(groupTwo);
@@ -48,7 +52,7 @@ export const before = async privilege => {
 };
 
 export const publicTest = async () => {
-  const { group } = await basic();
+  const { group } = await init();
   await browser.get(groupURL(group));
   await isLoginPage();
 };

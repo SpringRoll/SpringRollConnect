@@ -1,18 +1,18 @@
 import {
-  basic,
+  init,
   publicUserTest,
   viewTest,
   viewReleasesTest,
   editGameTest,
   privilegeTest
-} from '../test-code/3-game-slug';
+} from '../test-code/game-slug';
 const PAGE = `page - games/[slug]`;
 
 const VIEW = `visit this page, assuming they have read access to this game.`;
 
 const VIEW_RELEASES = `see the button for releases, and use it to go to the releases page.`;
 
-const EDIT = `edit the game's basic information`;
+const EDIT = `edit the game's init information`;
 
 const ACCESS_PRIVILEGES = `access the privileges page.`;
 
@@ -22,7 +22,7 @@ describe(`${PAGE} as a public user`, () => {
 
 // TODO: Fix read-only user permissions so they can view releases page
 // describe(`${PAGE} as a read-only user`, () => {
-//   beforeEach(async () => await basic(0, 0, 'prod'));
+//   beforeEach(async () => await init(0, 0, 'prod'));
 //   it(`I can ${VIEW}`, () => {});
 //   it(`I can ${VIEW_RELEASES}`, () => {});
 //   it(`I can't ${EDIT}`, () => {});
@@ -30,7 +30,7 @@ describe(`${PAGE} as a public user`, () => {
 // });
 
 describe(`${PAGE} as a edit capable user`, () => {
-  beforeEach(async () => await basic(1, 1, 'dev'));
+  beforeEach(async () => await init(1, 1, 'dev'));
   it(`I can ${VIEW}`, viewTest);
   it(`I can ${VIEW_RELEASES}`, viewReleasesTest);
   it(`I can ${EDIT}`, editGameTest);
@@ -39,7 +39,7 @@ describe(`${PAGE} as a edit capable user`, () => {
 });
 
 describe(`${PAGE} as a admin user`, () => {
-  beforeEach(async () => await basic(2, 2, 'dev'));
+  beforeEach(async () => await init(2, 2, 'dev'));
   it(`I can ${VIEW}`, viewTest);
   it(`I can ${VIEW_RELEASES}`, viewReleasesTest);
   it(`I can ${EDIT}`, editGameTest);

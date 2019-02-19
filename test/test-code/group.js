@@ -8,7 +8,11 @@ import {
 } from '../helpers';
 import { expect } from 'chai';
 import { until, By, WebElement } from 'selenium-webdriver';
-export const basic = async privilege => {
+/**
+ * initializes the test environment with the required data
+ * @param {0 | 1 | 2} [privilege=0]
+ */
+export const init = async (privilege = 0) => {
   if ('undefined' === typeof privilege) {
     await browser.get(GROUPS_URL);
     await isLoginPage();
@@ -32,7 +36,7 @@ export const basic = async privilege => {
 };
 
 export const addGroup = async () => {
-  await basic(2);
+  await init(2);
   await browser.findElement(By.css('a[href="/groups/add"]')).click();
 
   const [name, slug, submit] = await Promise.all([

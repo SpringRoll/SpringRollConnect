@@ -7,7 +7,7 @@ import {
   removeGame,
   refreshToken,
   edit
-} from '../test-code/6-group-slug';
+} from '../test-code/group-slug';
 const ADD_GAME = 'Add a game to a group';
 const ADD_USER = 'Add a user to a group';
 const EDIT = 'Edit a group';
