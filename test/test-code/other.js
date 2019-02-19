@@ -16,7 +16,11 @@ export const publicTest = async url => {
   await isLoginPage();
 };
 
-export const basic = async privilege => {
+/**
+ * initializes the test environment with the required data
+ * @param {0 | 1 | 2} [privilege=0]
+ */
+export const init = async (privilege = 0) => {
   const { user } = await createUserGroupGameRelease({
     gameStatus: 'prod',
     permission: privilege,

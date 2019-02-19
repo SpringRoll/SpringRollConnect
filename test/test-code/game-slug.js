@@ -15,8 +15,13 @@ export const publicUserTest = async () => {
 
   await isLoginPage();
 };
-
-export const basic = async (permission, privilege, gameStatus) => {
+/**
+ * initializes the test environment with the required data
+ * @param {0 | 1 | 2} permission
+ * @param {0 | 1 | 2} privilege
+ * @param {"dev" | "qa" | "stage" | "prod"} gameStatus
+ */
+export const init = async (permission, privilege, gameStatus) => {
   const { user, game } = await createUserGroupGameRelease({
     permission,
     privilege,

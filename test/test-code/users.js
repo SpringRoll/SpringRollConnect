@@ -8,10 +8,10 @@ import {
 import { expect } from 'chai';
 import { until, By, WebElement } from 'selenium-webdriver';
 /**
- *
- * @param {0 | 1 | 2} [privilege]
+ * initializes the test environment with the required data
+ * @param {0 | 1 | 2} [privilege=0]
  */
-export const basic = async privilege => {
+export const init = async (privilege = 0) => {
   if ('undefined' === typeof privilege) {
     await browser.get(USERS_URL);
     await isLoginPage();

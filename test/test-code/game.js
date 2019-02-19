@@ -3,12 +3,11 @@ import {
   createUserGroupGameRelease,
   login,
   GAME_URL,
-  isLoginPage,
-  sleep
+  isLoginPage
 } from '../helpers';
 import { until, By, error } from 'selenium-webdriver';
 import { expect } from 'chai';
-import { viewTest as gameViewTest } from './3-game-slug';
+import { viewTest as gameViewTest } from './game-slug';
 
 const { NoSuchElementError } = error;
 
@@ -18,7 +17,13 @@ export const publicUserTest = async () => {
   await isLoginPage();
 };
 
-export const basic = async (permission, privilege, gameStatus) => {
+/**
+ * initializes the test environment with the required data
+ * @param {0 | 1 | 2} permission
+ * @param {0 | 1 | 2} privilege
+ * @param {"dev" | "qa" | "stage" | "prod"} gameStatus
+ */
+export const init = async (permission, privilege, gameStatus) => {
   const { user } = await createUserGroupGameRelease({
     permission,
     privilege,
