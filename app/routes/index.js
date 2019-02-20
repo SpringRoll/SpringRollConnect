@@ -21,7 +21,7 @@ module.exports = function(app)
 		};
 		res.locals.isActive = function(url, undefined)
 		{
-			var isCurrent = (url instanceof RegExp) ? 
+			var isCurrent = (url instanceof RegExp) ?
 				url.test(req.originalUrl):
 				url == req.originalUrl;
 			return isCurrent ? 'active' : undefined;
@@ -62,9 +62,9 @@ module.exports = function(app)
 	app.use('/embed', require('./embed'));
 	app.use('/docs', access.isAuthenticated, require('./docs'));
 	app.use('/games/add', access.isEditor, require('./games/add'));
-	app.use('/games/search', access.isAdmin, require('./games/search'));
+	app.use('/games/search', access.isAuthenticated, require('./games/search'));
 	app.use('/groups/add', access.isAdmin, require('./groups/add'));
-	app.use('/games', access.isEditor, require('./games/index'));
+	app.use('/games', access.isAuthenticated, require('./games/index'));
 	app.use('/releases', access.isEditor, require('./releases/release'));
 	app.use('/archive', access.isEditor, require('./games/index'));
 	app.use('/groups/group', access.isAuthenticated, require('./groups/group'));
