@@ -6,7 +6,7 @@ import {
   isLoginPage
 } from '../helpers';
 import { expect } from 'chai';
-import { until, By, error, Key } from 'selenium-webdriver';
+import { until, By, error, Key, WebElement } from 'selenium-webdriver';
 
 export const publicUserTest = async () => {
   const { game } = await createUserGroupGameRelease();
@@ -69,12 +69,19 @@ export const viewReleasesTest = async () => {
   expect(await releasesTitle.getText()).to.equal('Releases');
 };
 
-export const editGameTest = async () => {
+export const editGameTest = async pass => {
   const test = 'Test description';
 
-  await browser
+  const button = await browser
     .wait(until.elementLocated(By.css('button[data-target="#editGame"]')), 500)
-    .click();
+    .catch(err => err);
+
+  if (pass) {
+    await button.click();
+  } else {
+    expect(button).to.not.be.instanceOf(WebElement);
+    return;
+  }
 
   const formInput = await browser.wait(
     until.elementLocated(By.id('description')),
@@ -97,14 +104,12 @@ export const editGameTest = async () => {
 
   expect(description).to.equal(test);
 };
-export const privilegeTest = async () => {
-  const err = await browser
-    .wait(
-      until.elementLocated(By.css(' a.list-group-item[href*="privileges"]')),
-      500
-    )
-    .click()
+export const privilegeTest = async pass => {
+  const link = await browser
+    .findElement(By.css('a[href*="/privileges"]'))
     .catch(err => err);
-
-  expect(err).to.not.be.instanceOf(error.IError);
+  if (pass) {
+  } else {
+    expect(link).to.be.instanceOf(error.NoSuchElementError);
+  }
 };
