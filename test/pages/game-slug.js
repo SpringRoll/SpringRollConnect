@@ -41,6 +41,5 @@ describe(`${PAGE} as a admin user`, () => {
   it(`I can ${VIEW}`, viewTest);
   it(`I can ${VIEW_RELEASES}`, viewReleasesTest);
   it(`I can ${EDIT}`, async () => editGameTest(true));
-  //TODO: Fix permissions so that a Admin can view privileges
-  // it(`I can ${ACCESS_PRIVILEGES}`, async () => privilegeTest(true));
+  it(`I can ${ACCESS_PRIVILEGES}`, async () => privilegeTest(true));
 });

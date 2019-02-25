@@ -512,7 +512,7 @@ GameSchema.statics.removeGroup = function(ids, groupId, callback) {
  */
 GameSchema.methods.removeGroup = function(group, callback) {
   this.groups = this.groups.filter(function(entry) {
-    return !entry.group._id.equals(group);
+    return !entry.group.equals(group);
   });
   return this.save(callback);
 };
@@ -527,7 +527,7 @@ GameSchema.methods.removeGroup = function(group, callback) {
  */
 GameSchema.methods.changePermission = function(group, permission, callback) {
   this.groups.forEach(function(entry) {
-    if (entry.group._id.equals(group)) {
+    if (entry.group.equals(group)) {
       entry.permission = permission;
     }
   });

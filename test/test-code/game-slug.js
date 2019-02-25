@@ -3,7 +3,8 @@ import {
   createUserGroupGameRelease,
   login,
   gameURL,
-  isLoginPage
+  isLoginPage,
+  sleep
 } from '../helpers';
 import { expect } from 'chai';
 import { until, By, error, Key, WebElement } from 'selenium-webdriver';
@@ -109,7 +110,78 @@ export const privilegeTest = async pass => {
     .findElement(By.css('a[href*="/privileges"]'))
     .catch(err => err);
   if (pass) {
+    await link.click();
+    await modifyGroup();
+    await deleteGroup();
+    await addGroup();
   } else {
     expect(link).to.be.instanceOf(error.NoSuchElementError);
   }
 };
+
+async function deleteGroup() {
+  await browser.findElement(By.css(`button[value="removeGroup"]`)).click();
+
+  await browser
+    .switchTo()
+    .alert()
+    .accept();
+
+  const element = await browser
+    .wait(until.elementLocated(By.css('.alert.alert-warning')), 500)
+    .catch(err => err);
+
+  expect(element).to.be.instanceOf(WebElement);
+}
+
+async function addGroup() {
+  await browser.findElement(By.css(`button[data-target="#addGroup"]`)).click();
+
+  const search = await browser.findElement(By.id('groupSearch'));
+
+  await browser.wait(until.elementIsVisible(search));
+
+  await search.sendKeys('F');
+  await sleep(100);
+  const searchItem = await browser.findElement(By.css(`button.search-item`));
+
+  await browser.wait(until.elementIsVisible(searchItem));
+
+  await searchItem.click();
+
+  await browser
+    .findElement(By.css(`button[value="addGroup"`))
+    .sendKeys(Key.ENTER);
+
+  const newGroup = await browser
+    .wait(until.elementLocated(By.css('a[href*="foo-bar"]')), 500)
+    .catch(err => err);
+
+  expect(newGroup).to.be.instanceOf(WebElement);
+}
+
+async function modifyGroup() {
+  let radioButtons = await browser.wait(
+    until.elementsLocated(
+      By.css('form > input[type="radio"][name="permission"]')
+    ),
+    500
+  );
+
+  const selectedArray = await Promise.all(
+    radioButtons.map(r => r.isSelected())
+  );
+
+  const index = selectedArray.findIndex(value => !value);
+
+  await radioButtons[index].click();
+
+  radioButtons = await browser.wait(
+    until.elementsLocated(
+      By.css('form > input[type="radio"][name="permission"]')
+    ),
+    500
+  );
+
+  expect(await radioButtons[index].isSelected()).to.be.true;
+}
