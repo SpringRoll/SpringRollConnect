@@ -40,7 +40,10 @@ module.exports = function(app)
 	});
 
 	app.use(function (req, res, next) {
-		const route = req.originalUrl.startsWith('/games') || req.originalUrl.startsWith('/archive') || req.originalUrl.startsWith('/releases');
+    const route =
+      (req.originalUrl.startsWith('/games') && !req.originalUrl.endsWith('privileges'))
+      || req.originalUrl.startsWith('/archive')
+      || req.originalUrl.startsWith('/releases');
 		const contents = req.body && typeof req.body === 'object' && 'action' in req.body;
 		// if fails cases, can just pass through w/ no change
 		if (route && contents) {

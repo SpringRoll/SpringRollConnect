@@ -1,11 +1,10 @@
 extend ../templates/game
-
 append gameContent
 	.panel.panel-default
 		.panel-heading
 			include modal-group
-			button.pull-right.btn.btn-default.btn-sm(data-toggle="modal" data-target="#addGroup") 
-				span.glyphicon.glyphicon-plus 
+			button.pull-right.btn.btn-default.btn-sm(data-toggle="modal" data-target="#addGroup")
+				span.glyphicon.glyphicon-plus
 				|  Add
 			h3.panel-title Privileges
 		.panel-body
@@ -16,16 +15,13 @@ append gameContent
 					thead: tr
 						th Group
 						th.text-center Read
-							|  
-							a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Users or groups can access games but not edit or add releases") 
+							a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Users or groups can access games but not edit or add releases")
 								span.glyphicon.glyphicon-question-sign
 						th.text-center Write
-							|  
-							a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Users or groups can manages releases and game properties") 
+							a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Users or groups can manages releases and game properties")
 								span.glyphicon.glyphicon-question-sign
 						th.text-center Admin
-							|  
-							a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Users or groups have write access and can manage game privileges") 
+							a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Users or groups have write access and can manage game privileges")
 								span.glyphicon.glyphicon-question-sign
 					tbody
 						for entry in game.groups
