@@ -1,7 +1,8 @@
 var router = require('express').Router(),
 	Game = require('../../models/game'),
 	Release = require('../../models/release'),
-	Pagination = require('../../helpers/pagination');
+	Pagination = require('../../helpers/pagination'),
+	Access = require('../../helpers/access');
 const { renderPage, handleError, defaultCapabilities, validateRequest } = require('./helpers');
 
 router.get('/:order(alphabetical|latest)?/:local(page)?/:number([0-9]+)?', function(req, res)
@@ -42,6 +43,8 @@ router.get('/:order(alphabetical|latest)?/:local(page)?/:number([0-9]+)?', funct
 
 });
 
+router.use('/:slug/privileges', Access.isAdmin);
+
 router.get('/:slug', function(req, res)
 {
 	renderPage(req, res, 'games/game');
@@ -51,6 +54,30 @@ router.get('/:slug/privileges', function(req, res)
 {
 	// have to pass addt'l param to resolve Group objects
 	renderPage(req, res, 'games/privileges', 'groups.group');
+});
+
+router.post('/:slug/privileges', function(req, res)
+{
+	Game.getBySlug(req.params.slug).then(game => {
+		const render = () => renderPage(req, res, 'games/privileges', 'groups.group');
+		switch (req.body.action) {
+			case 'addGroup':
+				Game.addGroup(game._id, req.body.group, req.body.permission, render);
+				break;
+			case 'changePermission':
+				game.changePermission(req.body.group, req.body.permission, render);
+				break;
+			case 'removeGroup':
+				game.removeGroup(req.body.group, render);
+				break;
+			default:
+				render();
+				break;
+		}
+	}).catch(err => {
+		console.error("Privileges error", err);
+		res.status(404).render('404');
+	});
 });
 
 router.get('/:slug/releases', function(req, res)
@@ -67,7 +94,7 @@ router.patch('/:slug/releases/:commit_id', async function(req, res)
 
 router.patch('/:slug', function(req, res){
 	let errors = validateRequest(req);
-	if (errors) { 
+	if (errors) {
 		return handleError(errors);
 	}
 
@@ -92,7 +119,7 @@ router.patch('/:slug', function(req, res){
 	});
 });
 
-router.delete('/:slug', function(req, res){	
+router.delete('/:slug', function(req, res){
 	Game.getBySlug(req.params.slug)
 	.then(game => {
 		if (game.isArchived){
@@ -106,12 +133,12 @@ router.delete('/:slug', function(req, res){
 					return done(err);
 				}
 			});
-		}	
+		}
 	})
 	.then(() => {
 		res.redirect('/');
 	});
-		
+
 });
 
 module.exports = router;
