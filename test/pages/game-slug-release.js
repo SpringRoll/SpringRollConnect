@@ -19,16 +19,15 @@ describe(`${PAGE} as a public user`, () => {
   it(`I can't access releases`, publicUserTest);
 });
 
-//TODO: Fix read-only user permissions so they can view releases page
-// describe(`${PAGE} as a read-only user`, () => {
-//   beforeEach(async () => await init(0, 0, 'dev'));
-//   it(`I can ${VIEW}`, () => {});
-//   it(`I can ${CHANGE}`, async () => await changeTest(false));
-//   it(`I can ${DOWNLOAD}`, downloadTest);
-//   it(`I can ${EDIT}`, async () => await editTest(false));
-//   it(`I can ${ADD}`, async () => await addReleaseTest(false));
-//   it(`I can ${DELETE}`, async () => await deleteReleaseTest(false));
-// });
+describe(`${PAGE} as a read-only user`, () => {
+  beforeEach(async () => await init(0, 0, 'dev'));
+  it(`I can ${VIEW}`, () => {});
+  it(`I can't ${CHANGE}`, async () => await changeTest(false));
+  it(`I can ${DOWNLOAD}`, downloadTest);
+  it(`I can't ${EDIT}`, async () => await editTest(false));
+  it(`I can't ${ADD}`, async () => await addReleaseTest(false));
+  it(`I can't ${DELETE}`, async () => await deleteReleaseTest(false));
+});
 
 describe(`${PAGE} as a edit capable user`, () => {
   beforeEach(async () => await init(1, 1, 'dev'));
