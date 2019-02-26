@@ -1,8 +1,9 @@
 import { Release, Game } from './models';
+import { makeRandomString } from './util';
 export const makeRelease = async (
   { _id },
   status = 'dev',
-  commitId = 'bf408de70afb8c5cd633ff2678c0d0e4d192326f',
+  commitId = makeRandomString(40),
   notes = 'Test Release'
 ) =>
   await new Release({
