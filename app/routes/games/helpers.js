@@ -72,8 +72,27 @@ function renderPage(req, res, template, populate=null)
 			{
 				return res.status(401).render('401');
 			}
+
+			// Gets the page index if the page supports query string pages
+			const pages = Math.ceil(game.releases.length / 10);
+
+			const pageIndex =
+				// Verify that the page is passed a number
+				req.query &&
+				req.query.page &&
+				Number.isInteger(Number(req.query.page)) &&
+				// Check to make sure it's greater than zero
+				0 < req.query.page
+					// Check to make sure that it's not greater than the maximum
+					? req.query.page > pages
+						? pages
+						: Number(req.query.page)
+					: 1;
+
 			res.render(template, {
 			game: game,
+			page: pageIndex,
+			totalPages: pages,
 			capabilities: game.capabilities,
 			host: req.headers.host,
 			isEditor: access.permission > 0,
