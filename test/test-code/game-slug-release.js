@@ -31,7 +31,7 @@ export const init = async (permission, privilege, gameStatus) => {
   await browser.get(url);
 
   const err = await browser
-    .wait(until.elementsLocated(By.css('[data-target="#addRelease"]')), 500)
+    .wait(until.elementsLocated(By.css('a[href*="releases"].active')), 500)
     .catch(err => err);
 
   expect(err).to.not.be.instanceOf(error.TimeoutError);
@@ -55,11 +55,18 @@ export const publicUserTest = async () => {
  * @param {boolean} pass
  */
 export const changeTest = async pass => {
-  const formButton = await browser.findElement(
-    By.className(`btn btn-default btn-block status dropdown-toggle`)
-  );
+  const formButton = await browser
+    .findElement(
+      By.className(`btn btn-default btn-block status dropdown-toggle`)
+    )
+    .catch(err => err);
 
-  expect(await formButton.isEnabled()).to.equal(pass);
+  if (pass) {
+    expect(await formButton.isEnabled()).to.equal(pass);
+  } else {
+    expect(formButton).to.be.instanceOf(error.NoSuchElementError);
+    return;
+  }
 
   if (pass) {
     const oldText = await formButton.getText();
@@ -92,11 +99,7 @@ export const downloadTest = async () => {
   await browser.findElement(By.className('help-block updated')).click();
 
   await browser
-    .findElement(
-      By.css(
-        'div:nth-child(1) > div > div.col-sm-9 > div > div > form:nth-child(2) > div > button'
-      )
-    )
+    .findElement(By.css('button.dropdown-toggle > .glyphicon.glyphicon-cog'))
     .click();
 
   await browser.findElement(By.css('a[href*="release.zip"]')).click();
@@ -110,14 +113,19 @@ export const editTest = async pass => {
   await browser.findElement(By.className('help-block updated')).click();
 
   await browser
-    .findElement(
-      By.css(
-        'div:nth-child(1) > div > div.col-sm-9 > div > div > form:nth-child(2) > div > button'
-      )
-    )
+    .findElement(By.css('button.dropdown-toggle > .glyphicon.glyphicon-cog'))
     .click();
 
-  await browser.findElement(By.css('span.glyphicon-pencil')).click();
+  const button = await browser
+    .findElement(By.css('span.glyphicon-pencil'))
+    .catch(err => err);
+
+  if (pass) {
+    await button.click();
+  } else {
+    expect(button).to.be.instanceOf(error.NoSuchElementError);
+    return;
+  }
 
   await browser
     .wait(until.elementLocated(By.id('version')), 500)
@@ -173,20 +181,13 @@ export const addReleaseTest = async pass => {
 export const deleteReleaseTest = async pass => {
   const releaseCount = await Release.find().count();
   await browser.findElement(By.className('help-block updated')).click();
-  await browser
-    .findElement(
-      By.css(
-        'div:nth-child(1) > div > div.col-sm-9 > div > div > form:nth-child(2) > div > button'
-      )
-    )
-    .click();
-
-  const target = await browser.findElement(
-    By.css(
-      'div:nth-child(1) > div > div.col-sm-9 > div > div > form > button > span.glyphicon-trash'
-    )
+  await browser.findElement(
+    By.css('button.dropdown-toggle > .glyphicon.glyphicon-cog')
   );
 
+  const target = await browser
+    .findElement(By.css('button > span.glyphicon-trash'))
+    .catch(err => err);
   if (!pass) {
     expect(target).to.not.be.instanceOf(WebElement);
     return;
