@@ -2,12 +2,29 @@
   "version": "1.6.4",
   "private": true,
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
+    "@babel/plugin-transform-modules-commonjs": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/register": "^7.0.0",
+    "@babel/runtime": "^7.3.1",
+    "chai": "^4.2.0",
+    "chromedriver": "^2.45.0",
+    "concurrently": "^4.1.0",
     "glob": "^7.1.2",
     "grunt": "0.4.*",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-less": "^1.4.1",
-    "grunt-eslint": "^21.0.0"
+    "grunt-eslint": "^21.0.0",
+    "grunt-prettier": "^1.1.1",
+    "mocha": "^5.2.0",
+    "node-fetch": "^2.3.0",
+    "nyc": "^13.1.0",
+    "selenium-webdriver": "^4.0.0-alpha.1",
+    "superagent": "^4.1.0"
   },
   "dependencies": {
     "async": "^1.0.0",
@@ -29,7 +46,7 @@
     "jquery": "^3.0.0",
     "marky-markdown": "^12.0.0",
     "moment": "^2.9.0",
-    "mongoose": "~4.0.4",
+    "mongoose": "^4.8.7",
     "mongoose-deep-populate": "^1.0.1",
     "mongoose-type-email": "^1.0.5",
     "mongoose-types": "^1.0.3",
@@ -42,6 +59,9 @@
     "uuid": "^3.2.1"
   },
   "scripts": {
-    "test": "grunt default --verbose"
+    "test": "concurrently 'node server.js' 'npm run test:init' -k --prefix-colors 'yellow,green' --success first",
+    "test:loop": "concurrently 'node server.js' 'npm run test:infinite'  -k --prefix-colors 'yellow,green' --success first",
+    "test:init": "mocha --require @babel/register --timeout 5000 test/index.js",
+    "test:infinite": "while npm run test:init; do :; done"
   }
 }

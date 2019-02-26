@@ -1,5 +1,12 @@
 language: node_js
 node_js:
   - "10.9.0"
+sudo: required
+addons:
+  chrome: stable
+services:
+  - mongodb
 before_install:
   - npm install -g grunt-cli
+  - sleep 5 # give time for mongo to wake up: https://docs.travis-ci.com/user/database-setup/#mongodb
+  - cp sample.env .env

@@ -6,6 +6,7 @@ module.exports = function(grunt)
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-eslint');
+  grunt.loadNpmTasks('grunt-prettier');
 
   // load the configuration
   grunt.initConfig({
@@ -58,8 +59,31 @@ module.exports = function(grunt)
           }
         ]
       }
+    },
+    prettier: {
+      options: {
+        progress: true,
+        singleQuote: true
+      },
+      tests: {
+        src: [
+          'test/**/*.js'
+        ]
+      },
+      // src: {
+      //   src: [
+      //     'src/**/*.js',
+      //     '!src/libs/*.js'
+      //   ]
+      // },
+      // app: {
+      //   src: [
+      //     'app/**/*.js',
+      //     '!app/public/**'
+      //   ]
+      // }
     }
   });
 
-  grunt.registerTask('default', ['copy', 'concat', 'less', 'eslint']);
+  grunt.registerTask('default', ['copy', 'concat', 'less', 'eslint', 'prettier:tests']);
 };

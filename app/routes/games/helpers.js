@@ -53,13 +53,14 @@ function renderPage(req, res, template, populate=null)
         if (populate){
           game.populate({
 						path: populate,
-						options: { sort: { 'updated': -1 } }
+						//Note: Removed this line because it was preventing access to the privileges page
+						// options: { sort: { 'updated': -1 } }
 					});
 				};
       },
 			function(game, done)
 			{
-				if (!game){ 
+				if (!game){
 					return res.status(404).render('404');
 				}
 
