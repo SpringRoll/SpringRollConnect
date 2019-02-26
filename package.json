@@ -61,7 +61,7 @@
   "scripts": {
     "test": "concurrently 'node server.js' 'npm run test:init' -k --prefix-colors 'yellow,green' --success first",
     "test:loop": "concurrently 'node server.js' 'npm run test:infinite'  -k --prefix-colors 'yellow,green' --success first",
-    "test:init": "mocha --require @babel/register --timeout 10000 test/index.js",
+    "test:init": "mocha --require @babel/register --timeout 5000 test/index.js",
     "test:infinite": "while npm run test:init; do :; done"
   }
 }
