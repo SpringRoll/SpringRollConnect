@@ -36,8 +36,8 @@ async function makeAdmin() {
   console.log('Creating admin user...');
   let passwordAdmin = makeRandomString(16);
   let adminGroup = new Group({
-    name: 'Admin2',
-    slug: 'Admin2',
+    name: 'adminGroup',
+    slug: 'admin',
     token: makeRandomString(40),
     tokenExpires: null,
     privilege: 2,
@@ -135,7 +135,7 @@ async function addUsers(incGroup){
   let newUserGroup = new Group({
     name: userHash,
     slug: userHash,
-    token: userHash,
+    token: makeRandomString(40),
     tokenExpires: null,
     privilege: 1,
     isUserGroup: true

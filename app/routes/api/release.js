@@ -26,15 +26,16 @@ router.post('/:slug', function(req, res)
 
 	if (errors)
 	{
+		log.error("Validation error adding release from token " + req.body.token);
+		log.error(errors);
+
 		if (req.body.redirect)
 		{
+			log.warn('Redirecting to ' + req.body.redirect);
 			res.redirect(req.body.redirect);
 		}
 		else
 		{
-			log.error("Validation error adding release");
-			log.error(errors);
-
 			res.send({
 				success:false,
 				data: errors
@@ -138,15 +139,15 @@ router.post('/:slug', function(req, res)
 	{
 		if (err)
 		{			
+			log.error('Unable to add the release for token ' + req.body.token);
+			log.error(err);
+
 			if (req.body.redirect)
 			{
 				res.redirect(req.body.redirect);
 			}
 			else
 			{
-				log.error('Unable to add the release');
-				log.error(err);
-
 				res.status(500).send({
 					success:false,
 					data: 'Unable to add the release'

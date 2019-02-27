@@ -3,6 +3,7 @@ var User = require('../models/user');
 var LocalStrategy = require('passport-local');
 var crypto = require('crypto');
 var async = require('async');
+var log = require('./logger');
 
 module.exports = function(passport)
 {
@@ -81,7 +82,7 @@ module.exports = function(passport)
 					{
 						if (err)
 						{
-							console.error(err);
+              log.error(err);
 							return done(null, false, req.flash('error', err));
 						}
 						done(null, user);

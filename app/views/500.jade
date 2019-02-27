@@ -1,0 +1,9 @@
+extend templates/normal
+
+append content
+    .alert.alert-warning
+      h2 500: Internal Server Error
+      p #{ err.toString() }
+      if showStack
+        pre
+          code #{ err.stack }

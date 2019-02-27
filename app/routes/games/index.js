@@ -1,7 +1,8 @@
 var router = require('express').Router(),
   Game = require('../../models/game'),
   Release = require('../../models/release'),
-  Pagination = require('../../helpers/pagination');
+  Pagination = require('../../helpers/pagination'),
+  Access = require('../../helpers/access');
 const {
   renderPage,
   handleError,
@@ -47,14 +48,46 @@ router.get('/:slug', function(req, res) {
   renderPage(req, res, 'games/game');
 });
 
+router.use('/:slug/privileges', Access.isAdmin);
+
+router.get('/:slug', function(req, res) {
+  renderPage(req, res, 'games/game');
+});
+
 router.get('/:slug/privileges', function(req, res) {
   // have to pass addt'l param to resolve Group objects
-  renderPage(req, res, 'games/privileges', ['groups.group']);
+  renderPage(req, res, 'games/privileges', 'groups.group');
+});
+
+router.post('/:slug/privileges', function(req, res) {
+  Game.getBySlug(req.params.slug)
+    .then(game => {
+      const render = () =>
+        renderPage(req, res, 'games/privileges', 'groups.group');
+      switch (req.body.action) {
+        case 'addGroup':
+          Game.addGroup(game._id, req.body.group, req.body.permission, render);
+          break;
+        case 'changePermission':
+          game.changePermission(req.body.group, req.body.permission, render);
+          break;
+        case 'removeGroup':
+          game.removeGroup(req.body.group, render);
+          break;
+        default:
+          render();
+          break;
+      }
+    })
+    .catch(err => {
+      console.error('Privileges error', err);
+      res.status(404).render('404');
+    });
 });
 
 router.get('/:slug/releases', function(req, res) {
   // have to pass addt'l param to resolve Release objects
-  renderPage(req, res, 'games/releases', ['releases']);
+  renderPage(req, res, 'games/releases', 'releases');
 });
 
 router.patch('/:slug/releases/:commit_id', async function(req, res) {

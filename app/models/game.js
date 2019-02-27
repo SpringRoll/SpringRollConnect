@@ -1,11 +1,11 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.Types.ObjectId;
+var User = require('./user');
 
 /**
  * The game model
  * @class Game
- * @extends mongoose.Schema
  */
 var GameSchema = new Schema({
   /**
@@ -373,6 +373,26 @@ GameSchema.methods.hasGroup = function(group) {
 };
 
 /**
+ * Returns the highest level privilege a group has on this game
+ * @param {Group} group The group to check privileges for
+ * @return {Number}
+ */
+GameSchema.methods.getHighestPrivilegeFor = function(group) {
+  let highestPrivilege = -1;
+  this.groups.forEach(function(entry) {
+    // If entry.group._id, the groups array has been populated and we can use the model. Otherwise, use the value
+    // directly (indicating that groups has NOT been populated)
+    const entryGroupId = entry.group._id ? entry.group._id : entry.group;
+
+    if (entryGroupId.toString() == group._id.toString()) {
+      highestPrivilege = Math.max(highestPrivilege, entry.permission);
+    }
+  });
+
+  return highestPrivilege;
+};
+
+/**
  * Check to see if a token has permission to view/edit game
  * @method  hasPermission
  * @param  {String}   token    The user or group token
@@ -383,15 +403,55 @@ GameSchema.methods.hasPermission = function(token, callback) {
   if (!token) {
     return callback('Token is required');
   }
-  this.model('Group').getByToken(token, function(err, group) {
-    if (!group) {
-      return callback('Token is invalid');
-    }
-    if (!game.hasGroup(group)) {
-      return callback('Unauthorized token');
-    }
-    callback(null, game);
-  });
+
+  // Find the associated group that this token
+  return this.model('Group')
+    .getByToken(token)
+    .then(function(group) {
+      // if no group is found, reject the query
+      if (!group) {
+        return Promise.reject('Token is invalid');
+      }
+
+      // if the group is a plain group, return just that single group as an array for the next step in the promise
+      // chain to query with
+      if (!group.isUserGroup) {
+        return [group];
+      }
+
+      // if it's a user group, get the associated user and then all the groups that user is a part of
+      return User.getByGroup(group)
+        .populate('groups')
+        .then(user => {
+          // have to dereference because returned as Array for some reason
+          return user[0].groups;
+        });
+    })
+    .then(function(groups) {
+      const ids = groups.map(group => group._id.toString());
+      const gameGroups = game.groups.map(entry => {
+        if (entry.group._id) {
+          // if the group relationship has been populated, use the id from the model
+          return entry.group._id.toString();
+        } else {
+          // otherwise, use the raw group property which is the id of the group
+          return entry.group.toString();
+        }
+      });
+
+      // at least ONE of the entries from ids must be in the list of groups attached to the game
+      for (const id of ids) {
+        if (gameGroups.indexOf(id) > -1) {
+          callback(null, game);
+          return;
+        }
+      }
+      callback('Unauthorized token');
+      return;
+    })
+    .catch(function(error) {
+      return callback(error);
+    });
 };
 
 /**
@@ -452,7 +512,7 @@ GameSchema.statics.removeGroup = function(ids, groupId, callback) {
  */
 GameSchema.methods.removeGroup = function(group, callback) {
   this.groups = this.groups.filter(function(entry) {
-    return !entry.group._id.equals(group);
+    return !entry.group.equals(group);
   });
   return this.save(callback);
 };
@@ -467,7 +527,7 @@ GameSchema.methods.removeGroup = function(group, callback) {
  */
 GameSchema.methods.changePermission = function(group, permission, callback) {
   this.groups.forEach(function(entry) {
-    if (entry.group._id.equals(group)) {
+    if (entry.group.equals(group)) {
       entry.permission = permission;
     }
   });

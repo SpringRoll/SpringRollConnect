@@ -55,15 +55,15 @@ append gameContent
 								.release-title.clearfix
 									.btn-group.btn-flex-2
 										if release.version
-											a.btn.btn-sm.btn-default.external(data-toggle="tooltip" title="Release" href="//#{host}/embed/#{game.slug}?version=#{release.version}&controls=1&title=1&token=#{token}")
+											a.btn.btn-sm.btn-default(data-toggle="tooltip" title="Release" href="//#{host}/embed/#{game.slug}?version=#{release.version}&controls=1&title=1&token=#{token}")
 												span.glyphicon.glyphicon-play
-											a.btn.btn-sm.btn-default.external(data-toggle="tooltip" title="Debug" href="//#{host}/embed/#{game.slug}?version=#{release.version}&debug=1&controls=1&title=1&token=#{token}")
+											a.btn.btn-sm.btn-default(data-toggle="tooltip" title="Debug" href="//#{host}/embed/#{game.slug}?version=#{release.version}&debug=1&controls=1&title=1&token=#{token}")
 												span.glyphicon.glyphicon-wrench
 												span.glyphicon.glyphicon-play
 										else
-											a.btn.btn-sm.btn-default.external(data-toggle="tooltip" title="Release" href="//#{host}/embed/#{game.slug}?commitId=#{release.commitId}&controls=1&title=1&token=#{token}")
+											a.btn.btn-sm.btn-default(data-toggle="tooltip" title="Release" href="//#{host}/embed/#{game.slug}?commitId=#{release.commitId}&controls=1&title=1&token=#{token}")
 												span.glyphicon.glyphicon-play
-											a.btn.btn-sm.btn-default.external(data-toggle="tooltip" title="Debug" href="//#{host}/embed/#{game.slug}?commitId=#{release.commitId}&debug=1&controls=1&title=1&token=#{token}")
+											a.btn.btn-sm.btn-default(data-toggle="tooltip" title="Debug" href="//#{host}/embed/#{game.slug}?commitId=#{release.commitId}&debug=1&controls=1&title=1&token=#{token}")
 												span.glyphicon.glyphicon-wrench
 												span.glyphicon.glyphicon-play
 							.col-sm-9: .row: .col-sm-12
@@ -81,7 +81,7 @@ append gameContent
 											a(href="#{game.repository}/browse?at=refs/heads/#{release.branch.replace('origin/', '')}" data-toggle="tooltip" title="View Branch")=' '+release.branch
 
 								.help-block.updated
-									span Updated
+									span Updated &nbsp;
 									span=moment(release.updated).fromNow()
 									if release.updatedBy
 										|  by #{release.updatedBy.name}

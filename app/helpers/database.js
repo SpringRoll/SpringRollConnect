@@ -23,6 +23,11 @@ module.exports = function(app)
 {
 	log.info('Springroll API is now operational');
 
+	// if we're spawned in a child process, notify any listeners
+	if (process.send) {
+		process.send({ message: 'Springroll API is now operational' });
+	}
+
 	// Attempt to connect to database
 	mongoose.connect(process.env.MONGO_DATABASE, function()
 	{
@@ -40,7 +45,8 @@ module.exports = function(app)
 	var db = mongoose.connection;
 	db.on('error', function(err)
 	{
-		console.error(String("Connection error : " + err).red);
+    log.error('Database connection error');
+    log.error(err);
 	});
     
     var store = new MongoDBStore(

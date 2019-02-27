@@ -107,8 +107,8 @@ var ReleaseSchema = new Schema(
      * @property {String} compressedSize
      */
     debugCompressedSize: {
-      type: String,
-      default: '0'
+      type: Number,
+      default: null
     },
 
     /**
@@ -116,8 +116,8 @@ var ReleaseSchema = new Schema(
      * @property {String} compressedSize
      */
     debugUncompressedSize: {
-      type: String,
-      default: '0'
+      type: Number,
+      default: null
     },
 
     /**
@@ -125,8 +125,8 @@ var ReleaseSchema = new Schema(
      * @property {String} compressedSize
      */
     releaseCompressedSize: {
-      type: String,
-      default: '0'
+      type: Number,
+      default: null
     },
 
     /**
@@ -134,8 +134,8 @@ var ReleaseSchema = new Schema(
      * @property {String} compressedSize
      */
     releaseUncompressedSize: {
-      type: String,
-      default: '0'
+      type: Number,
+      default: null
     },
 
     /**
@@ -305,7 +305,8 @@ ReleaseSchema.statics.getByGame = function(slug, options, callback) {
           .exec(done);
       }
     ],
-    function(err, releases) {
+
+    async function(err, releases) {
       if (!err && releases) {
         if (Array.isArray(releases)) {
           releases.forEach(release => addUrl(release));

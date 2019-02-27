@@ -48,11 +48,23 @@ append content
 						- active = "archive"
 					else
 						- active = "games"
-					li.list-group-item: a.btn-block(href="/#{active}/#{game.slug}")=game.title
-						if user.privilege == privilege.admin
-							form.pull-right(method="post" action=url)
-								input(type="hidden" name="game" value=game._id)
-								button.close(data-toggle="confirm" type="submit" name="action" value="removeGame") &times;
+					li.list-group-item
+						div.row
+							div.col-md-10.col-sm-8.col-xs-6
+								a.btn-block(href="/#{active}/#{game.slug}")=game.title
+							div.col-md-1.col-sm-3.col-xs-5
+								case game.getHighestPrivilegeFor(group)
+									when 0
+										span.label.label-primary Read
+									when 1
+										span.label.label-primary Write
+									when 2
+										span.label.label-primary Admin
+							if user.privilege == privilege.admin
+								div.col-md-1.text-right
+									form.pull-right(method="post" action=url)
+										input(type="hidden" name="game" value=game._id)
+										button.close(data-toggle="confirm" type="submit" name="action" value="removeGame") &times;
 		else
 			.alert.alert-warning No games for this group
 	.col-md-4.col-sm-5

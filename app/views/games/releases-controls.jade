@@ -1,6 +1,7 @@
 if isEditor
 	form.controls.pull-right(action="/releases/#{release.commitId}" method="post")
 		input(type="hidden" name="release" value=release._id)
+		input(type="hidden" name="game" value=game.slug)
 		input(type="hidden" name="action" value="DELETE")
 		button.btn.btn-block.btn-default.dropdown-toggle(data-toggle="confirm" type="submit")
 			span.glyphicon.glyphicon-trash

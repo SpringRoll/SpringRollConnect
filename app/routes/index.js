@@ -1,9 +1,10 @@
+var log = require('../helpers/logger');
+
 module.exports = function(app)
 {
 	const access = require('../helpers/access');
 	const marky = require("marky-markdown");
 	const Config = require('../models/config');
-	const methodOverride = require('method-override');
 
 	// Add the user to whatever template
 	app.use(function(req, res, next)
@@ -20,7 +21,7 @@ module.exports = function(app)
 		};
 		res.locals.isActive = function(url, undefined)
 		{
-			var isCurrent = (url instanceof RegExp) ? 
+			var isCurrent = (url instanceof RegExp) ?
 				url.test(req.originalUrl):
 				url == req.originalUrl;
 			return isCurrent ? 'active' : undefined;
@@ -38,26 +39,35 @@ module.exports = function(app)
 		});
 	});
 
-	app.use(methodOverride(function (req, res) {
-		const route = req.originalUrl.startsWith('/games') || req.originalUrl.startsWith('/archive') || req.originalUrl.startsWith('/releases');
+	app.use(function (req, res, next) {
+    const route =
+      (req.originalUrl.startsWith('/games') && !req.originalUrl.endsWith('privileges'))
+      || req.originalUrl.startsWith('/archive')
+      || req.originalUrl.startsWith('/releases');
 		const contents = req.body && typeof req.body === 'object' && 'action' in req.body;
+		// if fails cases, can just pass through w/ no change
 		if (route && contents) {
+			// Map RESTORE keyword to PATCH action, w/ isArchived flag change
 			if (req.body.action === 'RESTORE') {
 				req.body.isArchived = false;
-				return 'PATCH';
+				req.method = 'PATCH';
 			}
-			return req.body.action;
+			// Set POST to PATCH / DELETE based on value in form
+			else {
+				req.method = req.body.action;
+			}
 		}
-	}));
+		next();
+	});
 
 	// Site pages
 	app.use('/', require('./home'));
 	app.use('/embed', require('./embed'));
 	app.use('/docs', access.isAuthenticated, require('./docs'));
 	app.use('/games/add', access.isEditor, require('./games/add'));
-	app.use('/games/search', access.isAdmin, require('./games/search'));
+	app.use('/games/search', access.isAuthenticated, require('./games/search'));
 	app.use('/groups/add', access.isAdmin, require('./groups/add'));
-	app.use('/games', access.isEditor, require('./games/index'));
+	app.use('/games', access.isAuthenticated, require('./games/index'));
 	app.use('/releases', access.isEditor, require('./releases/release'));
 	app.use('/archive', access.isEditor, require('./games/index'));
 	app.use('/groups/group', access.isAuthenticated, require('./groups/group'));
@@ -85,5 +95,33 @@ module.exports = function(app)
 	app.all('*', function(req, res)
 	{
 		res.status(404).render('404');
+	});
+
+	// Setup the error handler. Note that this code is declared AFTER all of the other routes as per the recommendation
+	// here: https://stackoverflow.com/a/32671421/10200077
+	app.use(function(err, req, res, next) {
+		// log the error occurring
+		log.error('Uncaught error');
+		log.error(err);
+
+		// only show the stack when we're not in production
+		const showStack = process.env.NODE_ENV !== 'production';
+
+		// if it's an ajax request, respond with JSON
+		if (req.xhr) {
+			const response = {
+				success: false,
+				message: err.toString()
+			};
+
+			if(showStack) {
+				response.stack = err.stack;
+			}
+
+			res.status(500).send(response);
+		} else {
+			// Otherwise, render our 500 view which renders the same info, but as HTML
+			res.status(500).render('500', { err, showStack });
+		}
 	});
 };

@@ -4,3 +4,6 @@ node_modules
 springroll.log
 log.txt
 app/output.log
+.nyc_output
+.yarn-error.log
+.yarn-lock
