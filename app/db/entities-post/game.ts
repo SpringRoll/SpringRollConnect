@@ -55,7 +55,7 @@ export class Game {
   isArchived: boolean;
 
   @IsString()
-  @Column({ type: 'text' })
+  @Column({ type: 'text', default: '' })
   description: string;
 
   @IsDate()

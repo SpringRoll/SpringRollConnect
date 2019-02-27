@@ -1,7 +1,11 @@
 import { IsNumber, Min } from 'class-validator';
-import { Column } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
+@Entity({ name: 'configs' })
 export class Config {
+  @PrimaryGeneratedColumn()
+  id: number;
+
   @IsNumber()
   @Min(0)
   @Column({ nullable: false, default: 90 })
@@ -12,15 +16,15 @@ export class Config {
   @Column({ nullable: false, default: 20 })
   maxDevReleases: number;
 
-  @Column()
+  @Column({ nullable: true })
   embedScriptPlugin: string;
 
-  @Column()
+  @Column({ nullable: true })
   embedCssPlugin: string;
 
-  @Column()
+  @Column({ nullable: true })
   embedDebugScriptPlugin: string;
 
-  @Column()
+  @Column({ nullable: true })
   embedDebugCssPlugin: string;
 }

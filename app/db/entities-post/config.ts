@@ -9,12 +9,12 @@ export class Config {
 
   @IsInt()
   @Min(0)
-  @Column({ type: 'int2', nullable: false, default: 90 })
+  @Column({ type: 'int4', nullable: false, default: 90 })
   devExpireDays: number;
 
   @IsInt()
   @Min(0)
-  @Column({ type: 'text', nullable: false, default: 20 })
+  @Column({ type: 'int4', nullable: false, default: 20 })
   maxDevReleases: number;
 
   @Column({ type: 'text', nullable: true })

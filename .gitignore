@@ -7,3 +7,5 @@ app/output.log
 .nyc_output
 .yarn-error.log
 .yarn-lock
+backup
+

@@ -35,7 +35,7 @@ export class Release {
   game: Game;
 
   @IsString()
-  @Column({ type: 'text' })
+  @Column({ type: 'text', nullable: true })
   version: string;
 
   @IsString()
@@ -52,7 +52,7 @@ export class Release {
   commitId: string;
 
   @IsString()
-  @Column({ type: 'text' })
+  @Column({ type: 'text', nullable: true })
   branch: string;
 
   @CreateDateColumn()
@@ -62,7 +62,10 @@ export class Release {
   updated: Date;
 
   @IsInt()
-  @ManyToOne(type => User, user => user.id, { cascadeAll: false })
+  @ManyToOne(type => User, user => user.id, {
+    cascadeAll: false,
+    nullable: true
+  })
   updatedBy: User;
 
   @IsString()
