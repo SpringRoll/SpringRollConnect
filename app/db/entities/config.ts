@@ -1,30 +1,31 @@
-import { IsNumber, Min } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Min, IsInt } from 'class-validator';
+import { Column, PrimaryGeneratedColumn, Entity } from 'typeorm';
 
-@Entity({ name: 'configs' })
+@Entity()
 export class Config {
+  @IsInt()
   @PrimaryGeneratedColumn()
   id: number;
 
-  @IsNumber()
+  @IsInt()
   @Min(0)
-  @Column({ nullable: false, default: 90 })
+  @Column({ type: 'int4', nullable: false, default: 90 })
   devExpireDays: number;
 
-  @IsNumber()
+  @IsInt()
   @Min(0)
-  @Column({ nullable: false, default: 20 })
+  @Column({ type: 'int4', nullable: false, default: 20 })
   maxDevReleases: number;
 
-  @Column({ nullable: true })
+  @Column({ type: 'text', nullable: true })
   embedScriptPlugin: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'text', nullable: true })
   embedCssPlugin: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'text', nullable: true })
   embedDebugScriptPlugin: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'text', nullable: true })
   embedDebugCssPlugin: string;
 }

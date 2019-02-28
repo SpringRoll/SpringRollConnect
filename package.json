@@ -107,7 +107,7 @@
   },
   "scripts": {
     "start": "ts-node server.js",
-    "dev": "nodemon -e ts -w ./app -x npm run start",
+    "dev": "nodemon",
     "install-missing-types": "types-installer",
     "migration": "ts-node ./app/migration/index.ts",
     "test": "concurrently 'ts-node server.js' 'npm run test:init' -k --prefix-colors 'yellow,green' --success first",

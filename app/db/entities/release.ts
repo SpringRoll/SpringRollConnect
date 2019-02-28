@@ -1,40 +1,58 @@
 import {
   Entity,
-  ObjectID,
   Column,
-  ObjectIdColumn,
   CreateDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
+  PrimaryGeneratedColumn,
+  ManyToOne
 } from 'typeorm';
-import { Capabilities } from './capabilities';
-import { IsIn, IsString, IsMongoId, IsUrl } from 'class-validator';
+import {
+  IsIn,
+  IsString,
+  IsUrl,
+  IsInt,
+  IsNumber,
+  IsInstance
+} from 'class-validator';
+import { Game } from './game';
+import { User } from './user';
 
-@Entity({ name: 'releases' })
+enum ReleaseTypes {
+  'dev' = 'dev',
+  'qa' = 'qa',
+  'stage' = 'stage',
+  'prod' = 'prod'
+}
+
+@Entity()
 export class Release {
-  @IsMongoId()
-  @ObjectIdColumn()
-  game: ObjectID;
+  @IsInt()
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @IsInt()
+  @ManyToOne(type => Game, game => game.id, { cascadeAll: false })
+  game: Game;
 
   @IsString()
-  @Column()
+  @Column({ type: 'text', nullable: true })
   version: string;
 
   @IsString()
   @IsIn(['dev', 'qa', 'stage', 'prod'])
   @Column({
     nullable: false,
-    type: 'enum',
-    enum: ['dev', 'qa', 'stage', 'prod'],
-    unique: true
+    type: 'text',
+    enum: ReleaseTypes
   })
   status: string;
 
   @IsString()
-  @Column({ unique: true, nullable: false })
+  @Column({ type: 'text', unique: true, nullable: false })
   commitId: string;
 
   @IsString()
-  @Column()
+  @Column({ type: 'text', nullable: true })
   branch: string;
 
   @CreateDateColumn()
@@ -43,31 +61,38 @@ export class Release {
   @UpdateDateColumn()
   updated: Date;
 
-  @IsMongoId()
-  @Column({ nullable: true })
-  updatedBy: ObjectID;
+  @IsInt()
+  @ManyToOne(type => User, user => user.id, {
+    cascadeAll: false,
+    nullable: true
+  })
+  updatedBy: User;
 
   @IsString()
-  @Column()
+  @Column({ type: 'text' })
   notes: string;
 
   @IsString()
   @IsUrl()
-  @Column()
+  @Column({ type: 'text' })
   url: string;
 
-  @IsString()
-  @Column({ nullable: false, default: '0' })
-  debugCompressedSize: string;
+  @Column({ type: 'bigint', nullable: false, default: 0 })
+  debugUncompressedSize: number;
 
-  @IsString()
-  @Column({ nullable: false, default: '0' })
-  releaseCompressedSize: string;
+  @IsNumber()
+  @Column({ type: 'bigint', nullable: false, default: 0 })
+  debugCompressedSize: number;
 
-  @IsString()
-  @Column({ nullable: false, default: '0' })
-  releaseUncompressedSize: string;
+  @IsNumber()
+  @Column({ type: 'bigint', nullable: false, default: 0 })
+  releaseCompressedSize: number;
 
-  @Column()
-  capabilities: Capabilities;
+  @IsNumber()
+  @Column({ type: 'bigint', nullable: false, default: 0 })
+  releaseUncompressedSize: number;
+
+  @IsInstance(Object)
+  @Column({ type: 'jsonb' })
+  capabilities: object;
 }

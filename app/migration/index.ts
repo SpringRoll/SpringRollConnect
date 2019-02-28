@@ -1,6 +1,6 @@
 import { createConnections } from 'typeorm';
-import * as mEntities from '../db/entities';
-import * as pEntities from '../db/entities-post';
+import * as mEntities from './entities';
+import * as pEntities from '../db/entities';
 import { uniqBy } from 'lodash';
 
 function mapUserGroups(
@@ -80,7 +80,7 @@ createConnections([
   });
 
   const pGames: pEntities.Game[] = <pEntities.Game[]>(
-    await pGameRepository.save(games)
+    await pGameRepository.save(<pEntities.Game[]>games)
   );
 
   //GROUP PERMISSIONS

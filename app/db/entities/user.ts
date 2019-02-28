@@ -1,48 +1,64 @@
-import { Column, ObjectIdColumn, ObjectID, Entity } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable
+} from 'typeorm';
 import {
   IsDate,
   IsEmail,
   IsLowercase,
-  IsMongoId,
-  IsString
+  IsString,
+  IsInt,
+  IsDefined
 } from 'class-validator';
+import { Group } from './group';
 
-@Entity({ name: 'users' })
+@Entity()
 export class User {
-  @ObjectIdColumn()
-  id: ObjectID;
+  @PrimaryGeneratedColumn()
+  id: number;
 
+  @IsDefined()
   @IsString()
   @IsLowercase()
-  @Column({ unique: true, nullable: false })
+  @Column({ type: 'text', unique: true, nullable: false })
   username: string;
 
+  @IsDefined()
   @IsString()
-  @Column({ nullable: false, select: false })
+  @Column({ type: 'text', nullable: false, select: false })
   password: string;
 
+  @IsDefined()
   @IsString()
-  @IsLowercase()
   @IsEmail()
-  @Column({ unique: true })
+  @Column({ type: 'text', nullable: false, unique: true })
   email: string;
 
-  @Column({ nullable: false, default: true })
+  @Column({ type: 'boolean', nullable: false, default: true })
   active: boolean;
 
-  @IsMongoId({ each: true })
-  @Column()
-  groups: ObjectID[];
+  @IsInt({ each: true })
+  @ManyToMany(type => Group, group => group.id, {
+    eager: true,
+    cascadeUpdate: false,
+    cascadeInsert: false
+  })
+  @JoinTable({ name: 'user_groups' })
+  groups: Group[];
 
+  @IsDefined()
   @IsString()
-  @Column({ nullable: false })
+  @Column({ type: 'text', nullable: false })
   name: string;
 
   @IsString()
-  @Column()
-  resetPasswordToken: string;
+  @Column({ type: 'text', nullable: true })
+  resetPasswordToken?: string;
 
   @IsDate()
-  @Column()
-  resetPasswordExpires: Date;
+  @Column({ type: 'date', nullable: true })
+  resetPasswordExpires?: Date;
 }

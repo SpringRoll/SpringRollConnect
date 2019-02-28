@@ -1,66 +1,61 @@
 import {
   Entity,
   Column,
-  ObjectID,
-  ObjectIdColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  Binary
+  PrimaryGeneratedColumn,
+  OneToMany,
+  JoinColumn
 } from 'typeorm';
-import { Capabilities } from './capabilities';
 import {
-  IsString,
-  IsUUID,
-  IsUrl,
   IsBoolean,
   IsDate,
-  ValidateNested,
-  IsMongoId,
+  IsInt,
+  IsString,
+  IsUrl,
   Matches,
-  IsOptional,
-  IsDefined
+  ValidateNested,
+  IsBase64,
+  IsInstance
 } from 'class-validator';
-import { v4 } from 'uuid';
+import { Release } from './release';
+import { Group } from './group';
+import { GroupPermission } from './group-permission';
 
-interface GroupPermission {
-  _id: ObjectID;
-  group: ObjectID;
-  permission: number;
-}
-
-@Entity({ name: 'games' })
+@Entity()
 export class Game {
-  @IsMongoId()
-  @ObjectIdColumn({ name: '_id' })
-  id: ObjectID;
+  @IsInt()
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @IsString()
-  @Column({ nullable: false })
+  @Column({ type: 'text', nullable: false })
   title: string;
 
   @IsString()
   @Matches(/^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$/)
-  @Column({ unique: true, nullable: false })
+  @Column({ type: 'text', unique: true, nullable: false })
   slug: string;
 
-  @IsUUID('4')
-  @Column({ unique: true, nullable: false })
+  @IsString()
+  @Column({ type: 'text', unique: true, nullable: false })
+  // @Generated('uuid')
   bundleId: string;
 
   @IsUrl()
-  @Column({ nullable: false })
+  @Column({ type: 'text', nullable: false })
   repository: string;
 
   @IsUrl()
-  @Column({ nullable: false })
+  @Column({ type: 'text', nullable: false })
   location: string;
 
   @IsBoolean()
-  @Column({ nullable: false, default: false })
+  @Column({ type: 'boolean', nullable: false, default: false })
   isArchived: boolean;
 
   @IsString()
-  @Column()
+  @Column({ type: 'text', default: '' })
   description: string;
 
   @IsDate()
@@ -71,32 +66,25 @@ export class Game {
   @UpdateDateColumn()
   updated: Date;
 
-  @IsOptional()
-  @ValidateNested()
-  @Column(type => Capabilities)
-  capabilities: Capabilities;
+  @IsInstance(Object)
+  @Column({ type: 'jsonb' })
+  capabilities: object;
 
-  @IsMongoId({ each: true })
-  @IsDefined()
-  @Column({ nullable: false, default: [] })
-  releases: ObjectID[];
+  @ValidateNested({ each: true })
+  @OneToMany(type => Release, release => release.game, {
+    cascadeInsert: false,
+    cascadeUpdate: false
+  })
+  releases: Release[];
 
-  @IsMongoId({ each: true })
-  @IsDefined()
-  @Column({ nullable: false, default: [] })
+  @ValidateNested({ each: true })
+  @OneToMany(type => Group, group => group.id, {
+    cascadeInsert: true,
+    cascadeUpdate: true
+  })
   groups: GroupPermission[];
 
-  @Column()
-  thumbnail: Binary;
-
-  constructor() {
-    const date = new Date();
-    this.capabilities = new Capabilities();
-    this.releases = [];
-    this.groups = [];
-    this.bundleId = v4();
-    this.updated = date;
-    this.updated = date;
-    this.isArchived = false;
-  }
+  @IsBase64()
+  @Column({ type: 'text', nullable: true })
+  thumbnail?: string;
 }

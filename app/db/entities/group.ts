@@ -1,4 +1,4 @@
-import { Entity, Column, ObjectIdColumn, Binary, ObjectID } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import {
   IsString,
   IsBoolean,
@@ -7,42 +7,42 @@ import {
   IsInt,
   Min,
   Max,
-  IsMongoId
+  IsBase64
 } from 'class-validator';
 
-@Entity({ name: 'groups' })
+@Entity()
 export class Group {
-  @IsMongoId()
-  @ObjectIdColumn({ name: '_id' })
-  id: ObjectID;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @IsString()
-  @Column({ nullable: false })
+  @Column({ type: 'text', nullable: true })
   name: string;
 
   @IsBoolean()
-  @Column({ nullable: false })
+  @Column({ type: 'boolean', nullable: false, default: false })
   isUserGroup: boolean;
 
   @IsString()
   @IsLowercase()
-  @Column({ nullable: false, unique: true })
+  @Column({ type: 'text', nullable: true, unique: true })
   slug: string;
 
   @IsString()
-  @Column({ nullable: false, unique: true })
+  @Column({ type: 'text', nullable: true, unique: true })
   token: string;
 
   @IsDate()
-  @Column()
-  tokenExpires: Date;
+  @Column({ type: 'date', nullable: true })
+  tokenExpires?: Date;
 
   @IsInt()
   @Min(0)
   @Max(2)
-  @Column({ nullable: false, default: 0 })
+  @Column({ type: 'int2', nullable: false, default: 0 })
   privilege: number;
 
-  @Column()
-  logo: Binary;
+  @IsBase64()
+  @Column({ type: 'text', nullable: true })
+  logo?: string;
 }
