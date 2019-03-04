@@ -1,73 +1,71 @@
 var router = require('express').Router();
-var Group = require('../models/group');
-var log = require('../helpers/logger');
-var Pagination = require('../helpers/pagination');
-import { getRepository } from 'typeorm';
-import { Game, GroupPermission, User } from '../db';
+import { getRepository, Any } from 'typeorm';
+import { User } from '../db';
+import { Request, Response } from 'express';
+const log = require('../helpers/logger');
 
-router.get('/:local(page)?/:number([0-9]+)?', function(req, res) {
-  if (req.isAuthenticated()) {
-    const user: User = req.user;
-    getRepository(GroupPermission)
-      .find({
-        cache: true,
-        where: user.groups.map(({ id }) => ({ group: id })),
-        select: ['game']
-      })
-      .then(gameIds =>
-        getRepository(Game).find({
-          cache: true,
-          take: 12,
-          where: gameIds.map(({ game }) => ({ id: game })),
-          relations: ['releases'],
-          order: {
-            updated: 'DESC'
-          }
-        })
-      )
-      .then(games => {
-        res.render('home', {
-          games,
-          groups: user.groups.filter(group => !group.isUserGroup)
-        });
-      })
-      .catch(err => {
-        log(err);
-        res.render('home', {
-          games: [],
-          groups: user.groups.filter(group => !group.isUserGroup)
-        });
-      });
-  } else {
+router.get('/:local(page)?/:number([1-9][0-9]?*)?', function(
+  req: Request,
+  res: Response
+) {
+  if (!req.isAuthenticated()) {
     res.render('login', {
       error: req.flash('error'),
       redirect: req.flash('redirect')
     });
   }
+
+  getRepository(User)
+    .create(<User>req.user)
+    .getGames({
+      skip: req.params.number ? Number(req.params.number) * 24 : 0
+    })
+    .then(([games, count]) => {
+      if (1 > games.length && '/' !== req.url.trim()) {
+        res.redirect('/');
+        return;
+      }
+      res.render('home', {
+        games,
+        groups: req.user.groups,
+        pagination: {
+          total: count,
+          current: Number(req.params.number) || 1
+        }
+      });
+    })
+    .catch(err => {
+      res.render('home', {
+        games: [],
+        groups: Array.isArray(req.user.groups)
+          ? req.user.groups.filter(group => !group.isUserGroup)
+          : []
+      });
+    });
 });
 
-router.post('/', function(req, res) {
-  console.log(req.body);
-  Group.findById(req.body.group, function(err, group) {
-    if (err) {
+router.post('/', async function(req: Request, res: Response) {
+  if (!req.isAuthenticated()) {
+    res.render('login', {
+      error: req.flash('error'),
+      redirect: req.flash('redirect')
+    });
+    return;
+  }
+  const user = getRepository(User).create(<User>req.user);
+
+  user.groups
+    .find(({ isUserGroup }) => isUserGroup)
+    .refreashToken()
+    .then(() => {
+      req.login(user, () => res.redirect('/'));
+    })
+    .catch(err => {
       log.error('Unable to change personal token');
       log.error(err);
       req.flash('error', 'Something went wrong');
       res.redirect('/');
-    } else if (!group) {
-      req.flash('error', 'Unable to get user group');
-      res.redirect('/');
-    } else {
-      group.refreshToken(function(err, group) {
-        if (err) {
-          req.flash('error', 'Unable to refresh token');
-        } else {
-          req.flash('success', 'Access token has been refreshed');
-        }
-        res.redirect('/');
-      });
-    }
-  });
+    });
 });
 
 module.exports = router;

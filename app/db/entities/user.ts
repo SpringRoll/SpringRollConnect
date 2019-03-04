@@ -3,7 +3,8 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   ManyToMany,
-  JoinTable
+  JoinTable,
+  getRepository
 } from 'typeorm';
 import {
   IsDate,
@@ -14,6 +15,8 @@ import {
   IsDefined
 } from 'class-validator';
 import { Group } from './group';
+import { Game } from './game';
+import { GroupPermission } from './group-permission';
 
 @Entity()
 export class User {
@@ -42,9 +45,7 @@ export class User {
 
   @IsInt({ each: true })
   @ManyToMany(type => Group, group => group.id, {
-    eager: true,
-    cascadeUpdate: false,
-    cascadeInsert: false
+    eager: true
   })
   @JoinTable({ name: 'user_groups' })
   groups: Group[];
@@ -61,4 +62,33 @@ export class User {
   @IsDate()
   @Column({ type: 'date', nullable: true })
   resetPasswordExpires?: Date;
+
+  async getGames({ skip = 0, take = 24 } = {}) {
+    return await getRepository(GroupPermission)
+      .find({
+        cache: true,
+        where: this.groups.map(({ id }) => ({ groupID: id })),
+        select: ['gameID']
+      })
+      .then(gameIds => {
+        return getRepository(Game).findAndCount({
+          cache: true,
+          take,
+          skip,
+          relations: ['releases'],
+          where: gameIds.map(({ gameID }) => ({
+            id: gameID
+          })),
+          order: {
+            updated: 'DESC'
+          }
+        });
+      });
+  }
+
+  async refreshPersonalAccessToken() {
+    const userGroup = this.groups.find(({ isUserGroup }) => isUserGroup);
+    await userGroup.refreashToken();
+    return this;
+  }
 }

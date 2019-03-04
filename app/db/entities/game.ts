@@ -71,17 +71,11 @@ export class Game {
   capabilities: object;
 
   @ValidateNested({ each: true })
-  @OneToMany(type => Release, release => release.game, {
-    cascadeInsert: false,
-    cascadeUpdate: false
-  })
+  @OneToMany(type => Release, release => release.game)
   releases: Release[];
 
   @ValidateNested({ each: true })
-  @OneToMany(type => Group, group => group.id, {
-    cascadeInsert: true,
-    cascadeUpdate: true
-  })
+  @OneToMany(type => Group, group => group.id)
   groups: GroupPermission[];
 
   @IsBase64()

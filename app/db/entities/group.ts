@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, getRepository } from 'typeorm';
 import {
   IsString,
   IsBoolean,
@@ -9,6 +9,10 @@ import {
   Max,
   IsBase64
 } from 'class-validator';
+
+import { randomBytes } from 'crypto';
+import { PassportStatic } from 'passport';
+const passport: PassportStatic = require('passport');
 
 @Entity()
 export class Group {
@@ -45,4 +49,13 @@ export class Group {
   @IsBase64()
   @Column({ type: 'text', nullable: true })
   logo?: string;
+
+  async refreashToken(tokenExpires: false | Date = false) {
+    if (tokenExpires) {
+      this.tokenExpires = tokenExpires;
+    }
+
+    this.token = randomBytes(20).toString('hex');
+    await getRepository(Group).save(this);
+  }
 }

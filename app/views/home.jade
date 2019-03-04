@@ -18,26 +18,41 @@ append content
 								img.preview(src="/images/none.png")
 							span.title=game.title
 							span.badge=game.releases.length
-			.row: include partials/pagination
-		form.panel.panel-default(method="post" action=url)
-			.panel-heading
-				h3.panel-title Personal Access Token
-			.panel-body 
-				include partials/feedback
-				input(type="hidden" name="group" value=user.groups[0]._id)
-				p An acces token is required to have access to non-production releases of games (i.e., Development, QA, and Staging). For more information about the access token, see the 
-					a(href="/docs") documentation
-					|.
-				.input-group
-					input.monospace.select-all.form-control(readonly type="text" value=user.groups[0].token)
-					if user.groups[0].tokenExpires
-						.input-group-addon Expires #{moment(user.groups[0].tokenExpires).fromNow()}
-					else
-						.input-group-addon Expires: never
-					.input-group-btn
-						button.btn.btn-primary(type="submit" data-toggle="confirm") 
-							span.icon.glyphicon.glyphicon-refresh
-							| Refresh
+			.row
+				nav.text-center
+				if (pagination.total > 24)
+					ul.pagination
+						li: a(href="/page/1") start
+						li: a(href="/page/#{pagination.current-1}") &laquo;
+						- var pages = Math.ceil(pagination.total / 24);
+						- var start = Math.abs(pagination.current - pages) > 5 ? pagination.current : (pagination.current) - Math.ceil(pagination.current / 5) - 1;
+						- for (var i = start, max = start + 5; i < max; i++) {
+						- if (i > max || i >= pages) { break; }
+							li(class={"active": pagination.current == i})
+								a(href="/page/#{i}")=i
+						- }
+						li: a(href="/page/#{pagination.current+1}") &raquo;
+						li: a(href="/page/#{pages - 1}") end
+		- var userGroup = user.groups.find(({isUserGroup}) => isUserGroup);
+		if userGroup
+			form.panel.panel-default(method="post" action=url)
+				.panel-heading
+					h3.panel-title Personal Access Token
+				.panel-body
+					include partials/feedback
+					input(type="hidden" name="group" value=userGroup.id)
+					p An acces token is required to have access to non-production releases of games (i.e., Development, QA, and Staging). For more information about the access token, see the
+						a(href="/docs") documentation.
+					.input-group
+						input.monospace.select-all.form-control(readonly type="text" value=userGroup.token)
+						if userGroup.tokenExpires
+							.input-group-addon Expires #{moment(userGroup.tokenExpires).fromNow()}
+						else
+							.input-group-addon Expires: never
+						.input-group-btn
+							button.btn.btn-primary(type="submit" data-toggle="confirm")
+								span.icon.glyphicon.glyphicon-refresh
+								| Refresh
 	.col-sm-3
 		h3 Teams
 		if !groups.length
@@ -45,8 +60,8 @@ append content
 		else
 			.list-group
 				for group in groups
-					a.list-group-item(href="/groups/group/#{group.slug}")
-						if group.logo && group.logo.length
-							img.logo.logo-lg(src="data:image/png;base64,#{group.logo}")
-						| #{group.name}
-			
+					if !group.isUserGroup
+						a.list-group-item(href="/groups/group/#{group.slug}")
+							if group.logo && group.logo.length
+								img.logo.logo-lg(src="data:image/png;base64,#{group.logo}")
+							| #{group.name}

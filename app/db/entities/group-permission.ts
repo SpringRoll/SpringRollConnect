@@ -19,23 +19,19 @@ export class GroupPermission {
   @Column({ type: 'int2', default: 0, nullable: false })
   permission: number;
 
-  @ValidateNested()
-  @ManyToOne(type => Group, group => group.id, {
-    cascadeInsert: false,
-    cascadeRemove: false,
-    cascadeUpdate: false,
-    cascadeAll: false
-  })
-  @JoinColumn()
-  group: Group;
+  @IsInt()
+  @Column({ type: 'int' })
+  groupID: number;
 
   @ValidateNested()
-  @ManyToOne(type => Game, game => game.id, {
-    cascadeInsert: false,
-    cascadeRemove: false,
-    cascadeUpdate: false,
-    cascadeAll: false
-  })
-  @JoinColumn()
+  @ManyToOne(type => Group, group => group.id)
+  @JoinColumn({ name: 'groupID' })
+  group: Group;
+
+  @Column({ type: 'int' })
+  gameID: number;
+  @ValidateNested()
+  @ManyToOne(type => Game, game => game.id)
+  @JoinColumn({ name: 'gameID' })
   game: Game;
 }

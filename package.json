@@ -101,7 +101,7 @@
     "semver": "^5.0.1",
     "springroll-container": "SpringRoll/SpringRollContainer#0.5.3",
     "ts-node": "^8.0.2",
-    "typeorm": "^0.1.9",
+    "typeorm": "^0.2.14",
     "typescript": "^3.3.3333",
     "uuid": "^3.2.1"
   },

@@ -31,7 +31,7 @@ export class Release {
   id: number;
 
   @IsInt()
-  @ManyToOne(type => Game, game => game.id, { cascadeAll: false })
+  @ManyToOne(type => Game, game => game.id)
   game: Game;
 
   @IsString()
@@ -63,7 +63,6 @@ export class Release {
 
   @IsInt()
   @ManyToOne(type => User, user => user.id, {
-    cascadeAll: false,
     nullable: true
   })
   updatedBy: User;

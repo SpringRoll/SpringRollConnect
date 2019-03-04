@@ -17,8 +17,8 @@ module.exports = function(passport: PassportStatic) {
 
   passport.deserializeUser(function(id: number, done: Function) {
     getRepository(User)
-      .findOneById(id)
-      .then(user => done(null, user))
+      .findByIds([id])
+      .then(([user]) => done(null, user))
       .catch(err => done(err));
   });
 
