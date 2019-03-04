@@ -60,7 +60,7 @@ module.exports = function(app) {
   // Site pages
   app.use('/', require('./home'));
   // app.use('/embed', require('./embed'));
-  // app.use('/docs', access.isAuthenticated, require('./docs'));
+  app.use('/docs', access.isAuthenticated, require('./docs'));
   // app.use('/games/add', access.isEditor, require('./games/add'));
   // app.use('/games/search', access.isAuthenticated, require('./games/search'));
   // app.use('/groups/add', access.isAdmin, require('./groups/add'));

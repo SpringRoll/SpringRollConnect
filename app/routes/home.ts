@@ -1,7 +1,7 @@
-var router = require('express').Router();
-import { getRepository, Any } from 'typeorm';
+import { getRepository } from 'typeorm';
 import { User } from '../db';
 import { Request, Response } from 'express';
+const router = require('express').Router();
 const log = require('../helpers/logger');
 
 router.get('/:local(page)?/:number([1-9][0-9]?*)?', function(
