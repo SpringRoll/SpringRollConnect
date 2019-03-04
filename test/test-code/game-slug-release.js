@@ -5,7 +5,8 @@ import {
   login,
   sleep,
   Release,
-  isLoginPage
+  isLoginPage,
+  makeRelease
 } from '../helpers';
 import { expect } from 'chai';
 import { until, By, error, WebElement } from 'selenium-webdriver';
@@ -28,8 +29,11 @@ export const init = async (permission, privilege, gameStatus) => {
   const url = gameReleasesURL(game);
   await login(user);
 
-  await browser.get(url);
+  for (let i = 0; i < 10; ++i) {
+    await makeRelease(game);
+  }
 
+  await browser.get(url);
   const err = await browser
     .wait(until.elementsLocated(By.css('a[href*="releases"].active')), 500)
     .catch(err => err);
@@ -48,6 +52,17 @@ export const publicUserTest = async () => {
   await browser.get(url);
 
   await isLoginPage();
+};
+
+export const viewTest = async () => {
+  const pageOneElements = await browser.findElements(By.css('.release.dev'));
+
+  expect(pageOneElements.length).to.equal(10);
+
+  await browser.findElement(By.css('a[href="?page=2"]')).click();
+  const pageTwoElements = await browser.findElements(By.css('.release.dev'));
+
+  expect(pageTwoElements.length).to.equal(1);
 };
 
 /**
