@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.Types.ObjectId;
 var User = require('./user');
+var Group = require('./group');
 
 /**
  * The game model
@@ -340,8 +341,12 @@ GameSchema.methods.getAccess = function(user, callback) {
   // if there's a match with the current user
   this.groups.forEach(function(entry) {
     if (user.inGroup(entry.group) && entry.permission >= result.permission) {
-      result.token = entry.group.token;
-      result.permission = entry.permission;
+      // have to get the whole group object so we can get the token.
+      let validGroup = user.groups.find(function(groupId){
+        return groupId.equals(entry.group);
+      });
+      result.token = validGroup.token;
+      result.permission = validGroup.permission;
     }
   });
 

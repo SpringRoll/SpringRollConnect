@@ -202,7 +202,15 @@ UserSchema.methods.getGames = function(callback)
 UserSchema.methods.inGroup = function(group)
 {
 	return this.groups.find(function(g){
-		return g._id.equals(group._id);
+		// parse whether we've received the whole group object, or just the groupId itself
+		// this is SUPER bad practice, 
+		// but one more piece of duct tape on this garbage permissions system isnt going to matter much.
+		if (group._id){
+			return g._id.equals(group._id);
+		}
+		else {
+			return g._id.equals(group);
+		}
 	});
 };
 
