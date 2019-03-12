@@ -48,7 +48,6 @@ module.exports = function(passport: PassportStatic) {
                 error = 'Invalid Password';
                 break;
             }
-
             return error
               ? done(null, false, req.flash('error', error))
               : done(null, user);
