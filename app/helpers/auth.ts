@@ -3,7 +3,7 @@ import { User } from '../db';
 import { getRepository } from 'typeorm';
 import { Strategy } from 'passport-local';
 import { Request } from 'express';
-import { compareSync } from 'bcrypt-nodejs';
+import { compareSync } from 'bcryptjs';
 
 module.exports = function(passport: PassportStatic) {
   // Passport also needs to serialize and deserialize

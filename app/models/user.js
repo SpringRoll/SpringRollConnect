@@ -4,7 +4,7 @@ require('mongoose-type-email');
 var Schema = mongoose.Schema;
 var Email = mongoose.SchemaTypes.Email;
 var ObjectId = Schema.Types.ObjectId;
-var bcrypt = require('bcrypt-nodejs');
+var bcrypt = require('bcryptjs');
 var crypto = require('crypto');
 var async = require('async');
 

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { getRepository } from 'typeorm';
 import { User } from '../db/entities';
-import { compareSync } from 'bcrypt-nodejs';
+import { compareSync, hash, genSalt } from 'bcryptjs';
 const router = Router();
 
 router.get('/', function(req, res) {
@@ -25,44 +25,33 @@ router.post('/', function(req: any, res) {
 
   const { user }: { user: User } = req;
 
-  getRepository(User)
+  if (0 !== errors.length) {
+    return res.render('password', { errors });
+  }
+
+  const userRepo = getRepository(User);
+
+  userRepo
     .findByIds([user.id], { select: ['password'] })
     .then(([{ password }]) => {
       if (!compareSync(req.body.oldPassword, password)) {
-        req.flash('success', 'yo dawg!');
-        res.redirect(req.originalUrl);
-        return;
-      } else {
-        req.flash('success', 'YOU FAIL');
-        res.redirect(req.originalUrl);
+        return res.render('password', {
+          error: 'Current password is invalid.'
+        });
       }
+
+      genSalt(10, (_, salt) =>
+        hash(req.body.newPassword, salt, (_, hashed) =>
+          userRepo
+            .update(user.id, { password: hashed })
+            .catch(err =>
+              res.render('password', {
+                error: 'An error occurred while updating your password'
+              })
+            )
+            .then(() => res.render('login', { success: 'Password updated!' }))
+        )
+      );
     });
-
-  // if (!req.user.comparePassword(req.body.oldPassword)) {
-  //   errors.push({ msg: 'Current password is invalid.' });
-  // }
-
-  // if (errors.length) {
-  //   // render(res, errors);
-  //   return;
-  // }
-
-  // req.user.password = req.body.newPassword;
-
-  // req.user.save(function(err, user) {
-  // req.flash('success', 'Password updated!');
-  // res.redirect(req.originalUrl);
-  // });
 });
-
-function render(res, errors, success) {
-  if (typeof errors == 'string') {
-    errors = [{ msg: errors }];
-  }
-  res.render('password', {
-    errors: errors || [],
-    success: success || null
-  });
-}
-
 module.exports = router;

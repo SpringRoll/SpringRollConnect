@@ -11,7 +11,7 @@
     "@babel/register": "^7.0.0",
     "@babel/runtime": "^7.3.1",
     "@types/async": "^2.4.1",
-    "@types/bcrypt-nodejs": "^0.0.30",
+    "@types/bcryptjs": "^2.4.2",
     "@types/body-parser": "^1.17.0",
     "@types/bootstrap": "^4.2.2",
     "@types/bunyan": "^1.8.5",
@@ -69,7 +69,7 @@
   "dependencies": {
     "async": "^1.0.0",
     "bash-vars": "^1.1.0",
-    "bcrypt-nodejs": "0.0.3",
+    "bcryptjs": "^2.4.3",
     "bellhop-iframe": "^1.2.0",
     "body-parser": "^1.11.0",
     "bootstrap": "^3.3.7",
