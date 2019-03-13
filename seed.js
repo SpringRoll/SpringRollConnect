@@ -135,7 +135,7 @@ async function addUsers(incGroup){
   let newUserGroup = new Group({
     name: userHash,
     slug: userHash,
-    token: userHash,
+    token: makeRandomString(40),
     tokenExpires: null,
     privilege: 1,
     isUserGroup: true
