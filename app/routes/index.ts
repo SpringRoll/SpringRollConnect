@@ -59,12 +59,12 @@ module.exports = function(app) {
 
   // Site pages
   app.use('/', require('./home'));
-  // app.use('/embed', require('./embed'));
+  app.use('/embed', require('./embed'));
   app.use('/docs', access.isAuthenticated, require('./docs'));
   // app.use('/games/add', access.isEditor, require('./games/add'));
   // app.use('/games/search', access.isAuthenticated, require('./games/search'));
   // app.use('/groups/add', access.isAdmin, require('./groups/add'));
-  // app.use('/games', access.isAuthenticated, require('./games/index'));
+  app.use('/games', access.isAuthenticated, require('./games/index'));
   // app.use('/releases', access.isEditor, require('./releases/release'));
   // app.use('/archive', access.isEditor, require('./games/index'));
   // app.use('/groups/group', access.isAuthenticated, require('./groups/group'));
@@ -82,9 +82,9 @@ module.exports = function(app) {
   // Authentication Pages
   app.use('/login', access.isAnonymous, require('./login'));
   app.use('/logout', access.isAuthenticated, require('./logout'));
-  app.use('/register', access.isAnonymous, require('./register'));
-  app.use('/forgot', access.isAnonymous, require('./forgot'));
-  app.use('/reset', access.isAnonymous, require('./reset'));
+  // app.use('/register', access.isAnonymous, require('./register'));
+  // app.use('/forgot', access.isAnonymous, require('./forgot'));
+  // app.use('/reset', access.isAnonymous, require('./reset'));
   app.use('/profile', access.isAuthenticated, require('./profile'));
   app.use('/password', access.isAuthenticated, require('./password'));
 

@@ -1,6 +1,7 @@
 import { getRepository } from 'typeorm';
 import { User } from '../db';
 import { Request, Response } from 'express';
+import { pagination } from '../helpers';
 const router = require('express').Router();
 const log = require('../helpers/logger');
 
@@ -18,7 +19,8 @@ router.get('/:local(page)?/:number([1-9][0-9]?*)?', function(
   getRepository(User)
     .create(<User>req.user)
     .getGames({
-      skip: req.params.number ? Number(req.params.number) * 24 : 0
+      skip: req.params.number ? Number(req.params.number) * 24 : 0,
+      order: 'updated'
     })
     .then(([games, count]) => {
       if (1 > games.length && '/' !== req.url.trim()) {
@@ -28,10 +30,7 @@ router.get('/:local(page)?/:number([1-9][0-9]?*)?', function(
       res.render('home', {
         games,
         groups: req.user.groups,
-        pagination: {
-          total: count,
-          current: Number(req.params.number) || 1
-        }
+        pagination: pagination(count, req.params.number)
       });
     })
     .catch(err => {

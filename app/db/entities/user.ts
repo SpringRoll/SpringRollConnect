@@ -63,7 +63,7 @@ export class User {
   @Column({ type: 'date', nullable: true })
   resetPasswordExpires?: Date;
 
-  async getGames({ skip = 0, take = 24 } = {}) {
+  async getGames({ skip = 0, take = 24, order = 'alphabetical' } = {}) {
     return await getRepository(GroupPermission)
       .find({
         cache: true,
@@ -79,9 +79,8 @@ export class User {
           where: gameIds.map(({ gameID }) => ({
             id: gameID
           })),
-          order: {
-            updated: 'DESC'
-          }
+          order:
+            order == 'alphabetical' ? { title: 'ASC' } : { updated: 'DESC' }
         });
       });
   }

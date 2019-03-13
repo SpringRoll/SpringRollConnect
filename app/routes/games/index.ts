@@ -1,0 +1,122 @@
+import { getRepository } from 'typeorm';
+import { User } from '../../db';
+import { pagination } from '../../helpers';
+import { Router } from 'express';
+
+const router = Router();
+
+router.get(
+  '/:order(alphabetical|latest)?/:local(page)?/:number([0-9]+)?',
+  function(req, res) {
+    const order = req.params.order || 'alphabetical';
+    getRepository(User)
+      .create(<User>req.user)
+      .getGames({
+        skip: 1 < req.params.number ? req.params.number * 24 : 0,
+        order
+      })
+      .then(([games, count]) => {
+        res.render('games', {
+          games,
+          pagination: pagination(count, req.params.number)
+        });
+      });
+  }
+);
+// router.get('/:slug', function(req, res) {
+//   renderPage(req, res, 'games/game');
+// });
+
+// router.use('/:slug/privileges', Access.isAdmin);
+
+// router.get('/:slug', function(req, res) {
+//   renderPage(req, res, 'games/game');
+// });
+
+// router.get('/:slug/privileges', function(req, res) {
+//   // have to pass addt'l param to resolve Group objects
+//   renderPage(req, res, 'games/privileges', 'groups.group');
+// });
+
+// router.post('/:slug/privileges', function(req, res) {
+//   Game.getBySlug(req.params.slug)
+//     .then(game => {
+//       const render = () =>
+//         renderPage(req, res, 'games/privileges', 'groups.group');
+//       switch (req.body.action) {
+//         case 'addGroup':
+//           Game.addGroup(game._id, req.body.group, req.body.permission, render);
+//           break;
+//         case 'changePermission':
+//           game.changePermission(req.body.group, req.body.permission, render);
+//           break;
+//         case 'removeGroup':
+//           game.removeGroup(req.body.group, render);
+//           break;
+//         default:
+//           render();
+//           break;
+//       }
+//     })
+//     .catch(err => {
+//       console.error('Privileges error', err);
+//       res.status(404).render('404');
+//     });
+// });
+
+// router.get('/:slug/releases', function(req, res) {
+//   // have to pass addt'l param to resolve Release objects
+//   renderPage(req, res, 'games/releases', 'releases');
+// });
+
+// router.patch('/:slug/releases/:commit_id', async function(req, res) {
+//   // 307 maintains PATCH verb
+//   res.redirect(307, '/releases/' + req.body.commitId);
+// });
+
+// router.patch('/:slug', function(req, res) {
+//   let errors = validateRequest(req);
+//   if (errors) {
+//     return handleError(errors);
+//   }
+
+//   defaultCapabilities(req.body.capabilities);
+
+//   req.body.updated = Date.now();
+
+//   Game.getBySlug(req.params.slug)
+//     .then(game => {
+//       return Game.findByIdAndUpdate(game._id, req.body);
+//     })
+//     .then(game => {
+//       // have to re-get because slug may have changed
+//       Game.findById(game._id).then(game => {
+//         if (game.isArchived) {
+//           res.redirect('/archive/' + game.slug);
+//         } else {
+//           res.redirect('/games/' + game.slug);
+//         }
+//       });
+//     });
+// });
+
+// router.delete('/:slug', function(req, res) {
+//   Game.getBySlug(req.params.slug)
+//     .then(game => {
+//       if (game.isArchived) {
+//         game.remove();
+//       } else {
+//         game.isArchived = true;
+//         game.save(function(err) {
+//           if (err) {
+//             return done(err);
+//           }
+//         });
+//       }
+//     })
+//     .then(() => {
+//       res.redirect('/');
+//     });
+// });
+
+module.exports = router;

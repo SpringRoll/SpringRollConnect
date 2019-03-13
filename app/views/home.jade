@@ -18,21 +18,7 @@ append content
 								img.preview(src="/images/none.png")
 							span.title=game.title
 							span.badge=game.releases.length
-			.row
-				nav.text-center
-				if (pagination.total > 24)
-					ul.pagination
-						li: a(href="/page/1") start
-						li: a(href="/page/#{pagination.current-1}") &laquo;
-						- var pages = Math.ceil(pagination.total / 24);
-						- var start = Math.abs(pagination.current - pages) > 5 ? pagination.current : (pagination.current) - Math.ceil(pagination.current / 5) - 1;
-						- for (var i = start, max = start + 5; i < max; i++) {
-						- if (i > max || i >= pages) { break; }
-							li(class={"active": pagination.current == i})
-								a(href="/page/#{i}")=i
-						- }
-						li: a(href="/page/#{pagination.current+1}") &raquo;
-						li: a(href="/page/#{pages - 1}") end
+			.row: include ./partials/pagination
 		- var userGroup = user.groups.find(({isUserGroup}) => isUserGroup);
 		if userGroup
 			form.panel.panel-default(method="post" action=url)
