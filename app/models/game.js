@@ -474,20 +474,30 @@ GameSchema.methods.hasPermission = function(token, callback) {
  * @param {function} callback The callback with result
  * @return {Promise} The promise object for async action
  */
-GameSchema.statics.addGroup = function(ids, groupId, permission, callback) {
-  if (!Array.isArray(ids)) ids = [ids];
+GameSchema.statics.addGroup = function(ids, groupId, permission, callback)
+{
+	if (!Array.isArray(ids)) ids = [ids];
 
-  var group = {
-    group: groupId,
-    permission: permission
-  };
+	var group = {
+		group: groupId, 
+		permission: permission
+	};
 
-  this.update(
-    { _id: { $in: ids } },
-    { $push: { groups: group } },
-    { multi: true },
-    callback
-  );
+	// logic implements overwrite of existing with incoming
+	// first remove any old entries associated with the group in question
+	this.update(
+		{_id: {$in: ids}},
+		{$pull: {groups: {group: {$in: [groupId]}}}}
+	)
+	// then add the 'new' permission level
+	.then(()=>{
+		this.update(
+			{_id: {$in: ids}}, 
+			{$push: {groups: group}},
+			{multi: true}, 
+			callback
+		);
+	});
 };
 
 /**
