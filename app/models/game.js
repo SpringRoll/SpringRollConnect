@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.Types.ObjectId;
 var User = require('./user');
+var Group = require('./group');
 
 /**
  * The game model
@@ -323,27 +324,35 @@ GameSchema.methods.addGroup = function(ids, permissions, callback) {
  * @param  {mongoose.User} user The current user
  */
 GameSchema.methods.getAccess = function(user, callback) {
+  let isAdmin = false;
   var result = {
     permission: -1,
     token: null
   };
 
-  // Check for the user group's privilege
-  // if we're a producer or admin, use their settings first
-  if (user.privilege) {
+  // Check if the user is an admin, or in an admin group
+  // If they are, ignore further checks for specific game access
+  if (user.privilege === 2) {
     var group = user.groups[0];
     result.permission = user.privilege;
     result.token = group.token;
+    isAdmin = true;
   }
 
-  // Go through all the game groups to determine
-  // if there's a match with the current user
-  this.groups.forEach(function(entry) {
-    if (user.inGroup(entry.group) && entry.permission >= result.permission) {
-      result.token = entry.group.token;
-      result.permission = entry.permission;
-    }
-  });
+  if(!isAdmin){
+    // Go through all the game groups to determine
+    // if there's a match with the current user
+    this.groups.forEach(function(entry) {
+      if (user.inGroup(entry.group) && entry.permission >= result.permission) {
+        // have to get the whole group object so we can get the token.
+        let validGroup = user.groups.find(function(groupId){
+          return groupId.equals(entry.group);
+        });
+        result.token = validGroup.token;
+        result.permission = validGroup.privilege;
+      }
+    });
+  }
 
   if (result == -1) {
     callback('Access denied', this, result);
