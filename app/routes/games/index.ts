@@ -1,9 +1,19 @@
 import { getRepository } from 'typeorm';
 import { User } from '../../db';
-import { pagination } from '../../helpers';
+import { pagination, isAdmin, user } from '../../helpers';
 import { Router } from 'express';
+import { Request, Response } from 'express';
+// import { renderPage } from './helpers';
 
 const router = Router();
+
+function renderPage(req: Request, res: Response, template: string) {
+  return user(req)
+    .getGame({ slug: req.params.slug })
+    .then(({ game, permission }) => {
+      return res.render(template, { game });
+    });
+}
 
 router.get(
   '/:order(alphabetical|latest)?/:local(page)?/:number([0-9]+)?',
@@ -23,15 +33,12 @@ router.get(
       });
   }
 );
-// router.get('/:slug', function(req, res) {
-//   renderPage(req, res, 'games/game');
-// });
 
-// router.use('/:slug/privileges', Access.isAdmin);
+router.get('/:slug', function(req, res) {
+  return renderPage(req, res, 'games/game');
+});
 
-// router.get('/:slug', function(req, res) {
-//   renderPage(req, res, 'games/game');
-// });
+router.use('/:slug/privileges', isAdmin);
 
 // router.get('/:slug/privileges', function(req, res) {
 //   // have to pass addt'l param to resolve Group objects

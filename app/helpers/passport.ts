@@ -1,4 +1,3 @@
-const expressMongoose = require('express-mongoose');
 const passport = require('passport');
 const routes = require('../routes');
 const flash = require('connect-flash');

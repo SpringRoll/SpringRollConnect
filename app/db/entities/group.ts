@@ -50,7 +50,7 @@ export class Group {
   @Column({ type: 'text', nullable: true })
   logo?: string;
 
-  async refreashToken(tokenExpires: false | Date = false) {
+  async refreshToken(tokenExpires: false | Date = false) {
     if (tokenExpires) {
       this.tokenExpires = tokenExpires;
     }

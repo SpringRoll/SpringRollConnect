@@ -4,7 +4,8 @@ import { getRepository } from 'typeorm';
 import { Strategy } from 'passport-local';
 import { Request } from 'express';
 import { compareSync } from 'bcryptjs';
-
+import { user as getUser } from '../helpers';
+import { isAdmin } from './access';
 module.exports = function(passport: PassportStatic) {
   // Passport also needs to serialize and deserialize
   // user instance from a session store in order to
@@ -18,7 +19,14 @@ module.exports = function(passport: PassportStatic) {
   passport.deserializeUser(function(id: number, done: Function) {
     getRepository(User)
       .findByIds([id])
-      .then(([user]) => done(null, user))
+      .then(([user]) => {
+        done(null, {
+          ...user,
+          isReader: user.isReader,
+          isEditor: user.isEditor,
+          isAdmin: user.isAdmin
+        });
+      })
       .catch(err => done(err));
   });
 

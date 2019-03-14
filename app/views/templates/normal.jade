@@ -15,7 +15,7 @@ block body
 						| SpringRoll Connect
 						small.version.hidden-xs v#{version}
 				.navbar-collapse.collapse
-					if user && user.privilege >= privilege.subscriber
+					if user && user.isReader
 						form.navbar-form.search.hidden-sm.hidden-xs
 							.input-group
 								.input-group-addon
@@ -33,11 +33,11 @@ block body
 								ul.dropdown-menu
 					ul.nav.navbar-nav.navbar-right
 						if user
-							if user.privilege >= privilege.editor
+							if user.isEditor
 								li(class=isActive(/^\/games/))
 									a(href='/games')
 										span Games
-							if user.privilege == privilege.admin
+							if user.isAdmin
 								li(class=isActive(/^\/users/))
 									a(href="/users")
 										span Users
@@ -58,7 +58,7 @@ block body
 										a(href='/profile') Profile
 									li(class=isActive('/password'))
 										a(href='/password') Password
-									if user.privilege == privilege.admin
+									if user.isAdmin
 										li(class=isActive(/^\/configuration/))
 											a(href="/configuration")
 												span Configuration

@@ -4,7 +4,8 @@ import {
   PrimaryGeneratedColumn,
   ManyToMany,
   JoinTable,
-  getRepository
+  getRepository,
+  FindConditions
 } from 'typeorm';
 import {
   IsDate,
@@ -85,9 +86,51 @@ export class User {
       });
   }
 
+  async getGame(where: FindConditions<Game>) {
+    return await getRepository(Game)
+      .findOne({
+        relations: ['releases'],
+        where
+      })
+      .then(game =>
+        getRepository(GroupPermission)
+          .findOne({
+            where: this.groups.map(({ id }) => ({
+              groupID: id,
+              gameID: game.id
+            })),
+            order: { permission: 'DESC' }
+          })
+          .then(({ permission }) => ({ game, permission }))
+          .catch(() => ({ game, permission: null }))
+      );
+  }
+
+  get hasGroups(): boolean {
+    return !this.groups || 1 > this.groups.length ? false : true;
+  }
+
+  get userPrivilege(): number {
+    return this.hasGroups
+      ? this.groups.find(({ isUserGroup }) => isUserGroup).privilege
+      : -1;
+  }
+
+  get isAdmin(): boolean {
+    return this.userPrivilege >= 2;
+  }
+
+  get isEditor(): boolean {
+    return this.userPrivilege >= 1;
+  }
+
+  get isReader(): boolean {
+    return this.userPrivilege >= 0;
+  }
+
   async refreshPersonalAccessToken() {
     const userGroup = this.groups.find(({ isUserGroup }) => isUserGroup);
-    await userGroup.refreashToken();
+    await userGroup.refreshToken();
     return this;
   }
 }

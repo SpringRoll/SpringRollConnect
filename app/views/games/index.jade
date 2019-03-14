@@ -16,14 +16,14 @@ append content
 				.btn-group
 					a.btn.btn-sm.btn-default(class=(order=='alphabetical' ? 'disabled' : '') href="/#{active}/alphabetical") title
 					a.btn.btn-sm.btn-default(class=(order=='latest' ? 'disabled' : '') href="/#{active}/latest") updated
-				if url.startsWith('/games') && user.privilege >= privilege.editor
+				if url.startsWith('/games') && user.isEditor
 					a.btn.btn-sm.btn-default(href="/games/add")
 						span.glyphicon.glyphicon-pencil
 						|  Add
 			h3.panel-title Games
 		.panel-body
 			if !games.length
-				if url.startsWith('/games') && user.privilege >= privilege.editor
+				if url.startsWith('/games') && user.isEditor
 					.alert.alert-warning.text-center No games have been added.
 						a.btn.btn-warning.btn-sm(href="/games/add") Add Game
 				if url.startsWith('/archive')

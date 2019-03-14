@@ -55,7 +55,7 @@ router.post('/', async function(req: Request, res: Response) {
 
   user.groups
     .find(({ isUserGroup }) => isUserGroup)
-    .refreashToken()
+    .refreshToken()
     .then(() => {
       req.login(user, () => res.redirect('/'));
     })
