@@ -4,8 +4,8 @@ import {
   PrimaryGeneratedColumn,
   ManyToMany,
   JoinTable,
-  getRepository
-  // FindConditions,
+  getRepository,
+  FindConditions
 } from 'typeorm';
 import {
   IsDate,
@@ -18,6 +18,14 @@ import {
 import { Group } from './group';
 import { Game } from './game';
 import { GroupPermission } from './group-permission';
+import { select } from 'async';
+
+interface getGameArgs {
+  skip?: number;
+  take?: number;
+  order?: string;
+  where?: FindConditions<Game>;
+}
 
 @Entity()
 export class User {
@@ -64,30 +72,36 @@ export class User {
   @Column({ type: 'date', nullable: true })
   resetPasswordExpires?: Date;
 
-  async getGames({ skip = 0, take = 24, order = 'alphabetical' } = {}) {
+  async getGames({
+    skip = 0,
+    take = 24,
+    order = 'alphabetical',
+    where = {}
+  }: getGameArgs = {}) {
     return await getRepository(GroupPermission)
       .find({
         cache: true,
         where: this.groups.map(({ id }) => ({ groupID: id })),
         select: ['gameID']
       })
-      .then(gameIds => {
-        return getRepository(Game).findAndCount({
+      .then(gameIds =>
+        getRepository(Game).findAndCount({
           cache: true,
           take,
           skip,
           relations: ['releases'],
           where: gameIds.map(({ gameID }) => ({
+            ...where,
             id: gameID
           })),
           order:
             order == 'alphabetical' ? { title: 'ASC' } : { updated: 'DESC' }
-        });
-      });
+        })
+      );
   }
 
   async getGame(
-    where: any,
+    where: FindConditions<Game>,
     relations: Array<string> = []
   ): Promise<{ game: Game; permission: number; token: string }> {
     return await getRepository(Game)
@@ -111,10 +125,7 @@ export class User {
             permission,
             token: group.token
           }))
-          .catch(err => {
-            console.log(err);
-            return { game, permission: null, token: '' };
-          })
+          .catch(err => ({ game, permission: null, token: '' }))
       );
   }
 

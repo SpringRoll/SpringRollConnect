@@ -20,7 +20,6 @@ import {
 } from 'class-validator';
 import { Release } from './release';
 import { GroupPermission } from './group-permission';
-import { BinaryData } from 'fs';
 
 @Entity()
 export class Game {

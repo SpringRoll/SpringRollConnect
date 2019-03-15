@@ -61,8 +61,8 @@ module.exports = function(app) {
   app.use('/', require('./home'));
   app.use('/embed', require('./embed'));
   app.use('/docs', access.isAuthenticated, require('./docs'));
-  // app.use('/games/add', access.isEditor, require('./games/add'));
-  // app.use('/games/search', access.isAuthenticated, require('./games/search'));
+  app.use('/games/add', access.isEditor, require('./games/add'));
+  app.use('/games/search', access.isAuthenticated, require('./games/search'));
   // app.use('/groups/add', access.isAdmin, require('./groups/add'));
   app.use('/games', access.isAuthenticated, require('./games/index'));
   // app.use('/releases', access.isEditor, require('./releases/release'));
@@ -70,9 +70,9 @@ module.exports = function(app) {
   // app.use('/groups/group', access.isAuthenticated, require('./groups/group'));
   // app.use('/groups/search', access.isAdmin, require('./groups/search'));
   // app.use('/groups', access.isAdmin, require('./groups/index'));
-  // app.use('/users/search', require('./users/search'));
-  // app.use('/users/add', access.isAdmin, require('./users/add'));
-  // app.use('/users', access.isAdmin, require('./users/index'));
+  app.use('/users/search', require('./users/search'));
+  app.use('/users/add', access.isAdmin, require('./users/add'));
+  app.use('/users', access.isAdmin, require('./users/index'));
   // app.use('/configuration', access.isAdmin, require('./configuration'));
 
   // RESTful service for releases

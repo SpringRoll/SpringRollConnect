@@ -1,9 +1,6 @@
-import { getRepository } from 'typeorm';
-import { User, GroupPermission, Group } from '../../db';
 import { pagination, isAdmin, user, permissions } from '../../helpers';
 import { Router } from 'express';
 import { Request, Response } from 'express';
-// import { renderPage } from './helpers';
 
 const router = Router();
 
@@ -16,7 +13,6 @@ function renderPage(
   return user(req)
     .getGame({ slug: req.params.slug }, ['groups'])
     .then(async ({ game, permission, token }) => {
-      console.log('token =>', token, permission);
       return res.render(template, {
         game,
         token,
