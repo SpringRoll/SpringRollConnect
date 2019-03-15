@@ -86,7 +86,7 @@ export class Game {
   @Column({ nullable: false, default: [] })
   groups: GroupPermission[];
 
-  @Column()
+  @Column({ type: 'binary' })
   thumbnail: Binary;
 
   constructor() {

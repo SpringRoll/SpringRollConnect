@@ -24,14 +24,14 @@ export class GroupPermission {
   groupID: number;
 
   @ValidateNested()
-  @ManyToOne(type => Group, group => group.id)
+  @ManyToOne(type => Group, group => group.id, { eager: true })
   @JoinColumn({ name: 'groupID' })
   group: Group;
 
   @Column({ type: 'int' })
   gameID: number;
   @ValidateNested()
-  @ManyToOne(type => Game, game => game.id)
+  @ManyToOne(type => Game, game => game.id, { eager: true })
   @JoinColumn({ name: 'gameID' })
   game: Game;
 }

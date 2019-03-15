@@ -24,6 +24,7 @@ function mapUserGroups(
 
 createConnections([
   {
+    name: 'mongo',
     type: 'mongodb',
     host: 'localhost',
     port: 27017,
@@ -144,7 +145,7 @@ createConnections([
 
       return release;
     })
-    .map(r => pRelease.create(r));
+    .map(r => pRelease.create(<object>r));
 
   await postgres
     .getRepository(pEntities.Release)

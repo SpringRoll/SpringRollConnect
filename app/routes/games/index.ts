@@ -1,17 +1,29 @@
 import { getRepository } from 'typeorm';
-import { User } from '../../db';
-import { pagination, isAdmin, user } from '../../helpers';
+import { User, GroupPermission, Group } from '../../db';
+import { pagination, isAdmin, user, permissions } from '../../helpers';
 import { Router } from 'express';
 import { Request, Response } from 'express';
 // import { renderPage } from './helpers';
 
 const router = Router();
 
-function renderPage(req: Request, res: Response, template: string) {
+function renderPage(
+  req: Request,
+  res: Response,
+  template: string,
+  optionalData: object = {}
+) {
   return user(req)
-    .getGame({ slug: req.params.slug })
-    .then(({ game, permission }) => {
-      return res.render(template, { game });
+    .getGame({ slug: req.params.slug }, ['groups'])
+    .then(async ({ game, permission, token }) => {
+      console.log('token =>', token, permission);
+      return res.render(template, {
+        game,
+        token,
+        host: req.headers.host,
+        ...optionalData,
+        ...permissions(permission)
+      });
     });
 }
 
@@ -19,16 +31,15 @@ router.get(
   '/:order(alphabetical|latest)?/:local(page)?/:number([0-9]+)?',
   function(req, res) {
     const order = req.params.order || 'alphabetical';
-    getRepository(User)
-      .create(<User>req.user)
+    return user(req)
       .getGames({
         skip: 1 < req.params.number ? req.params.number * 24 : 0,
         order
       })
       .then(([games, count]) => {
-        res.render('games', {
+        return res.render('games', {
           games,
-          pagination: pagination(count, req.params.number)
+          pagination: pagination(count, req.params.number, 'games')
         });
       });
   }
@@ -40,10 +51,10 @@ router.get('/:slug', function(req, res) {
 
 router.use('/:slug/privileges', isAdmin);
 
-// router.get('/:slug/privileges', function(req, res) {
-//   // have to pass addt'l param to resolve Group objects
-//   renderPage(req, res, 'games/privileges', 'groups.group');
-// });
+router.get('/:slug/privileges', function(req, res) {
+  // have to pass addt'l param to resolve Group objects
+  return renderPage(req, res, 'games/privileges');
+});
 
 // router.post('/:slug/privileges', function(req, res) {
 //   Game.getBySlug(req.params.slug)
@@ -71,10 +82,10 @@ router.use('/:slug/privileges', isAdmin);
 //     });
 // });
 
-// router.get('/:slug/releases', function(req, res) {
-//   // have to pass addt'l param to resolve Release objects
-//   renderPage(req, res, 'games/releases', 'releases');
-// });
+router.get('/:slug/releases', function(req, res) {
+  // have to pass addt'l param to resolve Release objects
+  renderPage(req, res, 'games/releases');
+});
 
 // router.patch('/:slug/releases/:commit_id', async function(req, res) {
 //   // 307 maintains PATCH verb

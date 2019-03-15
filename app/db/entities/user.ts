@@ -4,8 +4,8 @@ import {
   PrimaryGeneratedColumn,
   ManyToMany,
   JoinTable,
-  getRepository,
-  FindConditions
+  getRepository
+  // FindConditions,
 } from 'typeorm';
 import {
   IsDate,
@@ -86,23 +86,35 @@ export class User {
       });
   }
 
-  async getGame(where: FindConditions<Game>) {
+  async getGame(
+    where: any,
+    relations: Array<string> = []
+  ): Promise<{ game: Game; permission: number; token: string }> {
     return await getRepository(Game)
       .findOne({
-        relations: ['releases'],
+        cache: true,
+        relations: ['releases'].concat(relations),
         where
       })
       .then(game =>
         getRepository(GroupPermission)
           .findOne({
             where: this.groups.map(({ id }) => ({
-              groupID: id,
-              gameID: game.id
+              cache: true,
+              gameID: game.id,
+              groupID: id
             })),
             order: { permission: 'DESC' }
           })
-          .then(({ permission }) => ({ game, permission }))
-          .catch(() => ({ game, permission: null }))
+          .then(({ permission, group }) => ({
+            game,
+            permission,
+            token: group.token
+          }))
+          .catch(err => {
+            console.log(err);
+            return { game, permission: null, token: '' };
+          })
       );
   }
 
@@ -117,15 +129,35 @@ export class User {
   }
 
   get isAdmin(): boolean {
-    return this.userPrivilege >= 2;
+    return 2 <= this.userPrivilege;
   }
 
   get isEditor(): boolean {
-    return this.userPrivilege >= 1;
+    return 1 <= this.userPrivilege;
   }
 
   get isReader(): boolean {
-    return this.userPrivilege >= 0;
+    return 0 <= this.userPrivilege;
+  }
+
+  getGamePermission(where: any) {
+    // getGamePermission(where: FindConditions<Game>) {
+    return this.getGame(where).then(({ permission }) => permission);
+  }
+
+  async canReadGame(where: any) {
+    // async canReadGame(where: FindConditions<Game>) {
+    return 0 <= (await this.getGamePermission(where));
+  }
+
+  async canEditGame(where: any) {
+    // async canEditGame(where: FindConditions<Game>) {
+    return 1 <= (await this.getGamePermission(where));
+  }
+
+  async canAdminGame(where: any) {
+    // async canAdminGame(where: FindConditions<Game>) {
+    return 2 <= (await this.getGamePermission(where));
   }
 
   async refreshPersonalAccessToken() {

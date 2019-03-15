@@ -3,7 +3,7 @@ extend ../templates/game
 append gameContent
 	.panel.panel-default
 		.panel-heading
-			if isEditor
+			if isEditor || user.isEditor
 				include modal-release
 				button.pull-right.btn.btn-sm.btn-default(data-toggle="modal" data-target="#addRelease")
 					span.glyphicon.glyphicon-plus
@@ -18,7 +18,7 @@ append gameContent
 					.release(class=release.status)
 						.row
 							.col-sm-3
-								if isEditor
+								if isEditor || user.isEditor
 									form.release-title.text-center(action=url + "/" + release.commitId method="post")
 										input(type="hidden" name="updatedBy" value=user._id)
 										input(type="hidden" name="release" value=release._id)
@@ -42,7 +42,7 @@ append gameContent
 													a(href="#")
 														input.auto-submit(type="radio" name="status" value="stage" checked=(release.status == "stage"))
 														|  Staging
-												if isAdmin
+												if user.isAdmin
 													li(class=(release.status == "prod" ? "active" : ""))
 														a(href="#")
 															input.auto-submit(type="radio" name="status" value="prod" checked=(release.status == "prod"))

@@ -19,8 +19,8 @@ import {
   IsInstance
 } from 'class-validator';
 import { Release } from './release';
-import { Group } from './group';
 import { GroupPermission } from './group-permission';
+import { BinaryData } from 'fs';
 
 @Entity()
 export class Game {
@@ -75,10 +75,10 @@ export class Game {
   releases: Release[];
 
   @ValidateNested({ each: true })
-  @OneToMany(type => Group, group => group.id)
+  @OneToMany(type => GroupPermission, group => group.game)
   groups: GroupPermission[];
 
   @IsBase64()
-  @Column({ type: 'text', nullable: true })
-  thumbnail?: string;
+  @Column({ type: 'bytea', nullable: true })
+  thumbnail: string;
 }

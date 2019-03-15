@@ -43,6 +43,6 @@ export class Group {
   @Column({ nullable: false, default: 0 })
   privilege: number;
 
-  @Column()
+  @Column({ type: 'binary' })
   logo: Binary;
 }

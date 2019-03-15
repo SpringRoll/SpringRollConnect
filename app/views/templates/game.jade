@@ -1,7 +1,6 @@
 extend ../templates/normal
-
 append title
-	| #{game.title} - Game - 
+	| #{game.title} - Game -
 
 append content
 	.col-sm-3: .row
@@ -12,15 +11,15 @@ append content
 		if game.thumbnail && game.thumbnail.length
 			.col-xs-6.col-sm-12
 				img.btn-block.preview(src="data:image/png;base64,#{game.thumbnail}")
-		
+
 		.col-sm-12(class=(game.thumbnail && game.thumbnail.length ? "col-xs-6" : "")): .list-group
 			a.list-group-item(href='/#{active}/#{game.slug}' class=isActive('/#{active}/#{game.slug}')) Home
 			a.list-group-item(href='/#{active}/#{game.slug}/releases' class=isActive(/releases?/)) Releases
 				span.badge=game.releases.length
-			if isAdmin
+			if isAdmin || user.isAdmin
 				a.list-group-item(href='/#{active}/#{game.slug}/privileges' class=isActive(/privileges$/)) Privileges
 	.col-sm-9
 		h2=game.title
-		if isEditor
+		if isEditor || user.isEditor
 			include ../partials/feedback
 		block gameContent

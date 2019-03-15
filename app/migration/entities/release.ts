@@ -44,7 +44,7 @@ export class Release {
   updated: Date;
 
   @IsMongoId()
-  @Column({ nullable: true })
+  @Column({ type: 'json', nullable: true })
   updatedBy: ObjectID;
 
   @IsString()

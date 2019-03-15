@@ -7,7 +7,7 @@
  *   How many page button to display from left-to-right.
  *   Odd numbers wil produce nicer looking, even sided, UI.
  */
-export const pagination = (numItems, currentPage) => {
+export const pagination = (numItems, currentPage, base = '') => {
   const current = parseInt(currentPage) || 1;
   const itemsPerPage = 24;
   const total = Math.ceil(numItems / itemsPerPage);
@@ -33,6 +33,7 @@ export const pagination = (numItems, currentPage) => {
   }
 
   return {
+    base,
     current: current,
     itemsPerPage,
     next: Math.min(total, current + 1),

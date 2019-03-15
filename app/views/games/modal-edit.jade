@@ -9,7 +9,7 @@
 					label.col-sm-3.control-label(for="title") Title
 					.col-sm-9
 						input.form-control#title(type="text" name="title" #{disabled} value=game.title required)
-				if isAdmin
+				if isAdmin || user.isAdmin
 					.form-group(data-unique="/games/search" data-ignore=game.slug)
 						label.col-sm-3.control-label(for="slug") Slug
 						.col-sm-9

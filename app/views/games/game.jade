@@ -1,9 +1,8 @@
 extend ../templates/game
-
 append gameContent
 	.panel.panel-default
 		.panel-heading
-			if isEditor
+			if isEditor ||user.isEditor
 				include modal-edit
 				button.pull-right.btn.btn-default.btn-sm(data-toggle="modal" data-target="#editGame")
 					span.glyphicon.glyphicon-pencil
