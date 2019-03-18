@@ -59,7 +59,8 @@ createConnections([
   const pGroups: pEntities.Group[] = await postgres
     .getRepository(pEntities.Group)
     .save(mGroups.map(group => {
-      const { id, ...g } = group;
+      const { id, logo, ...g } = group;
+      (<any>g).logo = logo ? logo.value() : undefined;
       return g;
     }) as any);
   //USERS

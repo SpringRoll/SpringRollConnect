@@ -4,7 +4,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   PrimaryGeneratedColumn,
-  ManyToOne
+  ManyToOne,
+  JoinColumn
 } from 'typeorm';
 import {
   IsIn,
@@ -65,6 +66,7 @@ export class Release {
   @ManyToOne(type => User, user => user.id, {
     nullable: true
   })
+  @JoinColumn()
   updatedBy: User;
 
   @IsString()

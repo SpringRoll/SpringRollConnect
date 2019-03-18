@@ -18,7 +18,6 @@ import {
 import { Group } from './group';
 import { Game } from './game';
 import { GroupPermission } from './group-permission';
-import { select } from 'async';
 
 interface getGameArgs {
   skip?: number;
@@ -151,23 +150,23 @@ export class User {
     return 0 <= this.userPrivilege;
   }
 
-  getGamePermission(where: any) {
-    // getGamePermission(where: FindConditions<Game>) {
+  // getGamePermission(where: any) {
+  getGamePermission(where: FindConditions<Game>) {
     return this.getGame(where).then(({ permission }) => permission);
   }
 
-  async canReadGame(where: any) {
-    // async canReadGame(where: FindConditions<Game>) {
+  // async canReadGame(where: any) {
+  async canReadGame(where: FindConditions<Game>) {
     return 0 <= (await this.getGamePermission(where));
   }
 
-  async canEditGame(where: any) {
-    // async canEditGame(where: FindConditions<Game>) {
+  // async canEditGame(where: any) {
+  async canEditGame(where: FindConditions<Game>) {
     return 1 <= (await this.getGamePermission(where));
   }
 
-  async canAdminGame(where: any) {
-    // async canAdminGame(where: FindConditions<Game>) {
+  // async canAdminGame(where: any) {
+  async canAdminGame(where: FindConditions<Game>) {
     return 2 <= (await this.getGamePermission(where));
   }
 

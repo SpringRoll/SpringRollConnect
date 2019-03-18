@@ -29,13 +29,13 @@ router.get(
     const order = req.params.order || 'alphabetical';
     return user(req)
       .getGames({
-        skip: 1 < req.params.number ? req.params.number * 24 : 0,
+        skip: 1 < req.params.number ? (req.params.number - 1) * 24 : 0,
         order
       })
       .then(([games, count]) => {
         return res.render('games', {
           games,
-          pagination: pagination(count, req.params.number, 'games')
+          pagination: pagination(count, req.params.number, '/games')
         });
       });
   }

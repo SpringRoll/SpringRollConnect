@@ -47,7 +47,7 @@ export class Group {
   privilege: number;
 
   @IsBase64()
-  @Column({ type: 'text', nullable: true })
+  @Column({ type: 'bytea', nullable: true })
   logo?: string;
 
   async refreshToken(tokenExpires: false | Date = false) {

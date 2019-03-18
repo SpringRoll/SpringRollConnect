@@ -5,10 +5,8 @@ if pagination && pagination.total > 1
 				li: a(href="#{pagination.base}/page/1") start
 			li: a(href="#{pagination.base}/page/#{pagination.previous}") &laquo;
 			for n in pagination.pages
-				if (n == pagination.current)
-					li.active: a.hidden-xs(href="#{pagination.base}/page/#{n}")= n
-				else
-					li: a.hidden-xs(href="#{pagination.base}/page/#{n}")= n
+				li(class={active: n == pagination.current})
+					a.hidden-xs(href="#{pagination.base}/page/#{n}")= n
 			li: a(href="#{pagination.base}/page/#{pagination.next}") &raquo;
 			if (pagination.total > pagination.size)
 				li: a(href="#{pagination.base}/page/#{pagination.total}") end
