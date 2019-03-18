@@ -14,7 +14,7 @@ append content
 					label.control-label.col-sm-3(for="active") Active
 					.col-sm-9
 						.checkbox: label
-							input(type='checkbox', name='active', value='1', checked=editUser.active) 
+							input(type='checkbox', name='active', value='1', checked=editUser.active)
 							span.help-inline If the user can login
 				.form-group
 					label.control-label.col-sm-3(for="name") Name
@@ -44,16 +44,13 @@ append content
 						table.table.table-striped.table-bordered
 							thead: tr
 								th.text-center Read
-									|  
-									a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Default user privilege") 
+									a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Default user privilege")
 										span.glyphicon.glyphicon-question-sign
 								th.text-center Write
-									|  
-									a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Ability to manage games") 
+									a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Ability to manage games")
 										span.glyphicon.glyphicon-question-sign
 								th.text-center Admin
-									|  
-									a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Ability to manage games, users and groups") 
+									a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Ability to manage games, users and groups")
 										span.glyphicon.glyphicon-question-sign
 							tbody: tr
 								td.text-center: input(name="privilege" value="0" type="radio" checked=(editUser.groups[0].privilege == 0))
@@ -63,7 +60,5 @@ append content
 					.col-sm-9.col-sm-offset-3
 						input(type='hidden', value=editUser._id, name='userId')
 						button.btn.btn-lg.btn-primary(type='submit' name="action" value="save") Save
-						|  
 						button.btn.btn-lg.btn-danger(type='submit' name="action" value="delete" data-toggle="confirm") Delete
-						|  
 						a.btn.btn-lg.btn-default(href='/users') Cancel
