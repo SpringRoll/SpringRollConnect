@@ -12,8 +12,8 @@ import {
   IsEmail,
   IsLowercase,
   IsString,
-  IsInt,
-  IsDefined
+  IsDefined,
+  ValidateNested
 } from 'class-validator';
 import { Group } from './group';
 import { Game } from './game';
@@ -51,9 +51,10 @@ export class User {
   @Column({ type: 'boolean', nullable: false, default: true })
   active: boolean;
 
-  @IsInt({ each: true })
+  @ValidateNested({ each: true })
   @ManyToMany(type => Group, group => group.id, {
-    eager: true
+    eager: true,
+    cascade: true
   })
   @JoinTable({ name: 'user_groups' })
   groups: Group[];

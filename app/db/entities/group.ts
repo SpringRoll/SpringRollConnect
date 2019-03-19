@@ -11,8 +11,6 @@ import {
 } from 'class-validator';
 
 import { randomBytes } from 'crypto';
-import { PassportStatic } from 'passport';
-const passport: PassportStatic = require('passport');
 
 @Entity()
 export class Group {
