@@ -32,7 +32,7 @@ export class Release {
   id: number;
 
   @IsInt()
-  @ManyToOne(type => Game, game => game.id)
+  @ManyToOne(type => Game, game => game.uuid)
   game: Game;
 
   @IsString()

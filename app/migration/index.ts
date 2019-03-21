@@ -76,7 +76,7 @@ createConnections([
   //GAMES
   const pGameRepository = postgres.getRepository(pEntities.Game);
   const games = mGames.map(mGame => {
-    const { id, thumbnail, releases, groups, ...game } = mGame;
+    const { id, thumbnail, releases, groups, bundleId, ...game } = mGame;
     (<any>game).thumbnail = thumbnail ? thumbnail.value() : undefined;
     return game;
   });
@@ -100,7 +100,7 @@ createConnections([
       .filter(g => g.slug === game.slug)
       .map(({ id, privilege }) => ({
         permission: privilege,
-        game: { id: game.id },
+        game: { uuid: game.uuid },
         group: { id }
       }))
   );
@@ -116,9 +116,9 @@ createConnections([
           'undefined' !== typeof releases.find(r => r.toString() === gameID)
       );
       if ('undefined' !== typeof found) {
-        const { id } = pGames.find(game => game.slug === found.slug);
+        const { uuid } = pGames.find(game => game.slug === found.slug);
         //@ts-ignore;
-        release.game = { id };
+        release.game = { uuid };
 
         return release;
       }

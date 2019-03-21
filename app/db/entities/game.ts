@@ -4,13 +4,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   PrimaryGeneratedColumn,
-  OneToMany,
-  JoinColumn
+  OneToMany
 } from 'typeorm';
 import {
   IsBoolean,
   IsDate,
-  IsInt,
   IsString,
   IsUrl,
   Matches,
@@ -23,9 +21,9 @@ import { GroupPermission } from './group-permission';
 
 @Entity()
 export class Game {
-  @IsInt()
-  @PrimaryGeneratedColumn()
-  id: number;
+  @IsString()
+  @PrimaryGeneratedColumn('uuid')
+  uuid: string;
 
   @IsString()
   @Column({ type: 'text', nullable: false })
@@ -35,11 +33,6 @@ export class Game {
   @Matches(/^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$/)
   @Column({ type: 'text', unique: true, nullable: false })
   slug: string;
-
-  @IsString()
-  @Column({ type: 'text', unique: true, nullable: false })
-  // @Generated('uuid')
-  bundleId: string;
 
   @IsUrl()
   @Column({ type: 'text', nullable: false })

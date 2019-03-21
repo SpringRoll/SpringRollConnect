@@ -32,7 +32,6 @@ router.post('/', async (req, res) => {
     .then(password => ((user.password = password), user))
     .then(user => userRepo.save(user))
     .catch(error => {
-      console.log(error);
       const msg = error.detail
         ? `A user already exists with this ${
             /username/g.test(error.detail) ? 'username' : 'email'

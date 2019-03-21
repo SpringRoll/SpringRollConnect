@@ -1,4 +1,5 @@
-import { Game } from '../../db/entities';
+import { Game, User, GroupPermission } from '../../db/entities';
+import { mapCapabilities } from '../../db/json';
 import { getRepository } from 'typeorm';
 import { validate } from 'class-validator';
 
@@ -6,6 +7,14 @@ const router = require('express').Router();
 
 router.post('/', function(req, res) {
   const GameRepository = getRepository(Game);
+  const GroupRepository = getRepository(GroupPermission);
+  if (!req.body.thumbnail) {
+    const { thumbnail, ...body } = req.body;
+    req.body = body;
+  }
+
+  const group = (<User>req.user).groups.find(({ isUserGroup }) => isUserGroup);
+  req.body.capabilities = mapCapabilities(req.body.capabilities);
   const game = GameRepository.create(<object>req.body);
 
   validate(game, {
@@ -21,16 +30,24 @@ router.post('/', function(req, res) {
     }
 
     GameRepository.save(game)
-      .then(() =>
-        res.render('games/add', {
-          success: 'Game added successfully'
-        })
-      )
-      .catch(() =>
-        res.render('game/add', {
+      .then(game => {
+        GroupRepository.save(
+          GroupRepository.create({
+            gameID: game.uuid,
+            groupID: group.id,
+            permission: 2
+          })
+        ).then(group => {
+          res.render('games/add', {
+            success: 'Game added successfully'
+          });
+        });
+      })
+      .catch(err => {
+        return res.render('games/add', {
           error: 'Unable to add the game'
-        })
-      );
+        });
+      });
   });
 });
 

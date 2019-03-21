@@ -28,10 +28,11 @@ export class GroupPermission {
   @JoinColumn({ name: 'groupID' })
   group: Group;
 
-  @Column({ type: 'int' })
-  gameID: number;
+  @Column({ type: 'uuid' })
+  gameID: string;
+
   @ValidateNested()
-  @ManyToOne(type => Game, game => game.id, { eager: true })
+  @ManyToOne(type => Game, game => game.uuid, { eager: true })
   @JoinColumn({ name: 'gameID' })
   game: Game;
 }

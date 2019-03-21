@@ -92,7 +92,7 @@ export class User {
           relations: ['releases'],
           where: gameIds.map(({ gameID }) => ({
             ...where,
-            id: gameID
+            uuid: gameID
           })),
           order:
             order == 'alphabetical' ? { title: 'ASC' } : { updated: 'DESC' }
@@ -115,7 +115,7 @@ export class User {
           .findOne({
             where: this.groups.map(({ id }) => ({
               cache: true,
-              gameID: game.id,
+              gameID: game.uuid,
               groupID: id
             })),
             order: { permission: 'DESC' }
@@ -151,22 +151,18 @@ export class User {
     return 0 <= this.userPrivilege;
   }
 
-  // getGamePermission(where: any) {
   getGamePermission(where: FindConditions<Game>) {
     return this.getGame(where).then(({ permission }) => permission);
   }
 
-  // async canReadGame(where: any) {
   async canReadGame(where: FindConditions<Game>) {
     return 0 <= (await this.getGamePermission(where));
   }
 
-  // async canEditGame(where: any) {
   async canEditGame(where: FindConditions<Game>) {
     return 1 <= (await this.getGamePermission(where));
   }
 
-  // async canAdminGame(where: any) {
   async canAdminGame(where: FindConditions<Game>) {
     return 2 <= (await this.getGamePermission(where));
   }
