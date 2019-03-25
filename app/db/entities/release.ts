@@ -9,11 +9,12 @@ import {
 } from 'typeorm';
 import {
   IsIn,
-  IsString,
-  IsUrl,
+  IsInstance,
   IsInt,
   IsNumber,
-  IsInstance
+  IsString,
+  IsUrl,
+  IsDate
 } from 'class-validator';
 import { Game } from './game';
 import { User } from './user';
@@ -32,7 +33,7 @@ export class Release {
   id: number;
 
   @IsInt()
-  @ManyToOne(type => Game, game => game.uuid)
+  @ManyToOne(type => Game, game => game.releases)
   game: Game;
 
   @IsString()
@@ -56,10 +57,12 @@ export class Release {
   @Column({ type: 'text', nullable: true })
   branch: string;
 
-  @CreateDateColumn()
+  @IsDate()
+  @Column({ type: 'timestamp with time zone', default: () => 'NOW()' })
   created: Date;
 
-  @UpdateDateColumn()
+  @IsDate()
+  @Column({ type: 'timestamp with time zone', default: () => 'NOW()' })
   updated: Date;
 
   @IsInt()
@@ -75,9 +78,8 @@ export class Release {
 
   @IsString()
   @IsUrl()
-  @Column({ type: 'text' })
+  @Column({ type: 'text', nullable: true })
   url: string;
-
   @Column({ type: 'bigint', nullable: false, default: 0 })
   debugUncompressedSize: number;
 

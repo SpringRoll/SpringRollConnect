@@ -47,6 +47,15 @@ export class Game {
   isArchived: boolean;
 
   @IsString()
+  @Column({
+    type: 'text',
+    unique: true,
+    nullable: false,
+    default: () => 'uuid_generate_v4()'
+  })
+  bundleId: string;
+
+  @IsString()
   @Column({ type: 'text', default: '' })
   description: string;
 

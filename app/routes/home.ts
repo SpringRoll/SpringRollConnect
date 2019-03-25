@@ -10,7 +10,7 @@ router.get('/:local(page)?/:number([1-9][0-9]?*)?', function(
   res: Response
 ) {
   if (!req.isAuthenticated()) {
-    res.render('login', {
+    return res.render('login', {
       error: req.flash('error'),
       redirect: req.flash('redirect')
     });

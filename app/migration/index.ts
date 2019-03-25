@@ -76,7 +76,7 @@ createConnections([
   //GAMES
   const pGameRepository = postgres.getRepository(pEntities.Game);
   const games = mGames.map(mGame => {
-    const { id, thumbnail, releases, groups, bundleId, ...game } = mGame;
+    const { id, thumbnail, releases, groups, ...game } = mGame;
     (<any>game).thumbnail = thumbnail ? thumbnail.value() : undefined;
     return game;
   });
@@ -120,6 +120,10 @@ createConnections([
         //@ts-ignore;
         release.game = { uuid };
 
+        if (!release.url) {
+          release.url = null;
+        }
+
         return release;
       }
     })
@@ -143,6 +147,10 @@ createConnections([
         //@ts-ignore
         user => user.username === release.updatedBy.username
       );
+      //@ts-ignore
+      release.updated = release.updated.toString();
+      //@ts-ignore
+      release.created = release.created.toString();
 
       return release;
     })

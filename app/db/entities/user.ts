@@ -102,14 +102,21 @@ export class User {
 
   async getGame(
     where: FindConditions<Game>,
-    relations: Array<string> = []
+    relation = ''
   ): Promise<{ game: Game; permission: number; token: string }> {
-    return await getRepository(Game)
-      .findOne({
-        cache: true,
-        relations: ['releases'].concat(relations),
-        where
-      })
+    const query = getRepository(Game)
+      .createQueryBuilder('game')
+      .cache(true)
+      .leftJoinAndSelect('game.releases', 'releases');
+
+    if (relation) {
+      query.leftJoinAndSelect(`game.${relation}`, relation);
+    }
+
+    return query
+      .where(where)
+      .orderBy('releases.updated', 'DESC')
+      .getOne()
       .then(game =>
         getRepository(GroupPermission)
           .findOne({

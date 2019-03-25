@@ -5,25 +5,25 @@ import { Request, Response } from 'express';
 // import { validate } from 'class-validator';
 // // import { zipWith } from 'lodash';
 // const async = require('async'),
-//   log = require('../../helpers/logger');
+const log = require('../../helpers/logger');
 // Game = require('../../models/game'),
 // User = require('../../models/user');
 
 // const GameRepository = getConnection().getMongoRepository(Game);
 
-// /**
-//  * Abstraction to handle the page errors
-//  * @param  {String|Array} errors Single or collection of errors
-//  */
-// function handleError(req, res, errors) {
-//   log.error(errors);
-//   if (Array.isArray(errors)) {
-//     req.flash('errors', errors);
-//   } else {
-//     req.flash('error', 'Unable to update the game: ' + errors);
-//   }
-//   res.redirect(req.originalUrl);
-// }
+/**
+ * Abstraction to handle the page errors
+ * @param  {String|Array} errors Single or collection of errors
+ */
+export function handleError(req, res, errors) {
+  log.error(errors);
+  if (Array.isArray(errors)) {
+    req.flash('errors', errors);
+  } else {
+    req.flash('error', 'Unable to update the game: ' + errors);
+  }
+  res.redirect(req.originalUrl);
+}
 
 /**
  * Abstraction to render a page, takes care of all

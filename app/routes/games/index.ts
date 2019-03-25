@@ -11,7 +11,7 @@ function renderPage(
   optionalData: object = {}
 ) {
   return user(req)
-    .getGame({ slug: req.params.slug }, ['groups'])
+    .getGame({ slug: req.params.slug }, 'groups')
     .then(async ({ game, permission, token }) => {
       return res.render(template, {
         game,
@@ -78,15 +78,15 @@ router.get('/:slug/privileges', function(req, res) {
 //     });
 // });
 
-router.get('/:slug/releases', function(req, res) {
-  // have to pass addt'l param to resolve Release objects
-  renderPage(req, res, 'games/releases');
-});
+// have to pass addt'l param to resolve Release objects
+router.get('/:slug/releases', (req, res) =>
+  renderPage(req, res, 'games/releases')
+);
 
-// router.patch('/:slug/releases/:commit_id', async function(req, res) {
-//   // 307 maintains PATCH verb
-//   res.redirect(307, '/releases/' + req.body.commitId);
-// });
+// 307 maintains PATCH verb
+router.patch('/:slug/releases/:commit_id', (req, res) =>
+  res.redirect(307, '/releases/' + req.body.commitId)
+);
 
 // router.patch('/:slug', function(req, res) {
 //   let errors = validateRequest(req);

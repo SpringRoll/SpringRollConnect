@@ -65,7 +65,7 @@ module.exports = function(app) {
   app.use('/games/search', access.isAuthenticated, require('./games/search'));
   // app.use('/groups/add', access.isAdmin, require('./groups/add'));
   app.use('/games', access.isAuthenticated, require('./games/index'));
-  // app.use('/releases', access.isEditor, require('./releases/release'));
+  app.use('/releases', access.isEditor, require('./releases/release'));
   // app.use('/archive', access.isEditor, require('./games/index'));
   app.use('/groups/group', access.isAuthenticated, require('./groups/group'));
   app.use('/groups/search', access.isAdmin, require('./groups/search'));
