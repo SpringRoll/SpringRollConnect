@@ -1,6 +1,8 @@
 import { pagination, isAdmin, user, permissions } from '../../helpers';
 import { Router } from 'express';
 import { Request, Response } from 'express';
+import { getRepository } from 'typeorm';
+import { Game } from '../../db';
 
 const router = Router();
 
@@ -46,10 +48,24 @@ router.get('/:slug', function(req, res) {
 });
 
 router.use('/:slug/privileges', isAdmin);
-
 router.get('/:slug/privileges', function(req, res) {
+  getRepository(Game)
+    .findOne({
+      where: { slug: req.params.slug },
+      join: {
+        alias: 'game',
+        leftJoinAndSelect: {
+          groups: 'game.groups',
+          releases: 'game.releases',
+          group: 'groups.group'
+        }
+      }
+    })
+    .then(game => {
+      return res.render('games/privileges', { host: req.headers.host, game });
+    });
+
   // have to pass addt'l param to resolve Group objects
-  return renderPage(req, res, 'games/privileges');
 });
 
 // router.post('/:slug/privileges', function(req, res) {

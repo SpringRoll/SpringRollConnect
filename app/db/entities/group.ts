@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, getRepository } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  getRepository,
+  ManyToMany
+} from 'typeorm';
 import {
   IsString,
   IsBoolean,
@@ -11,6 +17,7 @@ import {
 } from 'class-validator';
 
 import { randomBytes } from 'crypto';
+import { User } from './user';
 
 @Entity()
 export class Group {
@@ -47,6 +54,9 @@ export class Group {
   @IsBase64()
   @Column({ type: 'bytea', nullable: true, default: null })
   logo?: string;
+
+  @ManyToMany(type => User, user => user.groups)
+  users: Array<User>;
 
   async refreshToken(tokenExpires: false | Date = false) {
     if (tokenExpires) {

@@ -52,12 +52,12 @@ export class User {
   active: boolean;
 
   @ValidateNested({ each: true })
-  @ManyToMany(type => Group, group => group.id, {
+  @ManyToMany(type => Group, group => group.users, {
     eager: true,
     cascade: true
   })
   @JoinTable({ name: 'user_groups' })
-  groups: Group[];
+  groups: Array<Group>;
 
   @IsDefined()
   @IsString()

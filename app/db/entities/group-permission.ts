@@ -32,7 +32,7 @@ export class GroupPermission {
   gameID: string;
 
   @ValidateNested()
-  @ManyToOne(type => Game, game => game.uuid, { eager: true })
+  @ManyToOne(type => Game, game => game.groups, { eager: true })
   @JoinColumn({ name: 'gameID' })
   game: Game;
 }

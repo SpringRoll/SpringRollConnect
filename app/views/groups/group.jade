@@ -1,13 +1,13 @@
 extend ../templates/normal
 
 append title
-	| #{group.name} - Groups - 
+	| #{group.name} - Groups -
 
 append content
 	.col-sm-12
-		if user.privilege == privilege.admin
+		if user.isAdmin
 			include modal-edit
-			button.btn.btn-sm.btn-default.pull-right(data-toggle="modal" data-target="#editGroup") 
+			button.btn.btn-sm.btn-default.pull-right(data-toggle="modal" data-target="#editGroup")
 				span.glyphicon.glyphicon-pencil
 				|  Edit
 		h2
@@ -18,8 +18,8 @@ append content
 		form.panel.panel-default(method="post" action=url)
 			.panel-heading
 				h3.panel-title Access Token
-			.panel-body 
-				p An acces token is required to have access to non-production releases of games (i.e., Development, QA, and Staging). For more information about the access token, see the 
+			.panel-body
+				p An acces token is required to have access to non-production releases of games (i.e., Development, QA, and Staging). For more information about the access token, see the
 					a(href="/docs") documentation
 					|.
 				.input-group
@@ -28,18 +28,18 @@ append content
 						.input-group-addon Expires #{moment(group.tokenExpires).fromNow()}
 					else
 						.input-group-addon Expires: never
-					if user.privilege == privilege.admin
+					if user.isAdmin
 						.input-group-btn
-							button.btn.btn-primary(type="submit" name="action" value="refreshToken" data-toggle="confirm") 
+							button.btn.btn-primary(type="submit" name="action" value="refreshToken" data-toggle="confirm")
 								span.icon.glyphicon.glyphicon-refresh
 								| Refresh
 	.col-md-8.col-sm-7
-		if user.privilege == privilege.admin
-			button.btn.btn-sm.btn-default.pull-right(data-toggle="modal" data-target="#addGame") 
+		if user.isAdmin
+			button.btn.btn-sm.btn-default.pull-right(data-toggle="modal" data-target="#addGame")
 				span.glyphicon.glyphicon-plus
 				|  Add
 		h3 Games
-		if user.privilege == privilege.admin
+		if user.isAdmin
 			include modal-game
 		if games.length
 			ul.list-group
@@ -53,14 +53,15 @@ append content
 							div.col-md-10.col-sm-8.col-xs-6
 								a.btn-block(href="/#{active}/#{game.slug}")=game.title
 							div.col-md-1.col-sm-3.col-xs-5
-								case game.getHighestPrivilegeFor(group)
-									when 0
-										span.label.label-primary Read
-									when 1
-										span.label.label-primary Write
-									when 2
-										span.label.label-primary Admin
-							if user.privilege == privilege.admin
+								span.label.label-primary
+									case game.permission
+										when 0
+											| Read
+										when 1
+											| Write
+										when 2
+											| Admin
+							if user.isAdmin
 								div.col-md-1.text-right
 									form.pull-right(method="post" action=url)
 										input(type="hidden" name="game" value=game._id)
@@ -68,18 +69,18 @@ append content
 		else
 			.alert.alert-warning No games for this group
 	.col-md-4.col-sm-5
-		if user.privilege == privilege.admin
-			button.btn.btn-sm.btn-default.pull-right(data-toggle="modal" data-target="#addUser") 
+		if user.isAdmin
+			button.btn.btn-sm.btn-default.pull-right(data-toggle="modal" data-target="#addUser")
 				span.glyphicon.glyphicon-plus
 				|  Add
 		h3 Users
-		if user.privilege == privilege.admin
+		if user.isAdmin
 			include modal-user
 		if users.length
 			ul.list-group
 				for u in users
 					li.list-group-item=u.name
-						if user.privilege == privilege.admin
+						if user.isAdmin
 							form.pull-right(method="post" action=url)
 								input(type="hidden" name="user" value=u._id)
 								button.close(data-toggle="confirm" type="submit" name="action" value="removeUser") &times;
