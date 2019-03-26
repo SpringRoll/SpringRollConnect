@@ -14,6 +14,6 @@ export const makeRelease = async (
   })
     .save()
     .then(async release => {
-      await Game.updateOne({ _id }, { $push: { releases: release } });
+      await Game.update({ _id }, { $push: { releases: release } });
       return release;
     });

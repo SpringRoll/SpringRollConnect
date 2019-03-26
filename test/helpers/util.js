@@ -72,7 +72,7 @@ export const isLandingPage = async () => {
   return text.toLowerCase().includes('welcome');
 };
 
-export const makeRandomString = length => {
+export const makeRandomString = (length = 40) => {
   let random = '';
   for (let i = 0; i < length; i++) {
     random += (Math.random() * 10).toString().substring(0, 1);

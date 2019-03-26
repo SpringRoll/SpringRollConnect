@@ -3,10 +3,9 @@ import {
   browser,
   createUserGroupGameRelease,
   login,
-  sleep,
-  Release,
   isLoginPage,
-  makeRelease
+  makeRelease,
+  makeRandomString
 } from '../helpers';
 import { expect } from 'chai';
 import { until, By, error, WebElement } from 'selenium-webdriver';
@@ -161,8 +160,7 @@ export const editTest = async pass => {
  * @param {boolean} pass
  */
 export const addReleaseTest = async pass => {
-  const hash = '673151e71637a5e5cd2dc6c6fdb63a8446df2232';
-  const releaseCount = await Release.find().count();
+  const badgeCounter = await getBadgeCount();
   const target = await browser
     .wait(until.elementLocated(By.css('[data-target="#addRelease"]')), 50)
     .catch(err => err);
@@ -171,6 +169,7 @@ export const addReleaseTest = async pass => {
     expect(target).to.not.be.instanceOf(WebElement);
     return;
   }
+
   expect(target).to.be.instanceOf(WebElement);
 
   await target.click();
@@ -178,7 +177,7 @@ export const addReleaseTest = async pass => {
   const input = await browser.findElement(By.id('commitId'));
   await browser.wait(until.elementIsVisible(input), 1000);
 
-  await input.sendKeys(hash);
+  await input.sendKeys(makeRandomString());
   await browser.findElement(By.id('version')).sendKeys('1.0.0');
   await browser
     .findElement(
@@ -187,14 +186,12 @@ export const addReleaseTest = async pass => {
       )
     )
     .click();
-
-  const count = await delay(releaseCount);
-
-  expect(count).to.equal(releaseCount + 1);
+  expect(await getBadgeCount()).to.be.greaterThan(badgeCounter);
 };
 
 export const deleteReleaseTest = async pass => {
-  const releaseCount = await Release.find().count();
+  const badgeCounter = await getBadgeCount();
+
   await browser.findElement(By.className('help-block updated')).click();
   await browser.findElement(
     By.css('button.dropdown-toggle > .glyphicon.glyphicon-cog')
@@ -209,33 +206,16 @@ export const deleteReleaseTest = async pass => {
   }
 
   expect(target).to.be.instanceOf(WebElement);
-
   await target.click();
   await browser
     .switchTo()
     .alert()
     .accept();
-
-  const count = await delay(releaseCount);
-
-  expect(count).to.equal(releaseCount - 1);
+  expect(await getBadgeCount()).to.be.lessThan(badgeCounter);
 };
 
-/**
- * Because waiting for the page to update was proving to be unreliable
- * @param {number} releaseCount
- */
-const delay = async releaseCount => {
-  let count;
-  let attempts = 5;
-  while (true) {
-    count = await Release.find().count();
-    if (releaseCount !== count || 0 >= --attempts) {
-      break;
-    }
-
-    await sleep(50);
-  }
-
-  return count;
-};
+async function getBadgeCount() {
+  return Number(
+    await browser.wait(until.elementLocated(By.css('.badge'))).getText()
+  );
+}
