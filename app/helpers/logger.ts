@@ -1,10 +1,12 @@
 // Declare an "log stream" for bunyan to write to a file
-var streams = [
-  {
-    level: 'info',
-    path: process.env.OUTPUT_LOG
-  }
-];
+import { createLogger } from 'bunyan';
+
+// const streams = [
+//   {
+//     level: 'info',
+//     path: process.env.OUTPUT_LOG
+//   }
+// ];
 
 // // If we're not in production also log to standard out
 // if (process.env.NODE_ENV !== 'production') {
@@ -14,10 +16,6 @@ var streams = [
 //   });
 // }
 
-var bunyan = require('bunyan');
-var log = bunyan.createLogger({
+export const log = createLogger({
   name: 'springroll-connect'
-  // streams: streams
 });
-
-module.exports = log;
