@@ -82,7 +82,6 @@ module.exports = function(app) {
   // Authentication Pages
   app.use('/login', access.isAnonymous, require('./login'));
   app.use('/logout', access.isAuthenticated, require('./logout'));
-  // app.use('/register', access.isAnonymous, require('./register'));
   app.use('/forgot', access.isAnonymous, require('./forgot'));
   app.use('/reset', access.isAnonymous, require('./reset'));
   app.use('/profile', access.isAuthenticated, require('./profile'));
