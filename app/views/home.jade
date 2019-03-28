@@ -17,7 +17,7 @@ append content
 							else
 								img.preview(src="/images/none.png")
 							span.title=game.title
-							span.badge=game.releases.length
+							span.badge=game.releaseCount
 			.row: include ./partials/pagination
 		- var userGroup = user.groups.find(({isUserGroup}) => isUserGroup);
 		if userGroup

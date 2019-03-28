@@ -1,9 +1,11 @@
 import { getRepository } from 'typeorm';
-import { User } from '../db';
-import { Request, Response } from 'express';
+import { Release } from '../db';
+import { Request, Response, Router } from 'express';
 import { pagination } from '../helpers';
-const router = require('express').Router();
-const log = require('../helpers/logger');
+import { user } from '../helpers';
+import { log } from '../helpers/logger';
+
+const router = Router();
 
 router.get('/:local(page)?/:number([1-9][0-9]?*)?', function(
   req: Request,
@@ -16,29 +18,47 @@ router.get('/:local(page)?/:number([1-9][0-9]?*)?', function(
     });
   }
 
-  getRepository(User)
-    .create(<User>req.user)
-    .getGames({
-      skip: req.params.number ? Number(req.params.number) * 24 : 0,
-      order: 'updated'
-    })
+  user(req)
+    .getPermittedGameIds()
+    .then(gameIds =>
+      getRepository(Release)
+        .createQueryBuilder('release')
+        .select([
+          'MAX(release.updated) as latest',
+          'release.gameUuid',
+          'COUNT (release.gameUuid) as count'
+        ])
+        .leftJoinAndSelect('release.game', 'game')
+        .addSelect(['game.thumbnail'])
+        .groupBy('release.gameUuid')
+        .addGroupBy('game.uuid')
+        .orderBy('latest', 'DESC')
+        .limit(24)
+        .offset(req.params.number ? Number(req.params.number) * 24 : 0)
+        .where('release.gameUuid IN (:...games)', { games: gameIds })
+        .getRawMany()
+        .then(games => [
+          games.map(({ game_slug, game_title, game_thumbnail, count }) => ({
+            slug: game_slug,
+            title: game_title,
+            thumbnail: game_thumbnail,
+            releaseCount: count
+          })),
+          gameIds.length
+        ])
+    )
     .then(([games, count]) => {
-      if (1 > games.length && '/' !== req.url.trim()) {
-        res.redirect('/');
-        return;
-      }
       res.render('home', {
-        games,
+        games: games,
         groups: req.user.groups,
         pagination: pagination(count, req.params.number)
       });
     })
     .catch(err => {
+      console.log(err);
       res.render('home', {
         games: [],
-        groups: Array.isArray(req.user.groups)
-          ? req.user.groups.filter(group => !group.isUserGroup)
-          : []
+        groups: req.user.groups
       });
     });
 });
@@ -51,10 +71,9 @@ router.post('/', async function(req: Request, res: Response) {
     });
     return;
   }
-  const user = getRepository(User).create(<User>req.user);
 
-  user.groups
-    .find(({ isUserGroup }) => isUserGroup)
+  user(req)
+    .groups.find(({ isUserGroup }) => isUserGroup)
     .refreshToken()
     .then(() => {
       req.login(user, () => res.redirect('/'));

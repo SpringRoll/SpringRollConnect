@@ -1,6 +1,7 @@
 import { user } from '../../helpers';
-import { Like } from 'typeorm';
+import { Like, getRepository, In } from 'typeorm';
 import { Router } from 'express';
+import { Game } from '../../db';
 
 module.exports = Router().post('/', (req, res) => {
   let where;
@@ -14,7 +15,15 @@ module.exports = Router().post('/', (req, res) => {
     return res.send([]);
   }
   user(req)
-    .getGames({ where })
+    .getPermittedGameIds()
+    .then(gameIds =>
+      getRepository(Game).findAndCount({
+        where: {
+          uuid: In(gameIds),
+          ...where
+        }
+      })
+    )
     .then(([games]) =>
       res.send(
         games.map(({ title, isArchived, slug }) => ({

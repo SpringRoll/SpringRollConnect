@@ -72,32 +72,14 @@ export class User {
   @Column({ type: 'date', nullable: true })
   resetPasswordExpires?: Date;
 
-  async getGames({
-    skip = 0,
-    take = 24,
-    order = 'alphabetical',
-    where = {}
-  }: getGameArgs = {}) {
+  async getPermittedGameIds() {
     return await getRepository(GroupPermission)
       .find({
         cache: true,
         where: this.groups.map(({ id }) => ({ groupID: id })),
         select: ['gameID']
       })
-      .then(gameIds =>
-        getRepository(Game).findAndCount({
-          cache: true,
-          take,
-          skip,
-          relations: ['releases'],
-          where: gameIds.map(({ gameID }) => ({
-            ...where,
-            uuid: gameID
-          })),
-          order:
-            order == 'alphabetical' ? { title: 'ASC' } : { updated: 'DESC' }
-        })
-      );
+      .then(ids => ids.map(({ gameID }) => gameID));
   }
 
   async getGame(

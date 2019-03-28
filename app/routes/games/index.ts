@@ -1,7 +1,7 @@
 import { pagination, isAdmin, user, permissions } from '../../helpers';
 import { Router } from 'express';
 import { Request, Response } from 'express';
-import { getRepository } from 'typeorm';
+import { getRepository, In } from 'typeorm';
 import { Game } from '../../db';
 
 const router = Router();
@@ -27,20 +27,27 @@ function renderPage(
 
 router.get(
   '/:order(alphabetical|latest)?/:local(page)?/:number([0-9]+)?',
-  function(req, res) {
-    const order = req.params.order || 'alphabetical';
-    return user(req)
-      .getGames({
-        skip: 1 < req.params.number ? (req.params.number - 1) * 24 : 0,
-        order
-      })
+  (req, res) =>
+    user(req)
+      .getPermittedGameIds()
+      .then(gameIds =>
+        getRepository(Game).findAndCount({
+          where: { uuid: In(gameIds) },
+          select: ['thumbnail', 'title', 'slug'],
+          relations: ['releases'],
+          skip: 1 < req.params.number ? (req.params.number - 1) * 24 : 0,
+          order:
+            req.params.order === 'alphabetical'
+              ? { title: 'ASC' }
+              : { updated: 'DESC' }
+        })
+      )
       .then(([games, count]) => {
         return res.render('games', {
           games,
           pagination: pagination(count, req.params.number, '/games')
         });
-      });
-  }
+      })
 );
 
 router.get('/:slug', function(req, res) {

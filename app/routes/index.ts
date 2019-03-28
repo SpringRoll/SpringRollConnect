@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
 import { Config } from '../db';
-var log = require('../helpers/logger');
+import { log } from '../helpers';
 
 module.exports = function(app) {
   const access = require('../helpers/access');
@@ -76,7 +76,7 @@ module.exports = function(app) {
   app.use('/configuration', access.isAdmin, require('./configuration'));
 
   // RESTful service for releases
-  // app.use('/api/release', require('./api/release'));
+  app.use('/api/release', require('./api/release'));
   // app.use('/api/releases', require('./api/releases'));
   // app.use('/api/games', require('./api/games'));
   // Authentication Pages

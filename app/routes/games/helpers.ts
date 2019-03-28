@@ -1,11 +1,9 @@
-import { Game } from '../../db/entities';
-import { getConnection } from 'typeorm';
 import { user } from '../../helpers';
 import { Request, Response } from 'express';
 // import { validate } from 'class-validator';
 // // import { zipWith } from 'lodash';
 // const async = require('async'),
-const log = require('../../helpers/logger');
+import { log } from '../../helpers/logger';
 // Game = require('../../models/game'),
 // User = require('../../models/user');
 

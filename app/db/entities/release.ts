@@ -14,7 +14,8 @@ import {
   IsNumber,
   IsString,
   IsUrl,
-  IsDate
+  IsDate,
+  IsUUID
 } from 'class-validator';
 import { Game } from './game';
 import { User } from './user';
@@ -32,8 +33,12 @@ export class Release {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @IsUUID()
+  @Column({ type: 'uuid' })
+  gameUuid: string;
+
   @IsInt()
-  @ManyToOne(type => Game, game => game.releases)
+  @ManyToOne(type => Game, game => game.releases, {})
   game: Game;
 
   @IsString()
