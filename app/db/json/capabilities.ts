@@ -39,8 +39,7 @@ export const mapCapabilities = json => {
   if ('object' === typeof json) {
     json = JSON.stringify(json);
   }
-
   return capabilities(
-    JSON.parse(json.replace(/"on"|"off"/, x => x === '"on"'))
+    JSON.parse(json.replace(/"on"|"off"/g, x => x === '"on"'))
   );
 };

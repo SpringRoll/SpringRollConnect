@@ -1,8 +1,6 @@
 import {
   Entity,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn
@@ -15,7 +13,8 @@ import {
   IsString,
   IsUrl,
   IsDate,
-  IsUUID
+  IsUUID,
+  ValidateNested
 } from 'class-validator';
 import { Game } from './game';
 import { User } from './user';
@@ -37,7 +36,7 @@ export class Release {
   @Column({ type: 'uuid' })
   gameUuid: string;
 
-  @IsInt()
+  @ValidateNested()
   @ManyToOne(type => Game, game => game.releases, {})
   game: Game;
 
@@ -70,7 +69,7 @@ export class Release {
   @Column({ type: 'timestamp with time zone', default: () => 'NOW()' })
   updated: Date;
 
-  @IsInt()
+  @ValidateNested()
   @ManyToOne(type => User, user => user.id, {
     nullable: true
   })
@@ -85,6 +84,7 @@ export class Release {
   @IsUrl()
   @Column({ type: 'text', nullable: true })
   url: string;
+
   @Column({ type: 'bigint', nullable: false, default: 0 })
   debugUncompressedSize: number;
 

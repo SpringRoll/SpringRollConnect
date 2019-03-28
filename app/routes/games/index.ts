@@ -106,6 +106,8 @@ router.get('/:slug/releases', (req, res) =>
   renderPage(req, res, 'games/releases')
 );
 
+router.post('/:slug/releases', (req, res) => {});
+
 // 307 maintains PATCH verb
 router.patch('/:slug/releases/:commit_id', (req, res) =>
   res.redirect(307, '/releases/' + req.body.commitId)

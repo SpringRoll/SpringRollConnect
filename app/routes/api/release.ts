@@ -1,7 +1,8 @@
 import { Router, Request } from 'express';
 import { log } from '../../helpers';
-import { Game, Release, GroupPermission } from '../../db';
+import { Game, Release, mapCapabilities } from '../../db';
 import { getRepository } from 'typeorm';
+import { validate } from 'class-validator';
 const router = Router();
 
 router.use((_, res, next) => {
@@ -14,33 +15,32 @@ router.use((_, res, next) => {
 });
 
 router.post('/:slug', (req: Request & { checkBody; validationErrors }, res) => {
-  // req
-  //   .checkBody('status', 'Status must be one of: "dev", "qa", "stage", "prod"')
-  //   .isStatus();
-  // req
-  //   .checkBody('commitId', 'Commit ID must be a valid Git commit has')
-  //   .isCommit();
-  // req.checkBody('token', 'Token is required').isToken();
-  // req.checkBody('branch', 'Branch is required and must be a string').isBranch();
+  req
+    .checkBody('status', 'Status must be one of: "dev", "qa", "stage", "prod"')
+    .isStatus();
+  req
+    .checkBody('commitId', 'Commit ID must be a valid Git commit has')
+    .isCommit();
+  req.checkBody('token', 'Token is required').isToken();
+  req.checkBody('branch', 'Branch is required and must be a string').isBranch();
 
-  // if (req.body.verison) {
-  //   req
-  //     .checkBody('version', 'Not a properly formatted Semantic Version')
-  //     .isSemver();
-  // }
-
-  const errors = req.validationErrors();
-
-  if (errors) {
-    log.error('Validation error adding release from token ' + req.body.token);
-    log.error(errors);
-    return res.send({
-      success: false,
-      data: errors
-    });
+  if (req.body.verison) {
+    req
+      .checkBody('version', 'Not a properly formatted Semantic Version')
+      .isSemver();
   }
 
-  getRepository(GroupPermission);
+  {
+    const errors = req.validationErrors();
+    if (errors) {
+      log.error('Validation error adding release from token ' + req.body.token);
+      log.error(errors);
+      return res.send({
+        success: false,
+        data: errors
+      });
+    }
+  }
 
   getRepository(Game)
     .findOne({
@@ -54,10 +54,42 @@ router.post('/:slug', (req: Request & { checkBody; validationErrors }, res) => {
         }
       }
     })
-    .then(game => {
-      return res.send({
-        success: true,
-        data: game
+    .then(({ uuid, groups }) => {
+      const onFail = (reason: any) =>
+        res.send({
+          success: false,
+          data: reason
+        });
+      const isValidGroup = groups
+        .map(({ group }) => group)
+        .find(({ token }) => token === req.body.token);
+
+      if (!isValidGroup) {
+        return onFail('Invalid Token');
+      }
+      const releaseRepository = getRepository(Release);
+      const release = releaseRepository.create(<Release>{
+        ...req.body,
+        game: { uuid },
+        updatedBy: undefined,
+        capabilities: mapCapabilities(req.body.capabilities)
+      });
+
+      return validate(release, { skipMissingProperties: true }).then(errors => {
+        if (0 < errors.length) {
+          return onFail(errors);
+        }
+        releaseRepository
+          .save(release)
+          .then(({ id }) =>
+            res.send({
+              success: true,
+              data: id
+            })
+          )
+          .catch(({ message }) =>
+            onFail((<string>message).split('"')[0].trim())
+          );
       });
     });
 });
