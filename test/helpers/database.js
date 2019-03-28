@@ -2,6 +2,7 @@ const dotenv = require('dotenv');
 const fs = require('fs');
 const mongoose = require('mongoose');
 const mongooseTypes = require('mongoose-types');
+mongoose.Promise = Promise;
 
 /**
  * @typedef {object} Models
@@ -16,18 +17,20 @@ export class Database {
     return mongoose.connection;
   }
 
-  static async connect() {
+  static async connect(done = (...args) => {}) {
     if (fs.existsSync('.env')) {
       dotenv.load();
     }
-    return mongoose
-      .connect(process.env.MONGO_DATABASE, { useMongoClient: true })
-      .then(() => {
+    return mongoose.connect(
+      process.env.MONGO_DATABASE,
+      { useMongoClient: true },
+      () => {
         mongooseTypes.loadTypes(mongoose);
         this.connection.on('error', err => {
           console.error(err);
         });
-      })
-      .catch(err => console.error(err));
+        done(mongoose.connection);
+      }
+    );
   }
 }

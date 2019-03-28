@@ -1,10 +1,12 @@
 const Mongoose = require('mongoose');
-Mongoose.Promise = Promise;
 import { Selenium, Database, logout } from './helpers';
 
-before(async () => {
-  await Promise.all([Selenium.init(), Database.connect()]);
-  await Mongoose.connection.db.dropDatabase();
+before(done => {
+  Database.connect(async connection => {
+    connection.db.dropDatabase();
+    await Selenium.init();
+    done();
+  });
 });
 
 afterEach(async () => {
