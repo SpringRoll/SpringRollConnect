@@ -5,3 +5,4 @@ springroll.log
 log.txt
 app/output.log
 .nyc_output
+app/backup
