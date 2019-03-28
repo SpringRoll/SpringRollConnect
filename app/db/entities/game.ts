@@ -1,11 +1,4 @@
-import {
-  Entity,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-  PrimaryGeneratedColumn,
-  OneToMany
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import {
   IsBoolean,
   IsDate,
@@ -60,11 +53,11 @@ export class Game {
   description: string;
 
   @IsDate()
-  @CreateDateColumn()
+  @Column({ type: 'timestamp with time zone', default: () => 'NOW()' })
   created: Date;
 
   @IsDate()
-  @UpdateDateColumn()
+  @Column({ type: 'timestamp with time zone', default: () => 'NOW()' })
   updated: Date;
 
   @IsInstance(Object)

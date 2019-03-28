@@ -14,10 +14,11 @@ import {
   IsUrl,
   IsDate,
   IsUUID,
-  ValidateNested
+  ValidateNested,
+  Length
 } from 'class-validator';
 import { Game } from './game';
-import { User } from './user';
+import { User } from './';
 
 enum ReleaseTypes {
   'dev' = 'dev',
@@ -54,6 +55,7 @@ export class Release {
   status: string;
 
   @IsString()
+  @Length(40, 40)
   @Column({ type: 'text', unique: true, nullable: false })
   commitId: string;
 

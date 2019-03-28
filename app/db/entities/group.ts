@@ -17,7 +17,7 @@ import {
 } from 'class-validator';
 
 import { randomBytes } from 'crypto';
-import { User } from './user';
+import { User } from './';
 
 @Entity()
 export class Group {
