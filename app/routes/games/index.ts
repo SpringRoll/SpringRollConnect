@@ -2,7 +2,8 @@ import { pagination, isAdmin, user, permissions } from '../../helpers';
 import { Router } from 'express';
 import { Request, Response } from 'express';
 import { getRepository, In } from 'typeorm';
-import { Game } from '../../db';
+import { Game, Release } from '../../db';
+import { validate } from 'class-validator';
 
 const router = Router();
 
@@ -10,17 +11,24 @@ function renderPage(
   req: Request,
   res: Response,
   template: string,
-  optionalData: object = {}
+  {
+    success,
+    error,
+    errors
+  }: { success?: string; error?: string; errors?: Array<any> } = {}
 ) {
   return user(req)
     .getGame({ slug: req.params.slug }, 'groups')
     .then(async ({ game, permission, token }) => {
+      console.log();
       return res.render(template, {
         game,
         token,
         host: req.headers.host,
-        ...optionalData,
-        ...permissions(permission)
+        ...permissions(permission),
+        success,
+        error,
+        errors
       });
     });
 }
@@ -29,7 +37,7 @@ router.get(
   '/:order(alphabetical|latest)?/:local(page)?/:number([0-9]+)?',
   (req, res) =>
     user(req)
-      .getPermittedGameIds()
+      .getPermittedGameIds(0)
       .then(gameIds =>
         getRepository(Game).findAndCount({
           where: { uuid: In(gameIds) },
@@ -101,12 +109,57 @@ router.get('/:slug/privileges', function(req, res) {
 //     });
 // });
 
-// have to pass addt'l param to resolve Release objects
 router.get('/:slug/releases', (req, res) =>
   renderPage(req, res, 'games/releases')
 );
 
-router.post('/:slug/releases', (req, res) => {});
+router.post('/:slug/releases', (req, res) => {
+  const releaseRepository = getRepository(Release);
+
+  return user(req)
+    .getPermittedGameIds(1)
+    .then(gameIds =>
+      0 === gameIds.length
+        ? null
+        : getRepository(Game).findOne({
+            where: { slug: req.params.slug, uuid: In(gameIds) }
+          })
+    )
+    .then(async game => {
+      if (!game) {
+        return renderPage(req, res, 'games/releases', {
+          error: 'Unable to add release'
+        });
+      }
+
+      const release = releaseRepository.create({
+        ...req.body,
+        gameUuid: game.uuid,
+        updatedById: req.user.id
+      });
+
+      const hasErrors = await validate(release, {
+        skipMissingProperties: true
+      });
+
+      if (0 < hasErrors.length) {
+        return renderPage(req, res, 'games/releases', {
+          error: 'Invalid Release Data'
+        });
+      }
+
+      return releaseRepository
+        .save(release)
+        .then(() =>
+          renderPage(req, res, 'games/releases', { success: 'Release added' })
+        )
+        .catch(({ message }) =>
+          renderPage(req, res, 'games/releases', {
+            error: <string>message.split('"')[0]
+          })
+        );
+    });
+});
 
 // 307 maintains PATCH verb
 router.patch('/:slug/releases/:commit_id', (req, res) =>

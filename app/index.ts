@@ -56,12 +56,5 @@ connectToDB.then(() => {
   // Expose the "public" folder
   app.use(express.static(__dirname + '/public'));
 
-  // if (!process.env.MONGO_DATABASE) {
-  //   app.use(require('./routes/install'));
-  // } else {
-  //   // bootstrap the database connection
-  //   require('./helpers/database')(app);
-  // }
-
   BootstrapPassport(app);
 });

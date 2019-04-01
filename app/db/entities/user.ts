@@ -5,7 +5,9 @@ import {
   ManyToMany,
   JoinTable,
   getRepository,
-  FindConditions
+  FindConditions,
+  In,
+  MoreThanOrEqual
 } from 'typeorm';
 import {
   IsDate,
@@ -18,13 +20,6 @@ import {
 import { Group } from './group';
 import { Game } from './game';
 import { GroupPermission } from './group-permission';
-
-interface getGameArgs {
-  skip?: number;
-  take?: number;
-  order?: string;
-  where?: FindConditions<Game>;
-}
 
 @Entity()
 export class User {
@@ -72,11 +67,14 @@ export class User {
   @Column({ type: 'date', nullable: true })
   resetPasswordExpires?: Date;
 
-  async getPermittedGameIds() {
+  async getPermittedGameIds(permission: 0 | 1 | 2 = 0) {
     return await getRepository(GroupPermission)
       .find({
         cache: true,
-        where: this.groups.map(({ id }) => ({ groupID: id })),
+        where: {
+          groupID: In(this.groups.map(({ id }) => id)),
+          permission: MoreThanOrEqual(permission)
+        },
         select: ['gameID']
       })
       .then(ids => ids.map(({ gameID }) => gameID));

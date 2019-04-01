@@ -4,9 +4,6 @@ import { getRepository } from 'typeorm';
 import { Group, GroupPermission } from '../../db';
 import { user as User, permissions } from '../../helpers';
 const router = Router();
-// const Group = require('../../models/group');
-const Game = require('../../models/game');
-// const User = require('../../models/user');
 
 router.get('/:slug', function(req, res) {
   // return res.status(404).render('404');

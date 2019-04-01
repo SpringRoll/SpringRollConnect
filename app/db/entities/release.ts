@@ -15,7 +15,8 @@ import {
   IsDate,
   IsUUID,
   ValidateNested,
-  Length
+  Length,
+  IsDefined
 } from 'class-validator';
 import { Game } from './game';
 import { User } from './';
@@ -34,6 +35,7 @@ export class Release {
   id: number;
 
   @IsUUID()
+  @IsDefined()
   @Column({ type: 'uuid' })
   gameUuid: string;
 
@@ -47,6 +49,7 @@ export class Release {
 
   @IsString()
   @IsIn(['dev', 'qa', 'stage', 'prod'])
+  @IsDefined()
   @Column({
     nullable: false,
     type: 'text',
@@ -56,6 +59,7 @@ export class Release {
 
   @IsString()
   @Length(40, 40)
+  @IsDefined()
   @Column({ type: 'text', unique: true, nullable: false })
   commitId: string;
 
@@ -71,11 +75,15 @@ export class Release {
   @Column({ type: 'timestamp with time zone', default: () => 'NOW()' })
   updated: Date;
 
+  @IsInt()
+  @Column({ type: 'int4', nullable: true })
+  updatedById: number;
+
   @ValidateNested()
   @ManyToOne(type => User, user => user.id, {
     nullable: true
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'updatedById' })
   updatedBy: User;
 
   @IsString()

@@ -1,9 +1,9 @@
 import { getRepository } from 'typeorm';
 import { Config } from '../db';
 import { log } from '../helpers';
+import { isAdmin, isAuthenticated, isAnonymous, isEditor } from '../helpers';
 
 module.exports = function(app) {
-  const access = require('../helpers/access');
   const marky = require('marky-markdown');
 
   // Add the user to whatever template
@@ -11,7 +11,7 @@ module.exports = function(app) {
     res.locals.fullYear = new Date().getFullYear();
     res.locals.url = req.originalUrl;
     res.locals.user = req.user;
-    res.locals.privilege = access.privilege;
+    // res.locals.privilege = privilege;
     res.locals.moment = require('moment');
     res.locals.version = app.get('version');
     res.locals.marked = function(str) {
@@ -60,33 +60,32 @@ module.exports = function(app) {
   // Site pages
   app.use('/', require('./home'));
   app.use('/embed', require('./embed'));
-  app.use('/docs', access.isAuthenticated, require('./docs'));
-  app.use('/games/add', access.isEditor, require('./games/add'));
-  app.use('/games/search', access.isAuthenticated, require('./games/search'));
-  // app.use('/groups/add', access.isAdmin, require('./groups/add'));
-  app.use('/games', access.isAuthenticated, require('./games/index'));
-  app.use('/releases', access.isEditor, require('./releases/release'));
-  // app.use('/archive', access.isEditor, require('./games/index'));
-  app.use('/groups/group', access.isAuthenticated, require('./groups/group'));
-  app.use('/groups/search', access.isAdmin, require('./groups/search'));
-  app.use('/groups', access.isAdmin, require('./groups/index'));
+  app.use('/docs', isAuthenticated, require('./docs'));
+  app.use('/games/add', isEditor, require('./games/add'));
+  app.use('/games/search', isAuthenticated, require('./games/search'));
+  // app.use('/groups/add', isAdmin, require('./groups/add'));
+  app.use('/games', isAuthenticated, require('./games/index'));
+  app.use('/releases', isEditor, require('./releases/release'));
+  // app.use('/archive', isEditor, require('./games/index'));
+  app.use('/groups/group', isAuthenticated, require('./groups/group'));
+  app.use('/groups/search', isAdmin, require('./groups/search'));
+  app.use('/groups', isAdmin, require('./groups/index'));
   app.use('/users/search', require('./users/search'));
-  app.use('/users/add', access.isAdmin, require('./users/add'));
-  app.use('/users', access.isAdmin, require('./users/index'));
-  app.use('/configuration', access.isAdmin, require('./configuration'));
+  app.use('/users/add', isAdmin, require('./users/add'));
+  app.use('/users', isAdmin, require('./users/index'));
+  app.use('/configuration', isAdmin, require('./configuration'));
 
   // RESTful service for releases
   app.use('/api/release', require('./api/release'));
   // app.use('/api/releases', require('./api/releases'));
   // app.use('/api/games', require('./api/games'));
   // Authentication Pages
-  app.use('/login', access.isAnonymous, require('./login'));
-  app.use('/logout', access.isAuthenticated, require('./logout'));
-  // app.use('/register', access.isAnonymous, require('./register'));
-  // app.use('/forgot', access.isAnonymous, require('./forgot'));
-  // app.use('/reset', access.isAnonymous, require('./reset'));
-  app.use('/profile', access.isAuthenticated, require('./profile'));
-  app.use('/password', access.isAuthenticated, require('./password'));
+  app.use('/login', isAnonymous, require('./login'));
+  app.use('/logout', isAuthenticated, require('./logout'));
+  // app.use('/forgot', isAnonymous, require('./forgot'));
+  // app.use('/reset', isAnonymous, require('./reset'));
+  app.use('/profile', isAuthenticated, require('./profile'));
+  app.use('/password', isAuthenticated, require('./password'));
 
   // All other pages default to 404
   app.all('*', function(req, res) {
