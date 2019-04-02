@@ -8,4 +8,4 @@ app/output.log
 .yarn-error.log
 .yarn-lock
 backup
-
+app/backup
