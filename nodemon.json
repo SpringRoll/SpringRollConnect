@@ -2,5 +2,5 @@
   "watch": ["app"],
   "ext": "ts,js",
   "ignore": ["src/**/*.spec.ts"],
-  "exec": "node -r ts-node/register --max-old-space-size=4000 ./app/index.ts"
+  "exec": "ts-node ./app/index.ts"
 }

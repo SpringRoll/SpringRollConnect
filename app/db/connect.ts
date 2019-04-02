@@ -3,9 +3,9 @@ import * as entities from './entities';
 
 export default createConnection({
   type: 'postgres',
-  host: 'localhost',
+  host: 'postgres',
   port: 5432,
-  database: 'connect',
+  database: 'backup',
   entities: Object.values(entities),
   username: 'postgres'
 });

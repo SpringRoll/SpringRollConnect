@@ -1,12 +1,12 @@
 extend ../templates/normal
 
 append title
-	| Add Group - 
+	| Add Group -
 
 append content
 	#userTemplate.hidden
 		span.search-result
-			input(type="hidden" name="user" value="%id%")
+			input(type="hidden" name="users" value="%id%")
 			button.btn.btn-sm.btn-default(type="button") %name% &times;
 	.col-md-8.col-md-offset-2.col-sm-10.col-sm-offset-1
 		.panel.panel-default
@@ -30,16 +30,13 @@ append content
 						table.table.no-margin.table-striped.table-bordered
 							thead: tr
 								th.text-center Read
-									|  
-									a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Default group privilege") 
+									a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Default group privilege")
 										span.glyphicon.glyphicon-question-sign
 								th.text-center Write
-									|  
-									a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Ability to manage games") 
+									a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Ability to manage games")
 										span.glyphicon.glyphicon-question-sign
 								th.text-center Admin
-									|  
-									a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Ability to manage games, users and groups") 
+									a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Ability to manage games, users and groups")
 										span.glyphicon.glyphicon-question-sign
 							tbody: tr
 								td.text-center: input(name="privilege" value="0" type="radio" checked=true)
@@ -59,13 +56,9 @@ append content
 					label.col-sm-3.control-label(for="tokenExpires") Access
 					.col-sm-9
 						.radio: label
-							input(type="radio" name="tokenExpires" value="1" checked=true) 
+							input(type="checkbox" name="tokenExpires" value='true' checked=true)
 							| Expires
 							span.help-inline Token expires in a year
-						.radio: label
-							input(type="radio" name="tokenExpires" value="-1") 
-							| Forever
-							span.help-inline Token doesn't expire
 				.form-group
 					label.col-sm-3.control-label(for="user") Add Users
 					.col-sm-9

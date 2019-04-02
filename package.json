@@ -70,7 +70,6 @@
     "class-validator": "^0.9.1",
     "colors": "^1.0.3",
     "connect-flash": "^0.1.1",
-    "connect-mongodb-session": "^1.0.5",
     "dotenv": "^1.1.0",
     "express": "^4.11.2",
     "express-session": "^1.10.3",
@@ -100,7 +99,7 @@
     "test:loop": "concurrently 'node server.js' 'npm run test:infinite'  -k --prefix-colors 'yellow,green' --success first",
     "test:init": "mocha --require @babel/register   --timeout 5000 test/index.js",
     "test:infinite": "while npm run test:init; do :; done",
-    "docker:build:production": "docker build -t 'springroll-container' -f docker/production.DockerFile .",
+    "docker:build:production": "docker build -t 'springroll-container:2.0' -f docker/dev.DockerFile .",
     "docker:run": "docker-compose up --build"
   }
 }

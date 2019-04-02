@@ -2,13 +2,11 @@ version: "3"
 
 services:
   springroll-connect:
+    image: springroll-container:2.0
     depends_on:
       - postgres
-    build:
-      context: .
-      dockerfile: ./docker/dev.DockerFile
     volumes:
-      - ./app:/app
+      - ./app:/app/app
     expose:
       - 3000
     ports:

@@ -1,12 +1,14 @@
 # This official base image contains node.js and npm
-FROM node:11.12
-ARG VERSION=1.0.0
+FROM node:11
 # Copy the application files
-WORKDIR /
-COPY /package.json /package.json
-COPY /server.js /server.js
-COPY /tsconfig.json /tsconfig.json
-COPY /.env /.env
+RUN mkdir app
+WORKDIR /app
+COPY /app /app/app
+COPY /package.json /app/package.json
+COPY /server.js /app/server.js
+COPY /tsconfig.json /app/tsconfig.json
+COPY /nodemon.json /app/nodemon.json
+COPY /.env /app/.env
 RUN npm install
 
 

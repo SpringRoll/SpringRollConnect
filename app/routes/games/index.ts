@@ -19,9 +19,8 @@ function renderPage(
 ) {
   return user(req)
     .getGame({ slug: req.params.slug }, 'groups')
-    .then(async ({ game, permission, token }) => {
-      console.log();
-      return res.render(template, {
+    .then(async ({ game, permission, token }) =>
+      res.render(template, {
         game,
         token,
         host: req.headers.host,
@@ -29,8 +28,8 @@ function renderPage(
         success,
         error,
         errors
-      });
-    });
+      })
+    );
 }
 
 router.get(
@@ -38,24 +37,26 @@ router.get(
   (req, res) =>
     user(req)
       .getPermittedGameIds(0)
-      .then(gameIds =>
-        getRepository(Game).findAndCount({
-          where: { uuid: In(gameIds) },
-          select: ['thumbnail', 'title', 'slug'],
-          relations: ['releases'],
-          skip: 1 < req.params.number ? (req.params.number - 1) * 24 : 0,
-          order:
-            req.params.order === 'alphabetical'
-              ? { title: 'ASC' }
-              : { updated: 'DESC' }
-        })
+      .then(async gameIds =>
+        1 > gameIds.length
+          ? [[], 0]
+          : getRepository(Game).findAndCount({
+              where: { uuid: In(gameIds) },
+              select: ['thumbnail', 'title', 'slug'],
+              relations: ['releases'],
+              skip: 1 < req.params.number ? (req.params.number - 1) * 24 : 0,
+              order:
+                req.params.order === 'alphabetical'
+                  ? { title: 'ASC' }
+                  : { updated: 'DESC' }
+            })
       )
-      .then(([games, count]) => {
-        return res.render('games', {
+      .then(([games, count]) =>
+        res.render('games', {
           games,
           pagination: pagination(count, req.params.number, '/games')
-        });
-      })
+        })
+      )
 );
 
 router.get('/:slug', function(req, res) {

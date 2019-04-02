@@ -20,8 +20,12 @@ router.get('/:local(page)?/:number([1-9][0-9]?*)?', function(
 
   user(req)
     .getPermittedGameIds()
-    .then(gameIds =>
-      getRepository(Release)
+    .then(gameIds => {
+      if (1 > gameIds.length) {
+        return [[], 0];
+      }
+
+      return getRepository(Release)
         .createQueryBuilder('release')
         .select([
           'MAX(release.updated) as latest',
@@ -45,22 +49,21 @@ router.get('/:local(page)?/:number([1-9][0-9]?*)?', function(
             releaseCount: count
           })),
           gameIds.length
-        ])
-    )
-    .then(([games, count]) => {
+        ]);
+    })
+    .then(([games, count]) =>
       res.render('home', {
         games: games,
         groups: req.user.groups,
         pagination: pagination(count, req.params.number)
-      });
-    })
-    .catch(err => {
-      console.log(err);
+      })
+    )
+    .catch(err =>
       res.render('home', {
         games: [],
         groups: req.user.groups
-      });
-    });
+      })
+    );
 });
 
 router.post('/', async function(req: Request, res: Response) {

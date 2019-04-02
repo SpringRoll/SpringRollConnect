@@ -68,11 +68,17 @@ export class User {
   resetPasswordExpires?: Date;
 
   async getPermittedGameIds(permission: 0 | 1 | 2 = 0) {
+    const groupIds = this.groups.map(({ id }) => id);
+
+    if (1 > groupIds.length) {
+      return [];
+    }
+
     return await getRepository(GroupPermission)
       .find({
         cache: true,
         where: {
-          groupID: In(this.groups.map(({ id }) => id)),
+          groupID: In(groupIds),
           permission: MoreThanOrEqual(permission)
         },
         select: ['gameID']
