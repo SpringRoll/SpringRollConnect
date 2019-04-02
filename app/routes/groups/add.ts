@@ -22,6 +22,7 @@ router.post('/', function(req, res) {
     req.body.users = req.body.users.map(id => ({ id: Number(id) }));
   }
   req.body.privilege = Number(req.body.privilege);
+  req.body.token = Group.generateToken();
   const group = repository.create(<object>req.body);
 
   return validate(group, { skipMissingProperties: true })

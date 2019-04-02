@@ -66,27 +66,16 @@ router.get('/:local(page)?/:number([1-9][0-9]?*)?', function(
     );
 });
 
-router.post('/', async function(req: Request, res: Response) {
-  if (!req.isAuthenticated()) {
-    res.render('login', {
-      error: req.flash('error'),
-      redirect: req.flash('redirect')
-    });
-    return;
-  }
-
+router.post('/', (req: Request, res: Response) =>
   user(req)
     .groups.find(({ isUserGroup }) => isUserGroup)
     .refreshToken()
-    .then(() => {
-      req.login(user, () => res.redirect('/'));
-    })
     .catch(err => {
       log.error('Unable to change personal token');
       log.error(err);
       req.flash('error', 'Something went wrong');
-      res.redirect('/');
-    });
-});
+    })
+    .finally(() => res.redirect('/'))
+);
 
 module.exports = router;

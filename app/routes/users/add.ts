@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { User, Group, GroupPermission } from '../../db';
+import { User, Group } from '../../db';
 import { getRepository } from 'typeorm';
 import { validate } from 'class-validator';
 import { hash, genSalt } from 'bcryptjs';
@@ -19,7 +19,8 @@ router.post('/', async (req, res) => {
       name: user.name,
       slug: user.username,
       isUserGroup: true,
-      privilege: Number(req.body.privilege)
+      privilege: Number(req.body.privilege),
+      token: Group.generateToken()
     })
   ];
 

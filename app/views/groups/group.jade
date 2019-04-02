@@ -64,7 +64,7 @@ append content
 							if user.isAdmin
 								div.col-md-1.text-right
 									form.pull-right(method="post" action=url)
-										input(type="hidden" name="game" value=game._id)
+										input(type="hidden" name="game" value=game.uuid)
 										button.close(data-toggle="confirm" type="submit" name="action" value="removeGame") &times;
 		else
 			.alert.alert-warning No games for this group

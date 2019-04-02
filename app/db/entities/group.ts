@@ -19,7 +19,6 @@ import {
 
 import { randomBytes } from 'crypto';
 import { User } from './';
-import { GroupPermission } from './group-permission';
 
 @Entity()
 export class Group {
@@ -65,7 +64,11 @@ export class Group {
       this.tokenExpires = tokenExpires;
     }
 
-    this.token = randomBytes(20).toString('hex');
+    this.token = Group.generateToken();
     await getRepository(Group).save(this);
+  }
+
+  static generateToken() {
+    return randomBytes(20).toString('hex');
   }
 }
