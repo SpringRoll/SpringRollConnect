@@ -3,7 +3,8 @@ import {
   Column,
   PrimaryGeneratedColumn,
   getRepository,
-  ManyToMany
+  ManyToMany,
+  OneToMany
 } from 'typeorm';
 import {
   IsString,
@@ -18,6 +19,7 @@ import {
 
 import { randomBytes } from 'crypto';
 import { User } from './';
+import { GroupPermission } from './group-permission';
 
 @Entity()
 export class Group {
