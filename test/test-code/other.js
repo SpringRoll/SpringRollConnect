@@ -5,7 +5,6 @@ import {
   login,
   PROFILE_URL,
   PASSWORD_URL,
-  createUserGroupGameRelease,
   MAIN_URL,
   sleep
 } from '../helpers';
@@ -20,16 +19,9 @@ export const publicTest = async url => {
  * Initializes the test environment by
  * - Creating a user group game and associated release
  * - Logging the user in
- * @param {0 | 1 | 2} [privilege=0]
  */
-export const init = async (privilege = 0) => {
-  const { user } = await createUserGroupGameRelease({
-    gameStatus: 'prod',
-    permission: privilege,
-    privilege
-  });
-
-  await login(user);
+export const init = async () => {
+  // await login(user);
 };
 
 export const docTest = async () => {

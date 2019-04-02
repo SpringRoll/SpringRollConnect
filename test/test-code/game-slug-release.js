@@ -1,10 +1,8 @@
 import {
   gameReleasesURL,
   browser,
-  createUserGroupGameRelease,
   login,
   isLoginPage,
-  makeRelease,
   makeRandomString
 } from '../helpers';
 import { expect } from 'chai';
@@ -20,19 +18,14 @@ import { until, By, error, WebElement } from 'selenium-webdriver';
  * @param {"dev" | "qa" | "stage" | "prod"} gameStatus
  */
 export const init = async (permission, privilege, gameStatus) => {
-  const { user, game } = await createUserGroupGameRelease({
-    permission,
-    privilege,
-    gameStatus
-  });
-  const url = gameReleasesURL(game);
-  await login(user);
+  // const url = gameReleasesURL(game);
+  // await login(user);
 
-  for (let i = 0; i < 10; ++i) {
-    await makeRelease(game);
-  }
+  // for (let i = 0; i < 10; ++i) {
+  //   await makeRelease(game);
+  // }
 
-  await browser.get(url);
+  // await browser.get(url);
   const err = await browser
     .wait(until.elementsLocated(By.css('a[href*="releases"].active')), 500)
     .catch(err => err);
@@ -42,13 +35,12 @@ export const init = async (permission, privilege, gameStatus) => {
   const text = await browser.findElement(By.className('panel-title')).getText();
 
   expect(text).to.equal('Releases');
-  return game;
+  // return game;
 };
 
 export const publicUserTest = async () => {
-  const { game } = await createUserGroupGameRelease();
-  const url = gameReleasesURL(game);
-  await browser.get(url);
+  // const url = gameReleasesURL(game);
+  // await browser.get(url);
 
   await isLoginPage();
 };

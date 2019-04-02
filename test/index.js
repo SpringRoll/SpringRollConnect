@@ -1,4 +1,3 @@
-
 import { Selenium, logout } from './helpers';
 before(async () => await Selenium.init());
 afterEach(async () => await logout());

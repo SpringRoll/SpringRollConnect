@@ -1,13 +1,7 @@
 import { expect } from 'chai';
 import { until, By } from 'selenium-webdriver';
 
-import {
-  MAIN_URL,
-  VERSION,
-  browser,
-  login,
-  createUserGroupGameRelease
-} from '../helpers';
+import { MAIN_URL, VERSION, browser, login } from '../helpers';
 
 describe('SpringRollConnect', () => {
   it('should have the correct title', () => {
@@ -22,9 +16,8 @@ describe('SpringRollConnect', () => {
 
 describe('Login', () => {
   it('should be able to log a user in', async () => {
-    const { user } = await createUserGroupGameRelease();
     // attempt to login from the home page
-    await login(user);
+    // await login(user);
 
     // now check that we're on the correct page by looking for a logout link
     await browser.wait(until.elementsLocated(By.css('a[href="/logout"]')));

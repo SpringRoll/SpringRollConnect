@@ -1,5 +1,4 @@
 import {
-  makeUserWithGroup,
   login,
   browser,
   GROUPS_URL,
@@ -26,8 +25,7 @@ export const init = async privilege => {
     return;
   }
 
-  const { user } = await makeUserWithGroup({ privilege });
-  await login(user);
+  // await login(user);
   await browser.get(GROUPS_URL);
 
   if (2 > privilege) {

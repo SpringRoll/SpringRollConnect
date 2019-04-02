@@ -1,10 +1,4 @@
-import {
-  makeUserWithGroup,
-  login,
-  browser,
-  USERS_URL,
-  isLoginPage
-} from '../helpers';
+import { login, browser, USERS_URL, isLoginPage } from '../helpers';
 import { expect } from 'chai';
 import { until, By, WebElement } from 'selenium-webdriver';
 
@@ -24,9 +18,7 @@ export const init = async privilege => {
     return;
   }
 
-  const { user } = await makeUserWithGroup({ privilege });
-
-  await login(user);
+  // await login(user);
 
   await browser.get(USERS_URL);
 

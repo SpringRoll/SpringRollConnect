@@ -1,18 +1,11 @@
-import {
-  browser,
-  createUserGroupGameRelease,
-  login,
-  gameURL,
-  isLoginPage,
-  sleep
-} from '../helpers';
+import { browser, login, gameURL, isLoginPage, sleep } from '../helpers';
 import { expect } from 'chai';
 import { until, By, error, Key, WebElement } from 'selenium-webdriver';
 
 export const publicUserTest = async () => {
-  const { game } = await createUserGroupGameRelease();
-  const url = gameURL(game);
-  await browser.get(url);
+  // const { game } = await createUserGroupGameRelease();
+  // const url = gameURL(game);
+  // await browser.get(url);
 
   await isLoginPage();
 };
@@ -26,18 +19,12 @@ export const publicUserTest = async () => {
  * @param {"dev" | "qa" | "stage" | "prod"} gameStatus
  */
 export const init = async (permission, privilege, gameStatus) => {
-  const { user, game } = await createUserGroupGameRelease({
-    permission,
-    privilege,
-    gameStatus
-  });
-  const url = gameURL(game);
-  await login(user);
+  // const url = gameURL(game);
+  // await login(user);
 
-  await browser.get(url);
+  // await browser.get(url);
 
   await viewTest();
-  return game;
 };
 
 export const viewTest = async () => {

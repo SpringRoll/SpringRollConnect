@@ -1,13 +1,4 @@
-import {
-  createUserGroupGameRelease,
-  makeGroup,
-  login,
-  browser,
-  groupURL,
-  sleep,
-  isLoginPage,
-  makeUser
-} from '../helpers';
+import { login, browser, groupURL, sleep, isLoginPage } from '../helpers';
 import { until, By, WebElement, error } from 'selenium-webdriver';
 import { expect } from 'chai';
 
@@ -19,50 +10,16 @@ const { NoSuchElementError } = error;
  * - Then creating a user group game and release (the user performing the actions in the test)
  * @param {0 | 1 | 2} [privilege=0]
  */
-export const init = async (privilege = 0) => {
-  const groupTwo = await makeGroup({
-    name: 'BarFoo',
-    isUserGroup: false,
-    privilege: 0,
-    slug: 'bar-foo',
-    token: '317b9a82236565332bb1f51f022d2e188d31466b'
-  });
-  await makeUser({
-    username: 'fBar',
-    name: 'Foo Bar',
-    email: 'foobar@barfoo.ca',
-    password: 'foobar'
-  });
-  const { user, group } = await createUserGroupGameRelease({
-    privilege
-  });
-
-  return {
-    group,
-    groupTwo,
-    user
-  };
-};
-
-export const before = async privilege => {
-  const { user, group, groupTwo } = await init(privilege);
-  await login(user);
-  const url = groupURL(group);
-  const urlTwo = groupURL(groupTwo);
-
-  return { url, urlTwo };
-};
+export const init = async (privilege = 0) => {};
 
 export const publicTest = async () => {
-  const { group } = await init();
-  await browser.get(groupURL(group));
   await isLoginPage();
 };
 
 export const viewGroup = async ({ inGroup = false, privilege = 0 }) => {
-  const { url, urlTwo } = await before(privilege);
+  // const { url, urlTwo } = await before(privilege);
 
-  await browser.get(inGroup ? url : urlTwo);
+  // await browser.get(inGroup ? url : urlTwo);
 
   const css =
     inGroup || 2 === privilege

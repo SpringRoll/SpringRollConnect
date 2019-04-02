@@ -1,10 +1,4 @@
-import {
-  browser,
-  createUserGroupGameRelease,
-  login,
-  GAME_URL,
-  isLoginPage
-} from '../helpers';
+import { browser, login, GAME_URL, isLoginPage } from '../helpers';
 import { until, By, error } from 'selenium-webdriver';
 import { expect } from 'chai';
 import { viewTest as gameViewTest } from './game-slug';
@@ -27,12 +21,7 @@ export const publicUserTest = async () => {
  * @param {"dev" | "qa" | "stage" | "prod"} gameStatus
  */
 export const init = async (permission, privilege, gameStatus) => {
-  const { user } = await createUserGroupGameRelease({
-    permission,
-    privilege,
-    gameStatus
-  });
-  await login(user);
+  // await login(user);
 
   await browser.get(GAME_URL);
 
