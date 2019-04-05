@@ -17,7 +17,8 @@ append gameContent
 				li
 					a(href="?page=#{page-1}" aria-label="Previous")
 						span(aria-hidden="true") &laquo;
-				- for (var i = 1; i <= totalPages; ++i) {
+				- var total = game.releases.length / 10;
+				- for (var i = 1; i <= total; ++i) {
 					li(class={"active":page === i})
 						a(href="?page=#{i}")=i
 				- }

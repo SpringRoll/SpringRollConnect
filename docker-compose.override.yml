@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  springroll-connect:
+    volumes:
+      - ./app:/app/app
+      - ./test:/app/test
+      - ./.env.test:/app/.env
+
+    command: ["npm", "run", "test"]

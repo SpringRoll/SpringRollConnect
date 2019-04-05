@@ -1,9 +1,8 @@
 import {
-  gameReleasesURL,
   browser,
-  login,
   isLoginPage,
-  makeRandomString
+  makeRandomString,
+  GAME_ONE_RELEASES_URL
 } from '../helpers';
 import { expect } from 'chai';
 import { until, By, error, WebElement } from 'selenium-webdriver';
@@ -25,7 +24,7 @@ export const init = async (permission, privilege, gameStatus) => {
   //   await makeRelease(game);
   // }
 
-  // await browser.get(url);
+  await browser.get(GAME_ONE_RELEASES_URL);
   const err = await browser
     .wait(until.elementsLocated(By.css('a[href*="releases"].active')), 500)
     .catch(err => err);
@@ -39,8 +38,7 @@ export const init = async (permission, privilege, gameStatus) => {
 };
 
 export const publicUserTest = async () => {
-  // const url = gameReleasesURL(game);
-  // await browser.get(url);
+  await browser.get(GAME_ONE_RELEASES_URL);
 
   await isLoginPage();
 };

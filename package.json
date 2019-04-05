@@ -58,6 +58,7 @@
     "nodemon": "^1.18.7",
     "nyc": "^13.1.0",
     "selenium-webdriver": "^4.0.0-alpha.1",
+    "ts-mocha": "^6.0.0",
     "types-installer": "^1.4.0"
   },
   "dependencies": {
@@ -91,15 +92,13 @@
     "uuid": "^3.2.1"
   },
   "scripts": {
-    "start": "ts-node server.js",
-    "dev": "docker-compose up --build",
+    "start": "nodemon",
+    "dev": "docker-compose -f docker-compose.yml up --build",
+    "test-me": "docker-compose up --build --abort-on-container-exit --exit-code-from springroll-connect",
     "install-missing-types": "types-installer",
     "migration": "ts-node ./app/migration/index.ts",
-    "test": "concurrently 'ts-node server.js' 'npm run test:init' -k --prefix-colors 'yellow,green' --success first",
-    "test:loop": "concurrently 'node server.js' 'npm run test:infinite'  -k --prefix-colors 'yellow,green' --success first",
-    "test:init": "mocha --require @babel/register   --timeout 5000 test/index.js",
-    "test:infinite": "while npm run test:init; do :; done",
-    "docker:build": "docker build -t 'springroll-container:2.0' -f docker/dev.DockerFile .",
-    "nodemon": "nodemon"
+    "test": "ts-mocha --timeout 5000 test/index.ts",
+    "test:init": "ts-mocha --timeout 5000 test.ts",
+    "docker:build": "docker build -t 'springroll-container:2.0' -f docker/dev.DockerFile ."
   }
 }

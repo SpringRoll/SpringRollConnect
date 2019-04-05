@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { until, By } from 'selenium-webdriver';
+import { until, By, WebDriver } from 'selenium-webdriver';
 
 import { MAIN_URL, VERSION, browser, login } from '../helpers';
 
@@ -17,7 +17,7 @@ describe('SpringRollConnect', () => {
 describe('Login', () => {
   it('should be able to log a user in', async () => {
     // attempt to login from the home page
-    // await login(user);
+    await login('reader');
 
     // now check that we're on the correct page by looking for a logout link
     await browser.wait(until.elementsLocated(By.css('a[href="/logout"]')));

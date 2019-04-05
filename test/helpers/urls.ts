@@ -6,7 +6,15 @@ export const LOGOUT_URL = `${MAIN_URL}/logout`;
 
 export const LOGIN_URL = `${MAIN_URL}/login`;
 
-export const GAME_URL = `${MAIN_URL}/games`;
+export const GAMES_URL = `${MAIN_URL}/games`;
+
+export const GAME_ONE_URL = `${GAMES_URL}/empty-game`;
+
+export const GAME_ONE_RELEASES_URL = `${GAMES_URL}/empty-game/releases`;
+
+export const GAME_TWO_URL = `${GAMES_URL}/empty-game-2`;
+
+export const GAME_TWO_RELEASES_URL = `${GAMES_URL}/empty-game-2/releases`;
 
 export const USERS_URL = `${MAIN_URL}/users`;
 

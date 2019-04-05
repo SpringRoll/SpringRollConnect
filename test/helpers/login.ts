@@ -7,7 +7,7 @@ export async function logout() {
   await browser.wait(until.elementsLocated(By.className('form-login')));
 }
 
-export async function login({ username, password }) {
+export async function login(user: 'reader' | 'editor' | 'admin') {
   // To make sure we are not already logged in, let's log out
   await logout();
 
@@ -25,10 +25,7 @@ export async function login({ username, password }) {
     })
   ]);
 
-  await Promise.all([
-    userInput.sendKeys(username),
-    passwordInput.sendKeys(password)
-  ]);
+  await Promise.all([userInput.sendKeys(user), passwordInput.sendKeys(user)]);
 
   const form = await browser.findElement({ tagName: 'form' });
   await form.submit();
