@@ -5,5 +5,6 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "lib": ["es2016", "es2017", "es2018", "esnext.array"]
+    // "types": ["mocha"]
   }
 }

@@ -1,0 +1,5 @@
+version: "3"
+
+services:
+  test-db:
+    image: postgres:11.1

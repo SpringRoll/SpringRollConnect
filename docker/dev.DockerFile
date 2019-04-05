@@ -5,7 +5,7 @@ RUN mkdir app
 WORKDIR /app
 COPY /app /app/app
 COPY /package.json /app/package.json
-COPY /server.js /app/server.js
+COPY /server.ts /app/server.ts
 COPY /tsconfig.json /app/tsconfig.json
 COPY /nodemon.json /app/nodemon.json
 COPY /.env /app/.env
@@ -18,4 +18,4 @@ RUN npm install
 # RUN npm update
 
 # Make the application run when running the container
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "nodemon"]

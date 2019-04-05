@@ -1,22 +1,12 @@
 #!/usr/bin/env node
-
 // Include libraries
-// const express = require('express'),
-const colors = require('colors'),
-  expressValidator = require('express-validator'),
-  bodyParser = require('body-parser'),
-  fs = require('fs'),
-  dotenv = require('dotenv');
 import connectToDB from './db/connect';
 import { BootstrapPassport } from './helpers/passport';
 import * as express from 'express';
+const expressValidator = require('express-validator');
+const bodyParser = require('body-parser');
 
 connectToDB.then(() => {
-  if (fs.existsSync('.env')) {
-    // Load the environment file
-    dotenv.load();
-  }
-
   // Create sever
   var app = express();
 

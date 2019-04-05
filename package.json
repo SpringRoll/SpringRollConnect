@@ -92,14 +92,14 @@
   },
   "scripts": {
     "start": "ts-node server.js",
-    "dev": "nodemon",
+    "dev": "docker-compose up --build",
     "install-missing-types": "types-installer",
     "migration": "ts-node ./app/migration/index.ts",
     "test": "concurrently 'ts-node server.js' 'npm run test:init' -k --prefix-colors 'yellow,green' --success first",
     "test:loop": "concurrently 'node server.js' 'npm run test:infinite'  -k --prefix-colors 'yellow,green' --success first",
     "test:init": "mocha --require @babel/register   --timeout 5000 test/index.js",
     "test:infinite": "while npm run test:init; do :; done",
-    "docker:build:production": "docker build -t 'springroll-container:2.0' -f docker/dev.DockerFile .",
-    "docker:run": "docker-compose up --build"
+    "docker:build": "docker build -t 'springroll-container:2.0' -f docker/dev.DockerFile .",
+    "nodemon": "nodemon"
   }
 }

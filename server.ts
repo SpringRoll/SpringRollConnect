@@ -1,5 +1,6 @@
-var cluster = require('cluster');
-var totalCpus = require('os').cpus().length;
+const cluster = require('cluster');
+const totalCpus = require('os').cpus().length;
+require('dotenv').config();
 // TODO: Re-enable
 // if (cluster.isMaster) {
 //   //If a thread dies, respawn it.
@@ -11,5 +12,5 @@ var totalCpus = require('os').cpus().length;
 //     cluster.fork();
 //   }
 // } else {
-var restServer = require('./app/index.ts');
+require('./app/index');
 // }

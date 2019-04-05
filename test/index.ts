@@ -3,5 +3,5 @@ before(async () => await Selenium.init());
 afterEach(async () => await logout());
 after(() => Selenium.Browser.quit());
 
-import './api';
-import './pages';
+// import './api';
+// import './pages';

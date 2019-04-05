@@ -3,9 +3,10 @@ import * as entities from './entities';
 
 export default createConnection({
   type: 'postgres',
-  host: 'postgres',
+  host: process.env['DB_HOST'],
   port: 5432,
-  database: 'backup',
+  database: process.env['DB'],
   entities: Object.values(entities),
-  username: 'postgres'
+  username: process.env['DB_USER'],
+  password: process.env['DB_PASSWORD']
 });
