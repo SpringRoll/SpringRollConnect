@@ -106,5 +106,32 @@ describe('api/release', () => {
         .send(releaseParams);
       expect(postResponse.body.success).to.equal(false);
     });
+
+    it('should still allow an admin user to create a game, even if they do not have privileges on that game', async function() {
+      await dataMakers.makeGame('prod');
+      let gameResponse = await request.get('http://localhost:3000/api/games');
+
+      // make a admin level access token
+      let editor = await dataMakers.makeUser(2);
+      let token = await dataMakers.getUserToken(editor);
+      // get the game slug from the api response
+      let gameSlug = gameResponse.body.data[0].slug;
+
+      // make a new commit id for the new release
+      let commitId = dataMakers.makeRandomString(40);
+
+      // send the request
+      let releaseParams = {
+        status: 'dev',
+        commitId: commitId,
+        version: '1.0.0',
+        token: token
+      };
+
+      let postResponse = await request
+        .post(`http://localhost:3000/api/release/${gameSlug}`)
+        .send(releaseParams);
+      expect(postResponse.body.success).to.equal(true);
+    });
   });
 });
