@@ -437,6 +437,15 @@ GameSchema.methods.hasPermission = function(token, callback) {
         });
     })
     .then(function(groups) {
+      // first, check if the user is an admin (by looking at their user group). If so, they should have permissions on
+      // all games
+      for (let i = 0; i < groups.length; i++) {
+        if (groups[i].isUserGroup === true && groups[i].privilege === 2) {
+          callback(null, game);
+          return;
+        }
+      }
+
       const ids = groups.map(group => group._id.toString());
       const gameGroups = game.groups.map(entry => {
         if (entry.group._id) {
