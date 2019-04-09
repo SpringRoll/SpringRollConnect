@@ -94,11 +94,10 @@
   "scripts": {
     "start": "nodemon",
     "dev": "docker-compose -f docker-compose.yml up --build",
-    "test-me": "docker-compose up --build --abort-on-container-exit --exit-code-from springroll-connect",
     "install-missing-types": "types-installer",
     "migration": "ts-node ./app/migration/index.ts",
     "test": "ts-mocha --timeout 5000 test/index.ts",
-    "test:init": "ts-mocha --timeout 5000 test.ts",
-    "docker:build": "docker build -t 'springroll-container:2.0' -f docker/dev.DockerFile ."
+    "test:docker": "docker-compose up --build --abort-on-container-exit --exit-code-from springroll-connect",
+    "build": "docker build -t 'springroll-container:2.0' -f DockerFile ."
   }
 }

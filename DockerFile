@@ -11,11 +11,5 @@ COPY /nodemon.json /app/nodemon.json
 COPY /.env /app/.env
 RUN npm install
 
-
-# Set required environment variables
-# ENV NODE_ENV production
-# Download the required packages for production
-# RUN npm update
-
 # Make the application run when running the container
-CMD ["npm", "run", "nodemon"]
+CMD ["npm", "run", "start"]

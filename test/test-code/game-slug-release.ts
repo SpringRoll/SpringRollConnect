@@ -2,7 +2,8 @@ import {
   browser,
   isLoginPage,
   makeRandomString,
-  GAME_ONE_RELEASES_URL
+  GAME_ONE_RELEASES_URL,
+  sleep
 } from '../helpers';
 import { expect } from 'chai';
 import { until, By, error, WebElement } from 'selenium-webdriver';
@@ -17,13 +18,6 @@ import { until, By, error, WebElement } from 'selenium-webdriver';
  * @param {"dev" | "qa" | "stage" | "prod"} gameStatus
  */
 export const init = async (permission, privilege, gameStatus) => {
-  // const url = gameReleasesURL(game);
-  // await login(user);
-
-  // for (let i = 0; i < 10; ++i) {
-  //   await makeRelease(game);
-  // }
-
   await browser.get(GAME_ONE_RELEASES_URL);
   const err = await browser
     .wait(until.elementsLocated(By.css('a[href*="releases"].active')), 500)
@@ -34,7 +28,6 @@ export const init = async (permission, privilege, gameStatus) => {
   const text = await browser.findElement(By.className('panel-title')).getText();
 
   expect(text).to.equal('Releases');
-  // return game;
 };
 
 export const publicUserTest = async () => {
@@ -44,14 +37,16 @@ export const publicUserTest = async () => {
 };
 
 export const viewTest = async () => {
+  await browser.get(GAME_ONE_RELEASES_URL);
+
   const pageOneElements = await browser.findElements(By.css('.release.dev'));
 
   expect(pageOneElements.length).to.equal(10);
 
-  await browser.findElement(By.css('a[href="?page=2"]')).click();
+  await browser.findElement(By.css('a[href*="page/2"]')).click();
   const pageTwoElements = await browser.findElements(By.css('.release.dev'));
 
-  expect(pageTwoElements.length).to.equal(1);
+  expect(pageTwoElements.length).to.equal(2);
 };
 
 /**
@@ -59,6 +54,7 @@ export const viewTest = async () => {
  * @param {boolean} pass
  */
 export const changeTest = async pass => {
+  await browser.get(GAME_ONE_RELEASES_URL);
   const formButton = await browser
     .findElement(
       By.className(`btn btn-default btn-block status dropdown-toggle`)

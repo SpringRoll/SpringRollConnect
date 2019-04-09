@@ -6,7 +6,7 @@ import testData from './testSQL';
 let app;
 before(async () => {
   app = await server;
-  await browser.get(MAIN_URL);
+  await browser.get(MAIN_URL).catch(err => err);
 });
 
 beforeEach(async () => {

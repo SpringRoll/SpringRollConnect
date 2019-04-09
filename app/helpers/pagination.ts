@@ -1,15 +1,10 @@
-/**
- * Pagination object
- * @class Pagination
- * @constructor
- * @param {number} numItems Number of items
- * @param {number} currentPage The page currently being shown
- *   How many page button to display from left-to-right.
- *   Odd numbers wil produce nicer looking, even sided, UI.
- */
-export const pagination = (numItems, currentPage, base = '') => {
+export const pagination = (
+  numItems,
+  currentPage,
+  base = '',
+  itemsPerPage = 24
+) => {
   const current = parseInt(currentPage) || 1;
-  const itemsPerPage = 24;
   const total = Math.ceil(numItems / itemsPerPage);
   const buttonCount = 7 < total ? 7 : total;
   const middleCount = Math.floor(buttonCount / 2);

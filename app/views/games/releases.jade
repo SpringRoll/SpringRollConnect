@@ -13,22 +13,10 @@ append gameContent
 			.panel-body
 				.alert.alert-warning No releases yet for this game.
 		else
-			ul.pagination(style="display: flex;width: 100%;justify-content: flex-end;padding-right: 1.5rem;")
-				li
-					a(href="?page=#{page-1}" aria-label="Previous")
-						span(aria-hidden="true") &laquo;
-				- var total = game.releases.length / 10;
-				- for (var i = 1; i <= total; ++i) {
-					li(class={"active":page === i})
-						a(href="?page=#{i}")=i
-				- }
-				li
-					a(href="?page=#{page+1}" aria-label="Next")
-						span(aria-hidden="true") &raquo;
+			.row: include ../partials/pagination
 			.panel-body.releases
-			- var start = page > 1 ? (page - 1) * 10 : 0;
-			- for(var i=start, max = i + 10; i < max; ++i) {
-					- var release = game.releases[i];
+			- for(var i=0, max = releases.length; i < max; ++i) {
+					- var release = releases[i];
 					if "undefined" === typeof release
 						-break;
 					.release(class=release.status)

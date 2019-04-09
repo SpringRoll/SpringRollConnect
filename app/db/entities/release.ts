@@ -87,7 +87,7 @@ export class Release {
   updatedBy: User;
 
   @IsString()
-  @Column({ type: 'text' })
+  @Column({ type: 'text', nullable: true })
   notes: string;
 
   @IsString()

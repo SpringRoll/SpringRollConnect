@@ -1,7 +1,7 @@
 node_modules
 *.map
+.env.*
 .env
-.env.backup
 springroll.log
 log.txt
 app/output.log

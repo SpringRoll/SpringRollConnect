@@ -6,6 +6,7 @@ import { Game, Release } from '../../db';
 import { validate } from 'class-validator';
 
 const router = Router();
+const RELEASE_PAGE_LIMIT = 10;
 
 function renderPage(
   req: Request,
@@ -17,6 +18,9 @@ function renderPage(
     errors
   }: { success?: string; error?: string; errors?: Array<any> } = {}
 ) {
+  const page = req.params.number ? Number(req.params.number) - 1 : 0;
+
+  const take = page * RELEASE_PAGE_LIMIT;
   return user(req)
     .getGame({ slug: req.params.slug }, 'groups')
     .then(async ({ game, permission, token }) =>
@@ -27,7 +31,14 @@ function renderPage(
         ...permissions(permission),
         success,
         error,
-        errors
+        errors,
+        releases: game.releases.slice(take, take + RELEASE_PAGE_LIMIT),
+        pagination: pagination(
+          game.releases.length,
+          req.params.number || 0,
+          `/games/${game.slug}/releases`,
+          10
+        )
       })
     );
 }
@@ -110,7 +121,7 @@ router.get('/:slug/privileges', function(req, res) {
 //     });
 // });
 
-router.get('/:slug/releases', (req, res) =>
+router.get('/:slug/releases/:local(page)?/:number([1-9][0-9]?*)?', (req, res) =>
   renderPage(req, res, 'games/releases')
 );
 
