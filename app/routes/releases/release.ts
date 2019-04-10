@@ -4,7 +4,6 @@ import { getRepository } from 'typeorm';
 import { user } from '../../helpers';
 const router = Router();
 import { handleError } from '../games/helpers';
-// const { defaultCapabilities, handleError } = require('../games/helpers');
 
 router.get('/:commit_id', async (req, res) =>
   getRepository(Release)

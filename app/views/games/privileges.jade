@@ -32,20 +32,20 @@ append gameContent
 									else
 										a(href="/groups/group/#{entry.group.slug}")=entry.group.name
 									form.pull-right(action=url method="post")
-										input(type="hidden" name="group" value=entry.group._id)
+										input(type="hidden" name="group" value=entry.group.id)
 										button.close(data-toggle="confirm" type="submit" name="action" value="removeGroup") &times;
 								td.text-center
 									form.form-inline(action=url method="post")
-										input(type="hidden" name="group" value=entry.group._id)
+										input(type="hidden" name="group" value=entry.group.id)
 										input(type="hidden" name="action" value="changePermission")
 										input.auto-submit(name="permission" value="0" type="radio" checked=(entry.permission == 0))
 								td.text-center
 									form.form-inline(action=url method="post")
-										input(type="hidden" name="group" value=entry.group._id)
+										input(type="hidden" name="group" value=entry.group.id)
 										input(type="hidden" name="action" value="changePermission")
 										input.auto-submit(name="permission" value="1" type="radio" checked=(entry.permission == 1))
 								td.text-center
 									form.form-inline(action=url method="post")
-										input(type="hidden" name="group" value=entry.group._id)
+										input(type="hidden" name="group" value=entry.group.id)
 										input(type="hidden" name="action" value="changePermission")
 										input.auto-submit(name="permission" value="2" type="radio" checked=(entry.permission == 2))

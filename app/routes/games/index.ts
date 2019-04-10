@@ -2,7 +2,7 @@ import { pagination, isAdmin, user, permissions } from '../../helpers';
 import { Router } from 'express';
 import { Request, Response } from 'express';
 import { getRepository, In } from 'typeorm';
-import { Game, Release } from '../../db';
+import { Game, Release, mapCapabilities, GroupPermission } from '../../db';
 import { validate } from 'class-validator';
 
 const router = Router();
@@ -77,17 +77,13 @@ router.get('/:slug', function(req, res) {
 router.use('/:slug/privileges', isAdmin);
 router.get('/:slug/privileges', function(req, res) {
   getRepository(Game)
-    .findOne({
-      where: { slug: req.params.slug },
-      join: {
-        alias: 'game',
-        leftJoinAndSelect: {
-          groups: 'game.groups',
-          releases: 'game.releases',
-          group: 'groups.group'
-        }
-      }
-    })
+    .createQueryBuilder('game')
+    .leftJoinAndSelect('game.groups', 'groups')
+    .leftJoinAndSelect('game.releases', 'releases')
+    .leftJoinAndSelect('groups.group', 'group')
+    .where({ slug: req.params.slug })
+    .orderBy('groups.id', 'DESC')
+    .getOne()
     .then(game => {
       return res.render('games/privileges', { host: req.headers.host, game });
     });
@@ -95,31 +91,51 @@ router.get('/:slug/privileges', function(req, res) {
   // have to pass addt'l param to resolve Group objects
 });
 
-// router.post('/:slug/privileges', function(req, res) {
-//   Game.getBySlug(req.params.slug)
-//     .then(game => {
-//       const render = () =>
-//         renderPage(req, res, 'games/privileges', 'groups.group');
-//       switch (req.body.action) {
-//         case 'addGroup':
-//           Game.addGroup(game._id, req.body.group, req.body.permission, render);
-//           break;
-//         case 'changePermission':
-//           game.changePermission(req.body.group, req.body.permission, render);
-//           break;
-//         case 'removeGroup':
-//           game.removeGroup(req.body.group, render);
-//           break;
-//         default:
-//           render();
-//           break;
-//       }
-//     })
-//     .catch(err => {
-//       console.error('Privileges error', err);
-//       res.status(404).render('404');
-//     });
-// });
+router.post('/:slug/privileges', function(req, res) {
+  const repository = getRepository(GroupPermission);
+  return getRepository(Game)
+    .findOne({ slug: req.params.slug })
+    .then(game => {
+      const url = `/games/${req.params.slug}/privileges`;
+      switch (req.body.action) {
+        case 'addGroup':
+          const permission = repository.create({
+            permission: Number(req.body.permission),
+            groupID: Number(req.body.group),
+            game
+          });
+
+          validate(permission, { skipMissingProperties: true })
+            .then(errors =>
+              0 < errors.length ? Promise.reject() : Promise.resolve()
+            )
+            .then(() => repository.save(permission))
+            .finally(() => res.redirect(url));
+          return;
+        case 'changePermission':
+          repository
+            .findOne({ gameID: game.uuid, groupID: Number(req.body.group) })
+            .then(permission => {
+              permission.permission = Number(req.body.permission);
+              validate(permission, { skipMissingProperties: true })
+                .then(errors =>
+                  0 < errors.length ? Promise.reject() : Promise.resolve()
+                )
+                .then(() => repository.save(permission))
+                .finally(() => res.redirect(url));
+            });
+          return;
+        case 'removeGroup':
+          repository
+            .findOne({ groupID: Number(req.body.group) })
+            .then(permission => repository.remove(permission))
+            .finally(() => res.redirect(url));
+          return;
+        default:
+          return res.redirect(url);
+      }
+    });
+});
 
 router.get('/:slug/releases/:local(page)?/:number([1-9][0-9]?*)?', (req, res) =>
   renderPage(req, res, 'games/releases')
@@ -147,7 +163,8 @@ router.post('/:slug/releases', (req, res) => {
       const release = releaseRepository.create({
         ...req.body,
         gameUuid: game.uuid,
-        updatedById: req.user.id
+        updatedById: req.user.id,
+        capabilities: mapCapabilities(req.body.capabilities)
       });
 
       const hasErrors = await validate(release, {
@@ -161,7 +178,7 @@ router.post('/:slug/releases', (req, res) => {
       }
 
       return releaseRepository
-        .save(release)
+        .insert(release)
         .then(() =>
           renderPage(req, res, 'games/releases', { success: 'Release added' })
         )
@@ -178,31 +195,36 @@ router.patch('/:slug/releases/:commit_id', (req, res) =>
   res.redirect(307, '/releases/' + req.body.commitId)
 );
 
-// router.patch('/:slug', function(req, res) {
-//   let errors = validateRequest(req);
-//   if (errors) {
-//     return handleError(errors);
-//   }
+router.patch('/:slug', function(req, res) {
+  const repository = getRepository(Game);
 
-//   defaultCapabilities(req.body.capabilities);
+  const updates = repository.create(<object>{
+    ...req.body,
+    capabilities: mapCapabilities(req.body.capabilities),
+    updated: new Date(),
+    thumbnail:
+      req.body.thumbnail && 0 < req.body.thumbnail.length
+        ? req.body.thumbnail
+        : undefined,
+    slug: req.params.slug
+  });
 
-//   req.body.updated = Date.now();
-
-//   Game.getBySlug(req.params.slug)
-//     .then(game => {
-//       return Game.findByIdAndUpdate(game._id, req.body);
-//     })
-//     .then(game => {
-//       // have to re-get because slug may have changed
-//       Game.findById(game._id).then(game => {
-//         if (game.isArchived) {
-//           res.redirect('/archive/' + game.slug);
-//         } else {
-//           res.redirect('/games/' + game.slug);
-//         }
-//       });
-//     });
-// });
+  validate(updates, { skipMissingProperties: true })
+    .then(async errors =>
+      0 < errors.length ? Promise.reject() : Promise.resolve()
+    )
+    .then(() => getRepository(Game).findOne({ slug: updates.slug }))
+    .then(game =>
+      repository
+        .update({ slug: game.slug }, { ...game, ...updates })
+        .then(() =>
+          res.redirect(
+            `/${game.isArchived ? 'archive' : 'games'}/${updates.slug}`
+          )
+        )
+    )
+    .catch(errors => res.redirect('/games'));
+});
 
 // router.delete('/:slug', function(req, res) {
 //   Game.getBySlug(req.params.slug)

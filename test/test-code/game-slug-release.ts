@@ -17,7 +17,7 @@ import { until, By, error, WebElement } from 'selenium-webdriver';
  * @param {0 | 1 | 2} privilege
  * @param {"dev" | "qa" | "stage" | "prod"} gameStatus
  */
-export const init = async (permission, privilege, gameStatus) => {
+export const init = async () => {
   await browser.get(GAME_ONE_RELEASES_URL);
   const err = await browser
     .wait(until.elementsLocated(By.css('a[href*="releases"].active')), 500)
@@ -37,7 +37,7 @@ export const publicUserTest = async () => {
 };
 
 export const viewTest = async () => {
-  await browser.get(GAME_ONE_RELEASES_URL);
+  await init();
 
   const pageOneElements = await browser.findElements(By.css('.release.dev'));
 
@@ -54,7 +54,7 @@ export const viewTest = async () => {
  * @param {boolean} pass
  */
 export const changeTest = async pass => {
-  await browser.get(GAME_ONE_RELEASES_URL);
+  await init();
   const formButton = await browser
     .findElement(
       By.className(`btn btn-default btn-block status dropdown-toggle`)
@@ -96,7 +96,8 @@ export const changeTest = async pass => {
 };
 
 export const downloadTest = async () => {
-  await browser.findElement(By.className('help-block updated')).click();
+  await init();
+  await browser.findElement(By.css('.help-block.updated')).click();
 
   await browser
     .findElement(By.css('button.dropdown-toggle > .glyphicon.glyphicon-cog'))
@@ -110,6 +111,7 @@ export const downloadTest = async () => {
  * @param {boolean} pass
  */
 export const editTest = async pass => {
+  await init();
   await browser.findElement(By.className('help-block updated')).click();
 
   await browser
@@ -146,6 +148,7 @@ export const editTest = async pass => {
  * @param {boolean} pass
  */
 export const addReleaseTest = async pass => {
+  await init();
   const badgeCounter = await getBadgeCount();
   const target = await browser
     .wait(until.elementLocated(By.css('[data-target="#addRelease"]')), 50)
@@ -172,10 +175,11 @@ export const addReleaseTest = async pass => {
       )
     )
     .click();
-  expect(await getBadgeCount()).to.be.greaterThan(badgeCounter);
+  expect(await getBadgeCount()).to.equal(badgeCounter + 1);
 };
 
 export const deleteReleaseTest = async pass => {
+  await init();
   const badgeCounter = await getBadgeCount();
 
   await browser.findElement(By.className('help-block updated')).click();
@@ -197,7 +201,7 @@ export const deleteReleaseTest = async pass => {
     .switchTo()
     .alert()
     .accept();
-  expect(await getBadgeCount()).to.be.lessThan(badgeCounter);
+  expect(await getBadgeCount()).to.equal(badgeCounter - 1);
 };
 
 async function getBadgeCount() {

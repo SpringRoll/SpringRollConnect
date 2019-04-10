@@ -106,11 +106,11 @@ export class User {
       .then(game =>
         getRepository(GroupPermission)
           .findOne({
-            where: this.groups.map(({ id }) => ({
+            where: {
               cache: true,
               gameID: game.uuid,
-              groupID: id
-            })),
+              groupID: In(this.groups)
+            },
             order: { permission: 'DESC' }
           })
           .then(({ permission, group }) => ({
@@ -118,7 +118,7 @@ export class User {
             permission,
             token: group.token
           }))
-          .catch(err => ({ game, permission: null, token: '' }))
+          .catch(() => ({ game, permission: null, token: '' }))
       );
   }
 
