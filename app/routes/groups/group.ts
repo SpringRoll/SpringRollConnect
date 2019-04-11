@@ -40,30 +40,10 @@ router.get('/:slug', function(req, res) {
           });
         });
     });
-  // Group.getBySlug(req.params.slug, false, function(err, group) {
-  //   if (!group) {
-  //     return res.status(404).render('404');
-  //   }
-
-  //   if (req.user.privilege < privilege.admin && !req.user.inGroup(group)) {
-  //     return res.status(401).render('401');
-  //   }
-
-  //   res.render('groups/group', {
-  //     success: req.flash('success'),
-  //     error: req.flash('error'),
-  //     group: group,
-  //     games: Game.getGamesByGroup(group)
-  //       .select('title slug isArchived groups')
-  //       .sort('title'),
-  //     users: User.getByGroup(group).select('name')
-  //   });
-  // });
 });
 
 router.post('/:slug', isAdmin, function(req, res) {
   const { action } = req.body;
-
   if ('function' === typeof groupMethods[action]) {
     return groupMethods[action](req, res, req.body);
   }

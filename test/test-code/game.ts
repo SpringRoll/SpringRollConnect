@@ -1,53 +1,45 @@
-import { browser, login, GAME_URL, isLoginPage } from '../helpers';
+import { browser, GAMES_URL, isLoginPage } from '../helpers';
 import { until, By, error } from 'selenium-webdriver';
 import { expect } from 'chai';
 import { viewTest as gameViewTest } from './game-slug';
+const slug = 'empty-game';
+const name = 'Empty Game';
 
 const { NoSuchElementError } = error;
 
 export const publicUserTest = async () => {
-  await browser.get(GAME_URL);
+  await browser.get(GAMES_URL);
 
   await isLoginPage();
 };
 
-/**
- * Initializes the test environment by
- * - Creating a user group game and associated release
- * - Logging the new user in
- * - Going to the game page
- * @param {0 | 1 | 2} permission
- * @param {0 | 1 | 2} privilege
- * @param {"dev" | "qa" | "stage" | "prod"} gameStatus
- */
-export const init = async (permission, privilege, gameStatus) => {
-  // await login(user);
-
-  await browser.get(GAME_URL);
-
-  await viewTest();
-};
-
 export const viewTest = async () => {
+  await browser.get(GAMES_URL);
   const gameTitle = await browser.wait(
-    until.elementLocated(By.css('a[href="/games/test-game"] .title')),
+    until.elementLocated(By.css(`a[href="/games/${slug}"] .title`)),
     500
   );
 
-  expect(await gameTitle.getText()).to.equal('Test Game');
+  expect(await gameTitle.getText()).to.equal(name);
 
   return gameTitle;
 };
 
 export const viewDetailsTest = async () => {
+  await browser.get(GAMES_URL);
   await browser
-    .wait(until.elementLocated(By.css('a[href="/games/test-game"]')), 500)
+    .wait(until.elementLocated(By.css(`a[href="/games/${slug}"]`)), 500)
     .click();
 
   await gameViewTest();
 };
 
 export const addGameTest = async pass => {
+  await browser.get(GAMES_URL);
+  const gameCount = await browser
+    .wait(until.elementsLocated(By.css('span.title')), 500)
+    .then(elements => elements.length);
+
   const addGameButton = await browser
     .findElement(By.css('a[href="/games/add"]'))
     .catch(err => err);
@@ -56,7 +48,7 @@ export const addGameTest = async pass => {
     expect(addGameButton).to.be.instanceOf(NoSuchElementError);
     return;
   }
-  // h3.panel-title
+
   const oldTitle = await browser.findElement(By.css('h3.panel-title'));
 
   await addGameButton.click();
@@ -95,12 +87,12 @@ export const addGameTest = async pass => {
 
   expect(await success.isDisplayed()).to.be.true;
 
-  await browser.get(GAME_URL);
+  await browser.get(GAMES_URL);
 
   const games = await browser.wait(
     until.elementsLocated(By.css('span.title')),
     500
   );
 
-  expect(games.length).to.equal(2);
+  expect(games.length).to.equal(gameCount + 1);
 };

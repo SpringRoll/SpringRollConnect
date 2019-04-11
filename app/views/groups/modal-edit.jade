@@ -21,16 +21,13 @@
 						table.table.no-margin.table-striped.table-bordered
 							thead: tr
 								th.text-center Read
-									|  
-									a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Default group privilege") 
+									a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Default group privilege")
 										span.glyphicon.glyphicon-question-sign
 								th.text-center Write
-									|  
-									a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Ability to manage games") 
+									a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Ability to manage games")
 										span.glyphicon.glyphicon-question-sign
 								th.text-center Admin
-									|  
-									a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Ability to manage games, users and groups") 
+									a(href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Ability to manage games, users and groups")
 										span.glyphicon.glyphicon-question-sign
 							tbody: tr
 								td.text-center: input(name="privilege" value="0" type="radio" checked=(group.privilege == 0))
@@ -50,16 +47,10 @@
 					label.col-sm-3.control-label Access Token
 					.col-sm-9
 						.radio: label
-							input(type="radio" name="tokenExpiresRefresh" value="1" checked=(group.tokenExpires !== null)) 
+							input(type="checkbox" name="tokenExpires" value='true' checked=true)
 							| Expires
 							span.help-inline Token expires in a year
-						.radio: label
-							input(type="radio" name="tokenExpiresRefresh" value="-1" checked=(group.tokenExpires === null)) 
-							| Forever
-							span.help-inline Token never expires
 			.modal-footer
 				button.btn.btn-primary(type="submit" name="action" value="updateGroup") Save
-				|  
 				button.btn.btn-danger(data-toggle="confirm" type="submit" name="action" value="deleteGroup") Delete
-				|  
 				button.btn.btn-default(type="button" data-dismiss="modal") Cancel

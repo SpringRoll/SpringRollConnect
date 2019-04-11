@@ -1,25 +1,23 @@
-import { login, browser, groupURL, sleep, isLoginPage } from '../helpers';
+import {
+  browser,
+  sleep,
+  isLoginPage,
+  GROUPS_URL,
+  READERS_GROUP_URL,
+  EMPTY_GROUP_URL
+} from '../helpers';
 import { until, By, WebElement, error } from 'selenium-webdriver';
 import { expect } from 'chai';
 
 const { NoSuchElementError } = error;
 
-/**
- * Initializes the test environment by
- * - Creating a test user and group
- * - Then creating a user group game and release (the user performing the actions in the test)
- * @param {0 | 1 | 2} [privilege=0]
- */
-export const init = async (privilege = 0) => {};
-
 export const publicTest = async () => {
+  await browser.get(GROUPS_URL);
   await isLoginPage();
 };
 
 export const viewGroup = async ({ inGroup = false, privilege = 0 }) => {
-  // const { url, urlTwo } = await before(privilege);
-
-  // await browser.get(inGroup ? url : urlTwo);
+  await browser.get(inGroup ? READERS_GROUP_URL : EMPTY_GROUP_URL);
 
   const css =
     inGroup || 2 === privilege
@@ -33,8 +31,12 @@ export const viewGroup = async ({ inGroup = false, privilege = 0 }) => {
   expect(found).to.be.instanceOf(WebElement);
 };
 
+const getUserList = () =>
+  browser.findElements(By.css('div.col-md-4.col-sm-5 > ul > li'));
+
 export const addUser = async config => {
   await viewGroup(config);
+  const count = (await getUserList()).length;
 
   if (2 > config.privilege) {
     const err = await browser
@@ -50,7 +52,7 @@ export const addUser = async config => {
   const userSearch = await browser.findElement(By.css('#userSearch'));
   await browser.wait(until.elementIsVisible(userSearch));
 
-  await userSearch.sendKeys('Foo Bar');
+  await userSearch.sendKeys('reader');
   // Pause here as the dom is rapidly changing and can cause a selenium error
   await sleep(100);
   await browser
@@ -65,11 +67,7 @@ export const addUser = async config => {
 
   browser.wait(until.stalenessOf(button));
 
-  const list = await browser.findElements(
-    By.css('div.col-md-4.col-sm-5 > ul > li')
-  );
-
-  expect(list).to.be.length(1);
+  expect(await getUserList()).to.be.length(count + 1);
 };
 
 export const removeUser = async config => {
@@ -83,6 +81,7 @@ export const removeUser = async config => {
     return;
   }
   await addUser(config);
+  const count = (await getUserList()).length;
 
   await browser
     .findElement(By.css('li.list-group-item:nth-child(1) button'))
@@ -99,7 +98,7 @@ export const removeUser = async config => {
     By.css('div.col-md-4.col-sm-5 > ul > li')
   );
 
-  expect(list).to.be.length(0);
+  expect(await getUserList()).to.be.length(count - 1);
 };
 
 export const addGame = async config => {
@@ -119,9 +118,10 @@ export const addGame = async config => {
 
   await browser.wait(until.elementIsVisible(gameSearch));
 
-  await gameSearch.sendKeys('Test');
+  await gameSearch.sendKeys('empty game 2');
 
   await sleep(100);
+
   await browser
     .wait(until.elementLocated(By.css('#gameSearchDisplay > ul > li > button')))
     .click();
@@ -217,12 +217,12 @@ export const edit = async config => {
   const input = await browser.findElement(By.id('name'));
   await browser.wait(until.elementIsVisible(input));
 
-  await input.sendKeys('Foo');
+  await input.sendKeys('2');
   await browser.findElement(By.css('button[value="updateGroup"]')).click();
 
   await browser.wait(until.stalenessOf(input));
 
   const title = await browser.findElement(By.tagName('h2')).getText();
 
-  expect(title).to.equal('BarFooFoo');
+  expect(title).to.equal('empty2');
 };

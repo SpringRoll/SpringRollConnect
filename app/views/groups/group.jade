@@ -82,7 +82,7 @@ append content
 					li.list-group-item=u.name
 						if user.isAdmin
 							form.pull-right(method="post" action=url)
-								input(type="hidden" name="user" value=u._id)
+								input(type="hidden" name="user" value=u.id)
 								button.close(data-toggle="confirm" type="submit" name="action" value="removeUser") &times;
 		else
 			.alert.alert-warning No users in this group

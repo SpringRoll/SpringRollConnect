@@ -4,27 +4,30 @@ import { Router } from 'express';
 import { Game } from '../../db';
 
 module.exports = Router().post('/', (req, res) => {
-  let where;
+  let argument;
+  let query;
   if (req.body.slug) {
-    where = { slug: req.body.slug };
+    query = 'game.slug = :slug';
+    argument = { slug: req.body.slug };
   } else if (req.body.bundleId) {
-    where = { bundleId: req.body.bundleId };
+    query = 'game.bundleId = :bundleId';
+    argument = { bundleId: req.body.bundleId };
   } else if (req.body.search) {
-    where = { title: Like(`%${req.body.search}%`) };
+    query = 'LOWER(game.title) LIKE :title';
+    argument = { title: `%${req.body.search.toLowerCase()}%` };
   } else {
     return res.send([]);
   }
   user(req)
     .getPermittedGameIds()
     .then(gameIds =>
-      getRepository(Game).findAndCount({
-        where: {
-          uuid: In(gameIds),
-          ...where
-        }
-      })
+      getRepository(Game)
+        .createQueryBuilder('game')
+        .whereInIds(gameIds)
+        .andWhere(query, argument)
+        .getMany()
     )
-    .then(([games]) =>
+    .then(games =>
       res.send(
         games.map(({ title, isArchived, slug }) => ({
           slug,

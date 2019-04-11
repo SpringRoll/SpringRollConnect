@@ -29,21 +29,22 @@ router.post('/', function(req, res) {
       });
     }
 
-    GameRepository.save(game)
-      .then(game => {
-        GroupRepository.save(
+    GameRepository.insert(game)
+      .then(result => {
+        const [{ uuid }] = result.generatedMaps;
+        GroupRepository.insert(
           GroupRepository.create({
-            gameID: game.uuid,
+            gameID: uuid,
             groupID: group.id,
             permission: 2
           })
-        ).then(group => {
+        ).then(() =>
           res.render('games/add', {
             success: 'Game added successfully'
-          });
-        });
+          })
+        );
       })
-      .catch(err => {
+      .catch(() => {
         return res.render('games/add', {
           error: 'Unable to add the game'
         });
@@ -51,8 +52,6 @@ router.post('/', function(req, res) {
   });
 });
 
-router.get('/', function(req, res) {
-  res.render('games/add');
-});
+router.get('/', (_, res) => res.render('games/add'));
 
 module.exports = router;

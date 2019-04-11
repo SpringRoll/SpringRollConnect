@@ -3,8 +3,7 @@ import {
   Column,
   PrimaryGeneratedColumn,
   getRepository,
-  ManyToMany,
-  OneToMany
+  ManyToMany
 } from 'typeorm';
 import {
   IsString,
@@ -14,7 +13,8 @@ import {
   IsInt,
   Min,
   Max,
-  IsBase64
+  IsBase64,
+  IsUUID
 } from 'class-validator';
 
 import { randomBytes } from 'crypto';
@@ -22,7 +22,8 @@ import { User } from './';
 
 @Entity()
 export class Group {
-  @PrimaryGeneratedColumn()
+  @IsInt()
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
   @IsString()

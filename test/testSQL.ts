@@ -144,7 +144,8 @@ INSERT INTO "public"."group" ("id", "name", "isUserGroup", "slug", "token", "tok
 ('3', 'admin', 't', 'admin', '8f1339ed05cc72b6e28155532779dde8a3bfb97f', NULL, '2', '\x6e756c6c'),
 ('12', 'editors', 'f', 'editors', '4a89861f2ea6084cd464f220b483b5e5bec58087', NULL, '1', '\x6e756c6c'),
 ('13', 'admins', 'f', 'admins', '0a5053ee6f3b77c66cceb49b5c1f0f34b5c8f5ea', NULL, '2', '\x6e756c6c'),
-('14', 'readers', 'f', 'readers', '8ae7aa9e471c7b9d3fdb04f7e80dca5fce59a386', NULL, '0', '\x6e756c6c');
+('14', 'readers', 'f', 'readers', '8ae7aa9e471c7b9d3fdb04f7e80dca5fce59a386', NULL, '0', '\x6e756c6c'),
+('15', 'empty', 'f', 'empty', '4df57f8684de985fd803abd0ebdf6909b9319ce1', NULL, '0', '\x6e756c6c');
 
 INSERT INTO "public"."group_permission" ("id", "permission", "groupID", "gameID") VALUES ('1', '2', '3', '7f394489-1373-455d-954f-4c318012ac63'),
 ('3', '0', '14', '7f394489-1373-455d-954f-4c318012ac63'),

@@ -1,9 +1,18 @@
 import { Request, Response } from 'express';
-import { Group, GroupPermission, Game } from '../../db';
+import { Group, GroupPermission, Game, User } from '../../db';
 import { getRepository, In } from 'typeorm';
+import { validate } from 'class-validator';
 export function addUsers(req: Request, res: Response) {
-  //TODO: Implement
-  return res.redirect(req.originalUrl);
+  const userRepository = getRepository(User);
+  return Promise.all([
+    getRepository(Group).findOne({ slug: req.params.slug }),
+    userRepository.findOne(req.body.user)
+  ])
+    .then(([group, user]) => {
+      user.groups.push(group);
+      return userRepository.save(user);
+    })
+    .finally(() => res.redirect(req.originalUrl));
 }
 export function refreshToken(req: Request, res: Response) {
   return getRepository(Group)
@@ -52,8 +61,14 @@ export function removeGame(
     .finally(() => res.redirect(req.originalUrl));
 }
 export function removeUser(req: Request, res: Response) {
-  //TODO: Implement
-  return res.redirect(req.originalUrl);
+  const userRepository = getRepository(User);
+  return userRepository
+    .findOne(req.body.user)
+    .then(user => {
+      user.groups = user.groups.filter(({ slug }) => slug !== req.params.slug);
+      return userRepository.save(user);
+    })
+    .finally(() => res.redirect(req.originalUrl));
 }
 export function deleteGroup(req: Request, res: Response, { slug }: Group) {
   const repository = getRepository(Group);
@@ -63,6 +78,23 @@ export function deleteGroup(req: Request, res: Response, { slug }: Group) {
     .then(() => res.redirect('/groups'));
 }
 export function updateGroup(req: Request, res: Response) {
-  //TODO: Implement
-  return res.redirect(req.originalUrl);
+  const repository = getRepository(Group);
+
+  return repository.findOne({ slug: req.body.slug }).then(group => {
+    const { logo, tokenExpires, privilege, ...update } = req.body;
+
+    group = repository.merge(group, update, {
+      logo: logo ? logo : undefined,
+      tokenExpires: 'true' == tokenExpires ? new Date() : undefined,
+      privilege: Number(privilege)
+    });
+
+    return validate(group, { skipMissingProperties: true })
+      .then(errors =>
+        0 < errors.length ? Promise.reject(errors) : Promise.resolve()
+      )
+      .catch(err => console.log(err))
+      .then(() => repository.save(group))
+      .finally(() => res.redirect(req.originalUrl));
+  });
 }

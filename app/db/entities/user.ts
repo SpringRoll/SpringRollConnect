@@ -20,6 +20,7 @@ import {
 import { Group } from './group';
 import { Game } from './game';
 import { GroupPermission } from './group-permission';
+import { hash, genSalt } from 'bcryptjs';
 
 @Entity()
 export class User {
@@ -164,5 +165,12 @@ export class User {
     const userGroup = this.groups.find(({ isUserGroup }) => isUserGroup);
     await userGroup.refreshToken();
     return this;
+  }
+
+  async hashPassword(newPassword?: string) {
+    const password = newPassword ? newPassword : this.password;
+    return genSalt(10)
+      .then(salt => hash(password, salt))
+      .then(password => ((this.password = password), this));
   }
 }

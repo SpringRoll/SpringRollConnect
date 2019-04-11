@@ -12,27 +12,27 @@ router.post('/', async (req, res) => {
     return res.redirect('/users/add');
   }
 
-  const userRepo = getRepository(User);
-  const user = userRepo.create(<object>req.body);
-  user.groups = [
-    getRepository(Group).create({
-      name: user.name,
-      slug: user.username,
-      isUserGroup: true,
-      privilege: Number(req.body.privilege),
-      token: Group.generateToken()
-    })
-  ];
+  const userRepository = getRepository(User);
+  const groupRepository = getRepository(Group);
+
+  const user = userRepository.create(<object>req.body);
+  const group = groupRepository.create({
+    name: user.name,
+    slug: user.username,
+    isUserGroup: true,
+    privilege: Number(req.body.privilege),
+    token: Group.generateToken()
+  });
+  user.groups = [group];
 
   validate(user, { skipMissingProperties: true })
     .then(errors =>
       errors.length ? Promise.reject('Must provide a valid email') : undefined
     )
-    .then(() => genSalt(10))
-    .then(salt => hash(user.password, salt))
-    .then(password => ((user.password = password), user))
-    .then(user => userRepo.save(user))
+    .then(() => user.hashPassword())
+    .then(user => userRepository.save(user))
     .catch(error => {
+      console.log(error);
       const msg = error.detail
         ? `A user already exists with this ${
             /username/g.test(error.detail) ? 'username' : 'email'

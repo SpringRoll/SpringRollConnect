@@ -33,10 +33,9 @@ block body
 								ul.dropdown-menu
 					ul.nav.navbar-nav.navbar-right
 						if user
-							if user.isEditor
-								li(class=isActive(/^\/games/))
-									a(href='/games')
-										span Games
+							li(class=isActive(/^\/games/))
+								a(href='/games')
+									span Games
 							if user.isAdmin
 								li(class=isActive(/^\/users/))
 									a(href="/users")

@@ -28,6 +28,11 @@ export const PASSWORD_URL = `${MAIN_URL}/password`;
 
 export const API_GAMES_URL = `${API_URL}/games`;
 
+export const ADMINS_GROUP_URL = `${GROUPS_URL}/group/admins`;
+export const EDITORS_GROUP_URL = `${GROUPS_URL}/group/editors`;
+export const READERS_GROUP_URL = `${GROUPS_URL}/group/readers`;
+export const EMPTY_GROUP_URL = `${GROUPS_URL}/group/empty`;
+
 export const embeddedGameURL = ({ slug }) => `${MAIN_URL}/embed/${slug}`;
 
 export const embedReleaseURL = ({

@@ -1,49 +1,23 @@
-import { login, browser, USERS_URL, isLoginPage } from '../helpers';
+import { browser, USERS_URL, sleep } from '../helpers';
 import { expect } from 'chai';
 import { until, By, WebElement } from 'selenium-webdriver';
-
-/**
- * Initializes the test environment by
- * - Creating a user and logging them in
- * - Attempting to take them to the /users page
- * - If no privileges were defined, make sure that the user couldn't access the users page and was instead redirected
- *   to the login page
- * - If the user doesn't admin privileges, make sure they're redirected to the games page.
- * @param {0 | 1 | 2} [privilege=0]
- */
-export const init = async privilege => {
-  if ('undefined' === typeof privilege) {
-    await browser.get(USERS_URL);
-    await isLoginPage();
-    return;
-  }
-
-  // await login(user);
-
+const getButton = () => browser.findElement(By.css('a[href="/users/add"]'));
+const getSelect = () => browser.findElement(By.tagName('select'));
+export const viewTest = async (pass: boolean) => {
   await browser.get(USERS_URL);
+  const addUser = await browser
+    .findElement(By.css('a[href="/users/add"]'))
+    .catch(err => err);
+  const result = expect(addUser).to;
 
-  if (2 > privilege) {
-    const banner = await browser.wait(
-      until.elementLocated(By.css('div.col-sm-9 > h3')),
-      250
-    );
-    expect(await banner.getText()).to.equal('Games');
-    return;
-  }
-
-  await viewTest();
-};
-
-export const viewTest = async () => {
-  const addUser = await browser.findElement(By.css('a[href="/users/add"]'));
-
-  expect(addUser).to.be.instanceOf(WebElement);
-
-  return addUser;
+  pass
+    ? result.be.instanceOf(WebElement)
+    : result.not.be.instanceOf(WebElement);
 };
 
 export const addTest = async () => {
-  const button = await viewTest();
+  await browser.get(USERS_URL);
+  const button = await getButton();
 
   await button.click();
 
@@ -74,7 +48,7 @@ export const addTest = async () => {
 
   await browser.get(USERS_URL);
 
-  const select = await browser.findElement(By.tagName('select'));
+  const select = getSelect();
 
   expect(select).to.be.instanceOf(WebElement);
 
@@ -82,20 +56,20 @@ export const addTest = async () => {
 };
 
 export const editTest = async () => {
+  await browser.get(USERS_URL);
   const select = await addTest();
   select.click();
+  const target = 'option[value*="fbar"]';
 
-  await browser.findElement(By.css('option:nth-child(2)')).click();
+  await browser.findElement(By.css(target)).click();
 
   await browser.findElement(By.css('[name="name"]')).sendKeys('Bar');
 
   await browser.findElement(By.css('button[type="submit"]')).click();
 
-  await browser.get(USERS_URL);
+  await getSelect().click();
 
-  const text = await browser
-    .findElement(By.css('option:nth-child(2)'))
-    .getText();
+  const text = await browser.findElement(By.css(target)).getText();
 
   expect(text).to.equal('FooBar');
 };

@@ -8,6 +8,7 @@ import {
   refreshToken,
   edit
 } from '../test-code/group-slug';
+import { login } from '../helpers';
 const ADD_GAME = 'Add a game to a group';
 const ADD_USER = 'Add a user to a group';
 const EDIT = 'Edit a group';
@@ -22,6 +23,7 @@ describe(`${PAGE} as a public user`, () => {
 });
 
 describe(`${PAGE} as a read-only user`, () => {
+  beforeEach(async () => await login('reader'));
   it(`I can ${VIEW} I'm in`, async () =>
     await viewGroup({ inGroup: true, privilege: 0 }));
   it(`I can't ${VIEW} I'm not in`, async () =>
@@ -41,6 +43,7 @@ describe(`${PAGE} as a read-only user`, () => {
 });
 
 describe(`${PAGE} as a edit capable user`, () => {
+  beforeEach(async () => await login('editor'));
   it(`I can ${VIEW} I'm in`, async () =>
     await viewGroup({ inGroup: true, privilege: 1 }));
   it(`I can't ${VIEW} I'm not in`, async () =>
@@ -60,6 +63,7 @@ describe(`${PAGE} as a edit capable user`, () => {
 });
 
 describe(`${PAGE} as a admin user`, () => {
+  beforeEach(async () => await login('admin'));
   it(`I can ${VIEW} I'm in`, async () =>
     await viewGroup({ inGroup: true, privilege: 2 }));
   it(`I can ${VIEW} I'm not in`, async () =>
