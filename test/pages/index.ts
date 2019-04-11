@@ -5,5 +5,5 @@ import './game-slug';
 import './game';
 import './users';
 import './group-slug';
-// import './group';
+import './group';
 // import './other';

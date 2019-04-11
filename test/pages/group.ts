@@ -1,21 +1,25 @@
-import { init, addGroup } from '../test-code/group';
+import { publicTest, view, addGroup } from '../test-code/group';
+import { login } from '../helpers';
 const PAGE = 'page - groups';
 const VIEW = 'View all groups';
 const ADD = 'Add a group';
 
 describe(`${PAGE} as a public user`, () => {
-  it(`I can't access the page`, async () => await init());
+  it(`I can't access the page`, async () => await publicTest());
 });
 
 describe(`${PAGE} as a read-only user`, () => {
-  it(`I can't access the page`, async () => await init(0));
+  beforeEach(async () => login('reader'));
+  it(`I can't access the page`, async () => await view(false));
 });
 
 describe(`${PAGE} as a edit capable user`, () => {
-  it(`I can't access the page`, async () => await init(1));
+  beforeEach(async () => login('editor'));
+  it(`I can't access the page`, async () => await view(false));
 });
 
 describe(`${PAGE} as a admin user`, () => {
-  it(`I can ${VIEW}`, async () => await init(2));
+  beforeEach(async () => login('admin'));
+  it(`I can ${VIEW}`, async () => await view(true));
   it(`I can ${ADD}`, addGroup);
 });

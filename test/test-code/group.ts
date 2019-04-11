@@ -8,27 +8,15 @@ import {
 import { expect } from 'chai';
 import { until, By, WebElement } from 'selenium-webdriver';
 
-/**
- * Initializes the test environment by
- * - Creating a user with a group
- * - Logging them
- * - Going to the groups page
- * - If no permission is provided, this setup code will assume the user is anonymous and check that they cannot reach
- *   the groups page
- * - If the user doesn't have admin privileges check that they also cannot reach the groups page
- * @param {0 | 1 | 2} [privilege=0]
- */
-export const init = async privilege => {
-  if ('undefined' === typeof privilege) {
-    await browser.get(GROUPS_URL);
-    await isLoginPage();
-    return;
-  }
+export const publicTest = async () => {
+  await browser.get(GROUPS_URL);
+  await isLoginPage();
+};
 
-  // await login(user);
+export const view = async (pass: boolean) => {
   await browser.get(GROUPS_URL);
 
-  if (2 > privilege) {
+  if (!pass) {
     expect(await isLandingPage()).to.be.true;
     return;
   }
@@ -41,7 +29,7 @@ export const init = async privilege => {
 };
 
 export const addGroup = async () => {
-  await init(2);
+  await browser.get(GROUPS_URL);
   await browser.findElement(By.css('a[href="/groups/add"]')).click();
 
   const [name, slug, submit] = await Promise.all([
