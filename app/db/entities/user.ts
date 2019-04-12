@@ -110,7 +110,7 @@ export class User {
             where: {
               cache: true,
               gameID: game.uuid,
-              groupID: In(this.groups)
+              groupID: In(this.groups.map(({ id }) => id))
             },
             order: { permission: 'DESC' }
           })
@@ -119,7 +119,7 @@ export class User {
             permission,
             token: group.token
           }))
-          .catch(() => ({ game, permission: null, token: '' }))
+          .catch(errors => ({ game, permission: null, token: '' }))
       );
   }
 

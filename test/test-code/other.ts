@@ -2,26 +2,20 @@ import {
   browser,
   isLoginPage,
   DOCS_URL,
-  login,
   PROFILE_URL,
   PASSWORD_URL,
   MAIN_URL,
-  sleep
+  sleep,
+  GAME_ONE_SLUG,
+  GAME_ONE_NAME,
+  READERS_GROUP_SLUG,
+  READERS_GROUP_NAME
 } from '../helpers';
 import { By, until, WebElement } from 'selenium-webdriver';
 import { expect } from 'chai';
 export const publicTest = async url => {
   await browser.get(url);
   await isLoginPage();
-};
-
-/**
- * Initializes the test environment by
- * - Creating a user group game and associated release
- * - Logging the user in
- */
-export const init = async () => {
-  // await login(user);
 };
 
 export const docTest = async () => {
@@ -33,9 +27,9 @@ export const docTest = async () => {
 
 export const profileTest = async () => {
   await browser.get(PROFILE_URL);
-  const name = await browser.findElement(By.id('name')).getAttribute('value');
+  const name = await browser.findElement(By.css('.panel-title')).getText();
 
-  expect(name).to.contain('Spring Roll');
+  expect(name).to.equal('Edit Your Profile');
 };
 
 export const passwordTest = async () => {
@@ -47,25 +41,25 @@ export const passwordTest = async () => {
 export const groupsTest = async () => {
   await browser.get(MAIN_URL);
   const text = await browser
-    .findElement(By.css('a[href="/groups/group/foo-bar"]'))
+    .findElement(By.css(`a[href="/groups/group/${READERS_GROUP_SLUG}"]`))
     .getText();
 
-  expect(text).to.equal('FooBar');
+  expect(text).to.equal(READERS_GROUP_NAME);
 };
 
 export const gamesTest = async () => {
   await browser.get(MAIN_URL);
   const text = await browser
-    .findElement(By.css('a[href="/games/test-game"]'))
+    .findElement(By.css(`a[href="/games/${GAME_ONE_SLUG}"]`))
     .getText();
 
-  expect(text).to.contain('Test Game');
+  expect(text).to.contain(GAME_ONE_NAME);
 };
 
 export const searchTest = async () => {
   await browser.get(MAIN_URL);
 
-  await browser.findElement(By.id('allGameSearch')).sendKeys('Test');
+  await browser.findElement(By.id('allGameSearch')).sendKeys(GAME_ONE_NAME);
   await sleep(100);
   const item = await browser.wait(
     until.elementLocated(By.className('search-item'))
@@ -74,13 +68,8 @@ export const searchTest = async () => {
   browser.wait(until.elementIsVisible(item));
 
   item.click();
-
   const element = await browser
-    .wait(
-      until.elementLocated(By.css('a[href="/games/test-game/releases"]')),
-      250
-    )
+    .wait(until.elementLocated(By.css(`a[href*="/releases"]`)), 500)
     .catch(err => err);
-
   expect(element).to.be.instanceOf(WebElement);
 };

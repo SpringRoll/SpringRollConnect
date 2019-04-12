@@ -1,14 +1,19 @@
 import {
   publicTest,
   docTest,
-  init,
   profileTest,
   passwordTest,
   gamesTest,
   groupsTest,
   searchTest
 } from '../test-code/other';
-import { MAIN_URL, DOCS_URL, PROFILE_URL, PASSWORD_URL } from '../helpers';
+import {
+  MAIN_URL,
+  DOCS_URL,
+  PROFILE_URL,
+  PASSWORD_URL,
+  login
+} from '../helpers';
 
 const VIEW_GAMES = '/[home] see the games they have read+ access to.';
 const VIEW_GROUPS = '/[home] see the groups ("Teams") they are a member of.';
@@ -27,7 +32,7 @@ describe('As a public user', () => {
 });
 
 describe('As a readonly user', () => {
-  beforeEach(async () => await init(0));
+  beforeEach(async () => await login('reader'));
   it(`I can ${VIEW_GAMES}`, gamesTest);
   it(`I can ${VIEW_GROUPS}`, groupsTest);
   it(`I can ${VIEW_DOCS}`, docTest);
@@ -37,7 +42,7 @@ describe('As a readonly user', () => {
 });
 
 describe('As a edit capable user', () => {
-  beforeEach(async () => await init(1));
+  beforeEach(async () => await login('editor'));
   it(`I can ${VIEW_GAMES}`, gamesTest);
   it(`I can ${VIEW_GROUPS}`, groupsTest);
   it(`I can ${VIEW_DOCS}`, docTest);
@@ -47,7 +52,7 @@ describe('As a edit capable user', () => {
 });
 
 describe('As a admin user', () => {
-  beforeEach(async () => await init(2));
+  beforeEach(async () => await login('admin'));
   it(`I can ${VIEW_GAMES}`, gamesTest);
   it(`I can ${VIEW_GROUPS}`, groupsTest);
   it(`I can ${VIEW_DOCS}`, docTest);

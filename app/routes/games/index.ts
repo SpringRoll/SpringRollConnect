@@ -24,22 +24,24 @@ function renderPage(
   return user(req)
     .getGame({ slug: req.params.slug }, 'groups')
     .then(async ({ game, permission, token }) =>
-      res.render(template, {
-        game,
-        token,
-        host: req.headers.host,
-        ...permissions(permission),
-        success,
-        error,
-        errors,
-        releases: game.releases.slice(take, take + RELEASE_PAGE_LIMIT),
-        pagination: pagination(
-          game.releases.length,
-          req.params.number || 0,
-          `/games/${game.slug}/releases`,
-          10
-        )
-      })
+      null === permission
+        ? res.redirect('/')
+        : res.render(template, {
+            game,
+            token,
+            host: req.headers.host,
+            ...permissions(permission),
+            success,
+            error,
+            errors,
+            releases: game.releases.slice(take, take + RELEASE_PAGE_LIMIT),
+            pagination: pagination(
+              game.releases.length,
+              req.params.number || 0,
+              `/games/${game.slug}/releases`,
+              10
+            )
+          })
     );
 }
 
@@ -75,7 +77,7 @@ router.get('/:slug', function(req, res) {
 });
 
 router.use('/:slug/privileges', isAdmin);
-router.get('/:slug/privileges', function(req, res) {
+router.get('/:slug/privileges', (req, res) =>
   getRepository(Game)
     .createQueryBuilder('game')
     .leftJoinAndSelect('game.groups', 'groups')
@@ -86,10 +88,8 @@ router.get('/:slug/privileges', function(req, res) {
     .getOne()
     .then(game => {
       return res.render('games/privileges', { host: req.headers.host, game });
-    });
-
-  // have to pass addt'l param to resolve Group objects
-});
+    })
+);
 
 router.post('/:slug/privileges', function(req, res) {
   const repository = getRepository(GroupPermission);

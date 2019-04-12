@@ -1,5 +1,27 @@
 export const MAIN_URL = 'http://localhost:3000';
 
+export const GAME_ONE_NAME = 'Empty Game';
+
+export const GAME_TWO_NAME = 'Empty Game 2';
+
+export const GAME_ONE_SLUG = 'empty-game';
+
+export const GAME_TWO_SLUG = 'empty-game-2';
+
+export const ADMINS_GROUP_NAME = 'admins';
+
+export const READERS_GROUP_NAME = 'readers';
+
+export const EDITORS_GROUP_NAME = 'editors';
+
+export const ADMINS_GROUP_SLUG = 'admins';
+
+export const EDITORS_GROUP_SLUG = 'editors';
+
+export const READERS_GROUP_SLUG = 'readers';
+
+export const EMPTY_GROUP_SLUG = 'empty';
+
 export const API_URL = `${MAIN_URL}/api`;
 
 export const LOGOUT_URL = `${MAIN_URL}/logout`;
@@ -8,13 +30,13 @@ export const LOGIN_URL = `${MAIN_URL}/login`;
 
 export const GAMES_URL = `${MAIN_URL}/games`;
 
-export const GAME_ONE_URL = `${GAMES_URL}/empty-game`;
+export const GAME_ONE_URL = `${GAMES_URL}/${GAME_ONE_SLUG}`;
 
-export const GAME_ONE_RELEASES_URL = `${GAMES_URL}/empty-game/releases`;
+export const GAME_ONE_RELEASES_URL = `${GAMES_URL}/${GAME_ONE_SLUG}/releases`;
 
-export const GAME_TWO_URL = `${GAMES_URL}/empty-game-2`;
+export const GAME_TWO_URL = `${GAMES_URL}/${GAME_ONE_SLUG}`;
 
-export const GAME_TWO_RELEASES_URL = `${GAMES_URL}/empty-game-2/releases`;
+export const GAME_TWO_RELEASES_URL = `${GAMES_URL}/${GAME_ONE_SLUG}/releases`;
 
 export const USERS_URL = `${MAIN_URL}/users`;
 
@@ -28,10 +50,15 @@ export const PASSWORD_URL = `${MAIN_URL}/password`;
 
 export const API_GAMES_URL = `${API_URL}/games`;
 
-export const ADMINS_GROUP_URL = `${GROUPS_URL}/group/admins`;
-export const EDITORS_GROUP_URL = `${GROUPS_URL}/group/editors`;
-export const READERS_GROUP_URL = `${GROUPS_URL}/group/readers`;
-export const EMPTY_GROUP_URL = `${GROUPS_URL}/group/empty`;
+export const ADMINS_GROUP_URL = `${GROUPS_URL}/group/${ADMINS_GROUP_SLUG}`;
+
+export const EDITORS_GROUP_URL = `${GROUPS_URL}/group/${EDITORS_GROUP_SLUG}`;
+
+export const READERS_GROUP_URL = `${GROUPS_URL}/group/${READERS_GROUP_SLUG}`;
+
+export const EMPTY_GROUP_URL = `${GROUPS_URL}/group/${EMPTY_GROUP_SLUG}`;
+
+export const GAME_TWO_EMBED_URL = `${MAIN_URL}/embed/${GAME_TWO_SLUG}`;
 
 export const embeddedGameURL = ({ slug }) => `${MAIN_URL}/embed/${slug}`;
 

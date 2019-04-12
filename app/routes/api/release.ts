@@ -1,6 +1,11 @@
 import { Router, Request } from 'express';
-import { log } from '../../helpers';
-import { Game, Release, mapCapabilities } from '../../db';
+import {
+  Game,
+  Release,
+  mapCapabilities,
+  Group,
+  GroupPermission
+} from '../../db';
 import { getRepository } from 'typeorm';
 import { validate } from 'class-validator';
 const router = Router();
@@ -12,6 +17,24 @@ router.use((_, res, next) => {
     'Origin, X-Requested-With, Content-Type, Accept'
   );
   return next();
+});
+
+const mapResponse = ({
+  capabilities,
+  releases,
+  title,
+  slug,
+  location
+}: Game) => ({
+  capabilities,
+  commitId: releases[0].commitId,
+  game: {
+    title,
+    slug,
+    location
+  },
+  url: `${location}/${releases[0].commitId}/release/index.html`,
+  updated: releases[0].updated
 });
 
 router.post('/:slug', (req: Request & { checkBody; validationErrors }, res) =>
@@ -220,38 +243,48 @@ router.post('/:slug', (req: Request & { checkBody; validationErrors }, res) =>
 //   }
 // );
 
-// router.get('/:slugOrBundleId', function(req, res) {
-//   req
-//     .checkQuery('token')
-//     .optional()
-//     .isToken();
-//   req
-//     .checkQuery('status')
-//     .optional()
-//     .isStatus();
-//   req
-//     .checkQuery('commitId')
-//     .optional()
-//     .isCommit();
-//   req
-//     .checkQuery('version')
-//     .optional()
-//     .isSemver();
-//   if (req.validationErrors()) {
-//     return response.call(res, 'Invalid arguments');
-//   }
-//   Release.getByGame(
-//     req.params.slugOrBundleId,
-//     {
-//       version: req.query.version,
-//       commitId: req.query.commitId,
-//       archive: req.query.archive,
-//       status: req.query.status || 'prod',
-//       token: req.query.token,
-//       debug: req.query.debug
-//     },
-//     response.bind(res)
-//   );
-// });
+router.get('/:slugOrBundleId', function(req, res) {
+  if (req.query.status && 'prod' !== req.query.status) {
+    if (!req.query.token) {
+      return res.status(404).send({ success: false, data: null });
+    }
+    console.log(req.query.status);
+    return getRepository(Group)
+      .findOne({ where: { token: req.query.token } })
+      .then(({ id }) =>
+        getRepository(GroupPermission)
+          .createQueryBuilder('gp')
+          .select()
+          .where('gp.groupID = :group', { group: id })
+          .leftJoinAndSelect('gp.game', 'game')
+          .leftJoinAndSelect('game.releases', 'release')
+          .andWhere(
+            'game.slug = :slug AND release.status = :status OR game.bundleId = :slug AND release.status = :status',
+            {
+              slug: req.params.slugOrBundleId,
+              status: req.query.status
+            }
+          )
+          .orderBy('release.created', 'DESC')
+          .getOne()
+          .then(({ game }) =>
+            res.send({ success: true, data: mapResponse(game) })
+          )
+          .catch(err => res.status(404).send({ success: false, data: null }))
+      );
+  }
+
+  const prod = `AND release.status = 'prod'`;
+  return getRepository(Game)
+    .createQueryBuilder('game')
+    .leftJoinAndSelect('game.releases', 'release')
+    .where(`game.slug = :slug ${prod} OR game.bundleId = :slug ${prod}`, {
+      slug: req.params.slugOrBundleId
+    })
+    .orderBy('release.created', 'DESC')
+    .getOne()
+    .then(game => res.send({ success: true, data: mapResponse(game) }))
+    .catch(() => res.status(404).send({ success: false, data: null }));
+});
 
 module.exports = router;

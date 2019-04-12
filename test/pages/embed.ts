@@ -1,4 +1,4 @@
-import { embeddedGameURL, embedReleaseURL, login, browser } from '../helpers';
+import { login, browser, GAME_ONE_URL, GAME_TWO_EMBED_URL } from '../helpers';
 import { until, By } from 'selenium-webdriver';
 import { expect } from 'chai';
 
@@ -6,7 +6,6 @@ const { NoSuchAlertError } = require('selenium-webdriver').error;
 
 describe('Embed Pages', () => {
   it('should allow anyone to see the latest prod release of a game', async () => {
-    // make sure we don't get an "INVALID API" Alert
     const alert = await browser
       .switchTo()
       .alert()
@@ -17,6 +16,7 @@ describe('Embed Pages', () => {
   });
 
   it('should not allow a user to see anything for a game without a prod release', async () => {
+    await browser.get(GAME_TWO_EMBED_URL);
     await browser.wait(until.alertIsPresent());
     const alert = await browser.switchTo().alert();
 
@@ -26,15 +26,16 @@ describe('Embed Pages', () => {
   });
 
   it('should allow valid tokens to view dev releases of a game', async () => {
-    // await login(user);
+    await login('reader');
+    await browser.get(GAME_ONE_URL);
 
-    // const url = embedReleaseURL({
-    //   status: 'dev',
-    //   slug: game.slug,
-    //   token: group.token
-    // });
+    await browser
+      .findElement(
+        By.css('div:nth-child(4) > div.col-sm-10 > div > div > a:nth-child(1)')
+      )
+      .click();
+    ``;
 
-    // await browser.get(url);
     await browser.wait(until.elementLocated(By.id('frame')));
   });
 });
