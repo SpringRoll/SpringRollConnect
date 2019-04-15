@@ -97,7 +97,7 @@ CREATE TABLE "public"."release" (
     "created" timestamptz NOT NULL DEFAULT now(),
     "updated" timestamptz NOT NULL DEFAULT now(),
     "updatedById" int4,
-    "notes" text NOT NULL,
+    "notes" text,
     "url" text,
     "debugUncompressedSize" int8 NOT NULL DEFAULT 0,
     "debugCompressedSize" int8 NOT NULL DEFAULT 0,

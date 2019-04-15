@@ -37,8 +37,9 @@ const mapResponse = ({
   updated: releases[0].updated
 });
 
-router.post('/:slug', (req: Request & { checkBody; validationErrors }, res) =>
-  !req.body.token
+router.post('/:slug', (req: Request & { checkBody; validationErrors }, res) => {
+  console.log('attempt', req.body);
+  return 'undefined' === typeof req.body.token
     ? res.send({
         success: false,
         data: 'Missing Required Token'
@@ -73,7 +74,9 @@ router.post('/:slug', (req: Request & { checkBody; validationErrors }, res) =>
             ...req.body,
             gameUuid: uuid,
             updatedBy: undefined,
-            capabilities: mapCapabilities(req.body.capabilities)
+            capabilities: mapCapabilities(
+              req.body.capabilities ? req.body.capabilities : {}
+            )
           });
 
           return validate(release, { skipMissingProperties: true }).then(
@@ -83,6 +86,12 @@ router.post('/:slug', (req: Request & { checkBody; validationErrors }, res) =>
               }
               releaseRepository
                 .save(release)
+                // .catch(
+                //   ({ message }) => (
+                //     onFail((<string>message).split('"')[0].trim()),
+                //     Promise.reject()
+                //   )
+                // )
                 .then(({ id }) =>
                   res.send({
                     success: true,
@@ -94,8 +103,8 @@ router.post('/:slug', (req: Request & { checkBody; validationErrors }, res) =>
                 );
             }
           );
-        })
-);
+        });
+});
 
 router.get('/:slugOrBundleId', function(req, res) {
   if (req.query.status && 'prod' !== req.query.status) {

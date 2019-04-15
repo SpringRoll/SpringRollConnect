@@ -22,4 +22,4 @@ after(async () => {
 });
 
 import './api';
-// import './pages';
+import './pages';
