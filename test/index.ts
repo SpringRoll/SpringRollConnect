@@ -21,5 +21,5 @@ after(async () => {
   await app.close();
 });
 
-// import './api';
-import './pages';
+import './api';
+// import './pages';

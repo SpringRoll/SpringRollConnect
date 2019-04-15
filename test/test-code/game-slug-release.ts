@@ -39,12 +39,12 @@ export const publicUserTest = async () => {
 export const viewTest = async () => {
   await init();
 
-  const pageOneElements = await browser.findElements(By.css('.release.dev'));
+  const pageOneElements = await browser.findElements(By.css('.release'));
 
   expect(pageOneElements.length).to.equal(10);
 
   await browser.findElement(By.css('a[href*="page/2"]')).click();
-  const pageTwoElements = await browser.findElements(By.css('.release.dev'));
+  const pageTwoElements = await browser.findElements(By.css('.release'));
 
   expect(pageTwoElements.length).to.equal(2);
 };

@@ -78,7 +78,7 @@ module.exports = function(app) {
   // RESTful service for releases
   app.use('/api/release', require('./api/release'));
   app.use('/api/releases', require('./api/releases'));
-  // app.use('/api/games', require('./api/games'));
+  app.use('/api/games', require('./api/games'));
   // Authentication Pages
   app.use('/login', isAnonymous, require('./login'));
   app.use('/logout', isAuthenticated, require('./logout'));

@@ -13,12 +13,12 @@ import {
   IsInt,
   Min,
   Max,
-  IsBase64,
-  IsUUID
+  IsBase64
 } from 'class-validator';
 
 import { randomBytes } from 'crypto';
 import { User } from './';
+import { GroupPermission } from './group-permission';
 
 @Entity()
 export class Group {
@@ -71,5 +71,14 @@ export class Group {
 
   static generateToken() {
     return randomBytes(20).toString('hex');
+  }
+
+  getPermittedGameIds() {
+    return getRepository(GroupPermission)
+      .find({
+        select: ['gameID'],
+        where: { groupID: this.id }
+      })
+      .then(groupPermissions => groupPermissions.map(({ gameID }) => gameID));
   }
 }
