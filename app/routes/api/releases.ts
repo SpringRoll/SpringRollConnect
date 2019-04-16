@@ -31,13 +31,29 @@ router.post('/clean', (_, res) =>
 );
 
 router.get('/:slugBundleID', function(req, res) {
-  const release = { status: 'prod' };
+  const release = {};
+  const getPublicReleases = () =>
+    getRepository(Game)
+      .findOne({
+        where: [
+          { slug: req.params.slugBundleID },
+          { bundleId: req.params.slugBundleID }
+        ]
+      })
+      .then(({ uuid }) => {
+        const query = {
+          ...release,
+          gameUuid: uuid,
+          status: 'prod',
+          order: { updated: 'DESC' }
+        };
+        const releaseRepository = getRepository(Release);
+        return req.query.multi
+          ? releaseRepository.find(query)
+          : <any>releaseRepository.findOne(query);
+      });
 
-  if (req.query.status && 'prod' !== req.query.status) {
-    if (!req.query.token) {
-      return res.status(404).send({ success: false, data: null });
-    }
-
+  const getPrivateReleases = () =>
     getRepository(Group)
       .findOne({ where: { token: req.query.token } })
       .then(({ id }) =>
@@ -49,58 +65,40 @@ router.get('/:slugBundleID', function(req, res) {
           .where('game.slug = :slug OR game.bundleId = :slug', {
             slug: req.params.slugBundleID
           })
-          .leftJoinAndSelect('game.releases', 'release')
-          .andWhere('release.status = :status', { status: req.query.status })
-          .getMany()
-          .then(result => {
-            console.log(result);
-            return res.send({ success: false, data: null });
-          })
-      );
-  }
+          .getOne()
+      )
 
-  if (req.body.commitId) {
-    release['commitId'] = req.query.commitId;
-  }
+      .then(({ game }) => {
+        const query = <object>{
+          where: { ...release, gameUuid: game.uuid },
+          order: { updated: 'DESC' }
+        };
+        const releaseRepository = getRepository(Release);
 
-  if (req.body.status) {
+        return req.query.multi
+          ? releaseRepository.find(query)
+          : <any>releaseRepository.findOne(query);
+      });
+
+  if (req.query.status) {
     release['status'] = req.query.status;
   }
 
-  getRepository(Game)
-    .find({
-      where: [
-        { slug: req.params.slugBundleID, ...release },
-        { bundleId: req.params.slugBundleID, ...release }
-      ],
-      join: {
-        alias: 'game',
-        leftJoinAndSelect: {
-          game: 'game.release'
-        }
-      }
-    })
+  if (req.query.commitId) {
+    release['commitId'] = req.query.commitId;
+  }
 
-    .then(releases => {
-      console.log(releases);
-      return res.send({
-        success: false,
-        data: null
-      });
-    });
-  // Release.getByGame(
-  //   req.params.slugOrBundleId,
-  //   {
-  //     version: req.query.version,
-  //     commitId: req.query.commitId,
-  //     archive: req.query.archive,
-  //     status: req.query.status,
-  //     token: req.query.token,
-  //     debug: req.query.debug,
-  //     multi: true
-  //   },
-  //   response.bind(res)
-  // );
+  if (req.query.version) {
+    release['version'] = req.query.version;
+  }
+
+  (req.query.token ? getPrivateReleases() : getPublicReleases()).then(
+    releases =>
+      res.send({
+        success: true,
+        data: releases
+      })
+  );
 });
 
 module.exports = router;
