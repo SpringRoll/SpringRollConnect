@@ -6,8 +6,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn
 } from 'typeorm';
+const semver = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(-(0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(\.(0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(\+[0-9a-zA-Z-]+(\.[0-9a-zA-Z-]+)*)?$/;
 import { Capabilities } from './capabilities';
-import { IsIn, IsString, IsMongoId, IsUrl } from 'class-validator';
+import { IsIn, IsString, IsMongoId, IsUrl, Matches } from 'class-validator';
 
 @Entity({ name: 'releases' })
 export class Release {
@@ -16,6 +17,7 @@ export class Release {
   game: ObjectID;
 
   @IsString()
+  @Matches(semver)
   @Column()
   version: string;
 

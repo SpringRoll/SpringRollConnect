@@ -12,28 +12,28 @@ router.get('/', function(req, res) {
 });
 
 router.post('/', function(req: any, res) {
-  req.checkBody('oldPassword', 'Current Password is required.').notEmpty();
-  req.checkBody('newPassword', 'New Password is required.').notEmpty();
-  req
-    .checkBody(
-      'repeatPassword',
-      'Repeat Password must be equal to New Password.'
-    )
-    .equals(req.body.newPassword);
+  const errors = [];
+  if (!req.body.oldPassword) {
+    errors.push('Current Password is required.');
+  }
 
-  var errors = req.validationErrors() || [];
+  if (!req.body.newPassword) {
+    errors.push('New Password is required.');
+  }
 
-  const { user }: { user: User } = req;
+  if (req.body.oldPassword !== req.body.newPassword) {
+    errors.push('Repeat Password must be equal to New Password.');
+  }
 
   if (0 !== errors.length) {
     return res.render('password', { errors });
   }
 
-  const userRepo = getRepository(User);
+  const userRepository = getRepository(User);
 
-  userRepo
-    .findByIds([user.id], { select: ['password'] })
-    .then(([{ password }]) => {
+  userRepository
+    .findOne(req.user.id, { select: ['password'] })
+    .then(({ password }) => {
       if (!compareSync(req.body.oldPassword, password)) {
         return res.render('password', {
           error: 'Current password is invalid.'
@@ -42,8 +42,8 @@ router.post('/', function(req: any, res) {
 
       genSalt(10, (_, salt) =>
         hash(req.body.newPassword, salt, (_, hashed) =>
-          userRepo
-            .update(user.id, { password: hashed })
+          userRepository
+            .update(req.user.id, { password: hashed })
             .catch(err =>
               res.render('password', {
                 error: 'An error occurred while updating your password'

@@ -37,8 +37,7 @@ const mapResponse = ({
   updated: releases[0].updated
 });
 
-router.post('/:slug', (req: Request & { checkBody; validationErrors }, res) => {
-  console.log('attempt', req.body);
+router.post('/:slug', (req, res) => {
   return 'undefined' === typeof req.body.token
     ? res.send({
         success: false,
@@ -86,12 +85,6 @@ router.post('/:slug', (req: Request & { checkBody; validationErrors }, res) => {
               }
               releaseRepository
                 .save(release)
-                // .catch(
-                //   ({ message }) => (
-                //     onFail((<string>message).split('"')[0].trim()),
-                //     Promise.reject()
-                //   )
-                // )
                 .then(({ id }) =>
                   res.send({
                     success: true,

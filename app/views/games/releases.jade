@@ -24,8 +24,7 @@ append gameContent
 							.col-sm-3
 								if isEditor || user.isEditor
 									form.release-title.text-center(action=url + "/" + release.commitId method="post")
-										input(type="hidden" name="updatedBy" value=user._id)
-										input(type="hidden" name="release" value=release._id)
+										input(type="hidden" name="release" value=release.id)
 										input(type="hidden" name="commitId" value=release.commitId)
 										input(type="hidden" name="action" value="PATCH")
 										.btn-group.btn-block

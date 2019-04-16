@@ -1,9 +1,10 @@
-import { Router, Request } from 'express';
+import { Router } from 'express';
 import { Release, mapCapabilities, Game } from '../../db';
 import { getRepository } from 'typeorm';
 import { user } from '../../helpers';
+import { validate } from 'class-validator';
+import { sanitize } from 'class-sanitizer';
 const router = Router();
-import { handleError } from '../games/helpers';
 
 router.get('/:commit_id', async (req, res) =>
   getRepository(Release)
@@ -35,53 +36,42 @@ router.get('/:commit_id', async (req, res) =>
     })
 );
 
-router.patch('/:commit_id', async function(
-  req: Request & { checkBody: Function; validationErrors: Function },
-  res
-) {
-  req.checkBody('commitId', 'Commit is a Git hash').isCommit();
-  req.checkBody('status', 'Status must be a valid status').isStatus();
-  req.checkBody('notes').optional();
-
-  if (req.body.version)
-    req
-      .checkBody('version', 'Version must be a valid semantic version')
-      .isSemver();
-
-  var errors = req.validationErrors();
-
-  if (errors) {
-    return handleError(req, res, errors);
+router.patch('/:commit_id', async (req, res) => {
+  if (req.body.capabilities) {
+    req.body.capabilities = mapCapabilities(req.body.capabilities);
   }
+  const repository = getRepository(Release);
 
-  const repo = getRepository(Release);
-  repo
+  repository
     .findOne({
       where: { commitId: req.body.commitId },
       relations: ['game']
     })
-    .then(({ game, id, capabilities, version, notes, status, commitId }) => {
-      const body = req.body;
-      const record = {
-        capabilities: body.capabilities
-          ? mapCapabilities(body.capabilities)
-          : capabilities,
-        version: body.version ? body.version : version,
-        notes: body.notes ? body.notes : notes,
-        status: body.status ? body.status : status,
-        commitId: body.commitId ? body.commitId : commitId
-      };
-
-      repo
-        .update(id, {
-          ...record,
-          updatedBy: req.user.id,
-          updated: new Date()
-        })
-        .then(() => {
-          const baseUrl = game.isArchived ? '/archive' : '/games';
-          return res.redirect(`${baseUrl}/${game.slug}/releases`);
-        });
+    .then(({ game, ...release }) => {
+      const updatedRelease = repository.create(<object>{
+        ...release,
+        ...req.body,
+        updatedById: req.user.id,
+        updated: new Date()
+      });
+      sanitize(updatedRelease);
+      validate(updatedRelease, { skipMissingProperties: true })
+        .then(errors =>
+          0 < errors.length ? Promise.reject(errors) : Promise.resolve()
+        )
+        .catch(errors => (console.log(errors), Promise.reject()))
+        .then(() => repository.update(release.id, updatedRelease))
+        .then(() =>
+          res.redirect(
+            `/${game.isArchived ? 'archive' : 'games'}/${game.slug}/releases`
+          )
+        )
+        .catch(
+          error => (
+            req.flash('error', 'Unable to update release'),
+            res.redirect(req.originalUrl)
+          )
+        );
     });
 });
 

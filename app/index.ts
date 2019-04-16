@@ -2,7 +2,6 @@
 // Include libraries
 import { BootstrapPassport } from './helpers/passport';
 import * as express from 'express';
-const expressValidator = require('express-validator');
 const bodyParser = require('body-parser');
 
 // Create sever
@@ -28,13 +27,6 @@ app.set('json spaces', spaces);
 
 // Set the version
 app.set('version', require('../package.json').version);
-
-// Custom validators
-app.use(
-  expressValidator({
-    customValidators: require('./helpers/validators')
-  })
-);
 
 // Rendering engine for mark-up
 app.set('views', __dirname + '/views');

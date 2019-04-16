@@ -20,7 +20,6 @@ import {
   IsOptional,
   IsDefined
 } from 'class-validator';
-import { v4 } from 'uuid';
 
 interface GroupPermission {
   _id: ObjectID;
@@ -88,15 +87,4 @@ export class Game {
 
   @Column({ type: 'binary' })
   thumbnail: Binary;
-
-  constructor() {
-    const date = new Date();
-    this.capabilities = new Capabilities();
-    this.releases = [];
-    this.groups = [];
-    this.bundleId = v4();
-    this.updated = date;
-    this.updated = date;
-    this.isArchived = false;
-  }
 }

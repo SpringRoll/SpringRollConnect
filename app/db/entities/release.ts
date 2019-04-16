@@ -18,6 +18,8 @@ import {
   Length,
   IsDefined
 } from 'class-validator';
+
+import { ToInt, Trim, ToDate } from 'class-sanitizer';
 import { Game } from './game';
 import { User } from './';
 
@@ -31,11 +33,13 @@ enum ReleaseTypes {
 @Entity()
 export class Release {
   @IsInt()
+  @ToInt()
   @PrimaryGeneratedColumn()
   id: number;
 
   @IsUUID()
   @IsDefined()
+  @Trim()
   @Column({ type: 'uuid' })
   gameUuid: string;
 
@@ -44,10 +48,12 @@ export class Release {
   game: Game;
 
   @IsString()
+  @Trim()
   @Column({ type: 'text', nullable: true })
   version: string;
 
   @IsString()
+  @Trim()
   @IsIn(['dev', 'qa', 'stage', 'prod'])
   @IsDefined()
   @Column({
@@ -60,22 +66,27 @@ export class Release {
   @IsString()
   @Length(40, 40)
   @IsDefined()
+  @Trim()
   @Column({ type: 'text', unique: true, nullable: false })
   commitId: string;
 
   @IsString()
+  @Trim()
   @Column({ type: 'text', nullable: true })
   branch: string;
 
+  @IsDate()
   @IsDate()
   @Column({ type: 'timestamp with time zone', default: () => 'NOW()' })
   created: Date;
 
   @IsDate()
+  @ToDate()
   @Column({ type: 'timestamp with time zone', default: () => 'NOW()' })
   updated: Date;
 
   @IsInt()
+  @IsNumber()
   @Column({ type: 'int4', nullable: true })
   updatedById: number;
 
@@ -87,26 +98,33 @@ export class Release {
   updatedBy: User;
 
   @IsString()
+  @Trim()
   @Column({ type: 'text', nullable: true })
   notes: string;
 
   @IsString()
   @IsUrl()
+  @Trim()
   @Column({ type: 'text', nullable: true })
   url: string;
 
+  @IsNumber()
+  @ToInt()
   @Column({ type: 'bigint', nullable: false, default: 0 })
   debugUncompressedSize: number;
 
   @IsNumber()
+  @ToInt()
   @Column({ type: 'bigint', nullable: false, default: 0 })
   debugCompressedSize: number;
 
   @IsNumber()
+  @ToInt()
   @Column({ type: 'bigint', nullable: false, default: 0 })
   releaseCompressedSize: number;
 
   @IsNumber()
+  @ToInt()
   @Column({ type: 'bigint', nullable: false, default: 0 })
   releaseUncompressedSize: number;
 
