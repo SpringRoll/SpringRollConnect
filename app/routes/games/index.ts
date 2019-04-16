@@ -226,23 +226,20 @@ router.patch('/:slug', function(req, res) {
     .catch(errors => res.redirect('/games'));
 });
 
-// router.delete('/:slug', function(req, res) {
-//   Game.getBySlug(req.params.slug)
-//     .then(game => {
-//       if (game.isArchived) {
-//         game.remove();
-//       } else {
-//         game.isArchived = true;
-//         game.save(function(err) {
-//           if (err) {
-//             return done(err);
-//           }
-//         });
-//       }
-//     })
-//     .then(() => {
-//       res.redirect('/');
-//     });
-// });
+router.delete('/:slug', function(req, res) {
+  const gameRepository = getRepository(Game);
+  gameRepository
+    .findOne({ slug: req.params.slug })
+    .then(game => {
+      if (game.isArchived) {
+        return gameRepository.remove(game);
+      }
+      game.isArchived = true;
+      return <any>gameRepository.update({ uuid: game.uuid }, game);
+    })
+    .finally(() => {
+      res.redirect('/');
+    });
+});
 
 module.exports = router;
