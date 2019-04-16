@@ -136,6 +136,8 @@ CREATE TABLE "public"."user_groups" (
     PRIMARY KEY ("userId","groupId")
 );
 
+INSERT INTO "public"."config" ("id", "devExpireDays", "maxDevReleases", "embedScriptPlugin", "embedCssPlugin", "embedDebugScriptPlugin", "embedDebugCssPlugin") VALUES ('5', '90', '20', NULL, NULL, NULL, NULL);
+
 INSERT INTO "public"."game" ("uuid", "title", "slug", "repository", "location", "isArchived", "bundleId", "description", "created", "updated", "capabilities", "thumbnail") VALUES ('390fb2bc-7b21-4ebf-b1e0-6a56a6727940', 'Empty Game 2', 'empty-game-2', 'https://projects.pbs.org/bitbucket/projects/PKK/repos/empty-game/browse', 'https://springroll-tc.pbskids.org/empty-game', 'f', '108364cf-c3bb-4efc-a5bc-3eff111abc4b', '', '2019-04-02 18:27:44.452743+00', '2019-04-02 18:27:44.452743+00', '{"ui": {"mouse": true, "touch": true}, "sizes": {"large": true, "small": true, "medium": true, "xlarge": true, "xsmall": true}, "features": {"webgl": false, "webaudio": false, "websockets": false, "webworkers": false, "geolocation": false}}', NULL),
 ('7f394489-1373-455d-954f-4c318012ac63', 'Empty Game', 'empty-game', 'https://projects.pbs.org/bitbucket/projects/PKK/repos/empty-game/', 'https://springroll-tc.pbskids.org/empty-game', 'f', 'a547e908-c19d-4c31-9779-f5e4b9523f56', '', '2019-04-02 17:34:50.871811+00', '2019-04-02 17:34:50.871811+00', '{"ui": {"mouse": true, "touch": true}, "sizes": {"large": true, "small": true, "medium": true, "xlarge": true, "xsmall": true}, "features": {"webgl": false, "webaudio": false, "websockets": false, "webworkers": false, "geolocation": false}}', NULL);
 
