@@ -8,7 +8,7 @@ addons:
 services:
   - postgresql
 before_script:
-  - psql -c 'CREATE DATABASE connect;' -U postgres;
+  - psql -c 'create database connect;' -U postgres
 before_install:
   - npm install -g grunt-cli
   - sleep 5 # give time for mongo to wake up: https://docs.travis-ci.com/user/database-setup/#mongodb
