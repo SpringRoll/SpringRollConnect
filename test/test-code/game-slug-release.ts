@@ -107,7 +107,6 @@ export const downloadTest = async () => {
 };
 
 /**
- * TODO: Implement logic for when a user is not expected to be able to edit
  * @param {boolean} pass
  */
 export const editTest = async pass => {

@@ -41,19 +41,18 @@ router.post('/', function(req, res) {
         })
         .finally(() => res.redirect('/users'));
 
-    //TODO: add delete
-    //     else if (action == 'delete') {
-    //       // Delete the user-group
-    //       user.groups[0].remove();
-
-    //       // Remove the user
-    //       user.remove(function(err) {
-    //         req.flash('success', 'Deleted ' + user.name + ' successfully.');
-    //         res.redirect('/users');
-    //       });
-    //     } else {
-    //       render(user, req, res);
-    //     }
+    case 'delete':
+      return userRepository
+        .findOne({
+          where: { username: req.body.username }
+        })
+        .then(user => userRepository.remove(user))
+        .then(
+          () => (
+            req.flash('success', 'Deleted user successfully.'),
+            res.redirect('/users')
+          )
+        );
     default:
       return userRepository
         .findOne({ where: { username: req.body.userId } })
