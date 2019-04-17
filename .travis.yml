@@ -9,11 +9,16 @@ addons:
     packages:
       - postgresql-10
       - postgresql-client-10
+env:
+  global:
+    - PGPORT=5433
 services:
   - postgresql
 before_script:
   - psql -c 'create database connect;' -U postgres
 before_install:
+  - sudo cp /etc/postgresql/{9.6,10}/main/pg_hba.conf
+  - sudo /etc/init.d/postgresql restart
   - npm install -g grunt-cli
   - sleep 5 # give time for mongo to wake up: https://docs.travis-ci.com/user/database-setup/#mongodb
   - cp sample.env .env
