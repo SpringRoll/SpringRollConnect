@@ -17,6 +17,6 @@ before_install:
   - sudo service postgresql restart 11
   - npm install -g grunt-cli
   - cp sample.env .env
-scripts:
+script:
   - npm run db:init
   - npm test
