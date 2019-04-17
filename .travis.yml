@@ -4,10 +4,11 @@ node_js:
 sudo: required
 addons:
   chrome: stable
-  postgresql: "11"
+  postgresql: "10"
   apt:
     packages:
-      - postgresql-11
+      - postgresql-10
+      - postgresql-client-10
 services:
   - postgresql
 before_script:
