@@ -45,7 +45,7 @@ router.post('/', function(req, res) {
         ? (feedback['success'] = 'Group was added')
         : (feedback['error'] = 'Group was not added')
     )
-    .catch(e => e)
+    .catch(e => console.log(e))
     .finally(() => res.render('groups/add', feedback));
 });
 

@@ -89,6 +89,7 @@
     "migration": "ts-node ./app/migration/index.ts",
     "test": "ts-mocha --timeout 5000 test/index.ts",
     "test:docker": "docker-compose up --build --abort-on-container-exit --exit-code-from springroll-connect",
-    "build": "docker build -t 'springroll-container:2.0' -f DockerFile ."
+    "build": "docker build -t 'springroll-container:2.0' -f DockerFile .",
+    "db:init": "ts-node ./scripts/dbInit.ts"
   }
 }

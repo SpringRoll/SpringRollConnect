@@ -69,7 +69,7 @@ export const searchTest = async () => {
 
   item.click();
   const element = await browser
-    .wait(until.elementLocated(By.css(`a[href*="/releases"]`)), 500)
+    .wait(until.elementLocated(By.css(`a[href*="/releases"]`)), 1000)
     .catch(err => err);
   expect(element).to.be.instanceOf(WebElement);
 };

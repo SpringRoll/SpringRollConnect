@@ -4,6 +4,7 @@ import { server } from '../server';
 import testData from './testSQL';
 
 let app;
+
 before(async () => {
   app = await server;
   await browser.get(MAIN_URL).catch(err => err);
@@ -11,7 +12,8 @@ before(async () => {
 
 beforeEach(async () => {
   const connection = getConnection();
-  await connection.dropDatabase().then(() => connection.query(testData));
+
+  await connection.synchronize(true).then(() => connection.query(testData));
 });
 
 afterEach(async () => await logout());

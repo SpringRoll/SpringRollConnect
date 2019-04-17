@@ -22,7 +22,7 @@ import { Game } from './game';
 import { GroupPermission } from './group-permission';
 import { hash, genSalt } from 'bcryptjs';
 
-@Entity()
+@Entity({ name: 'springroll_user' })
 export class User {
   @PrimaryGeneratedColumn()
   id: number;

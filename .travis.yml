@@ -9,7 +9,6 @@ before_script:
   - psql --version
   - psql -c 'CREATE DATABASE connect;' -U postgres
   - psql -c 'CREATE ROLE travis SUPERUSER LOGIN CREATEDB;' -U postgres
-  # - cp config/database.yml.travis config/database.yml
 before_install:
   - sudo apt-get update
   - sudo apt-get --yes remove postgresql\*

@@ -44,7 +44,7 @@ export class Game {
     type: 'text',
     unique: true,
     nullable: false,
-    default: () => 'uuid_generate_v4()'
+    default: () => 'uuid_generate_v4()::text'
   })
   bundleId: string;
 
