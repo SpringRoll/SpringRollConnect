@@ -24,7 +24,9 @@
     "node-fetch": "^2.3.0",
     "nyc": "^13.1.0",
     "selenium-webdriver": "^4.0.0-alpha.1",
-    "superagent": "^4.1.0"
+    "superagent": "^4.1.0",
+    "webpack": "^4.30.0",
+    "webpack-cli": "^3.3.1"
   },
   "dependencies": {
     "async": "^1.0.0",
@@ -62,6 +64,9 @@
     "test": "concurrently 'node server.js' 'npm run test:init' -k --prefix-colors 'yellow,green' --success first",
     "test:loop": "concurrently 'node server.js' 'npm run test:infinite'  -k --prefix-colors 'yellow,green' --success first",
     "test:init": "mocha --require @babel/register --timeout 5000 test/index.js",
-    "test:infinite": "while npm run test:init; do :; done"
+    "test:infinite": "while npm run test:init; do :; done",
+    "frontend:build": "webpack --mode development",
+    "frontend:watch": "webpack -w --mode development",
+    "frontend:prod": "webpack --mode production"
   }
 }

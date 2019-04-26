@@ -1,6 +1,3 @@
-if (!('ontouchstart' in window))
-{
-	$('[data-toggle="tooltip"]').tooltip(
-		{container: 'body'}
-	);
+if (!('ontouchstart' in window)) {
+  $('[data-toggle="tooltip"]').tooltip({ container: 'body' });
 }

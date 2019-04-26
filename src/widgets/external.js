@@ -1,1 +1,1 @@
-$("a.external").attr("target","_blank");
+$('a.external').attr('target', '_blank');
