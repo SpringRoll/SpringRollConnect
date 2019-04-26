@@ -94,7 +94,18 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _widgets__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./widgets */ \"./src/widgets/index.js\");\n/* harmony import */ var _plugins_jquery_search__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./plugins/jquery-search */ \"./src/plugins/jquery-search.js\");\n/* harmony import */ var _plugins_jquery_search__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_plugins_jquery_search__WEBPACK_IMPORTED_MODULE_1__);\n\n\n\n\n//# sourceURL=webpack:///./src/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _widgets__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./widgets */ \"./src/widgets/index.js\");\n/* harmony import */ var _plugins_jquery_search__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./plugins/jquery-search */ \"./src/plugins/jquery-search.js\");\n/* harmony import */ var _plugins_jquery_search__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_plugins_jquery_search__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _main_less__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./main.less */ \"./src/main.less\");\n/* harmony import */ var _main_less__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_main_less__WEBPACK_IMPORTED_MODULE_2__);\n\n\n\n\n\n//# sourceURL=webpack:///./src/index.js?");
+
+/***/ }),
+
+/***/ "./src/main.less":
+/*!***********************!*\
+  !*** ./src/main.less ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("// extracted by mini-css-extract-plugin\n\n//# sourceURL=webpack:///./src/main.less?");
 
 /***/ }),
 

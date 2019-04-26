@@ -1,12 +1,12 @@
-@import 'embed-icons';
-@import 'embed-mixins';
+@import './embed-icons.less';
+@import './embed-mixins.less';
 
 @uiHeight: 40px;
 @smBreak: 500px;
 
 * {
 	/* make transparent link selection, adjust last value opacity 0 to 1.0 */
-	-webkit-tap-highlight-color: rgba(0,0,0,0); 
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 body {
@@ -138,7 +138,7 @@ body {
 	top:0;
 	left:0;
 	&.show-controls {
-		.controls { 
+		.controls {
 			display:block;
 		}
 		#pausedScreen {
@@ -179,8 +179,8 @@ body {
 				border-left: 1px solid rgba(0,0,0, 0.1);
 				width: percentage(1/10);
 				.arrow-down {
-					width: 0; 
-					height: 0; 
+					width: 0;
+					height: 0;
 					border-left: 5px solid transparent;
 					border-right: 5px solid transparent;
 					border-top: 5px solid #fff;
