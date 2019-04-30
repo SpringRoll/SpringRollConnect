@@ -1,6 +1,6 @@
 import './auto-slug';
 import './auto-submit';
-import './autogrow';
+// import './autogrow';
 import './base64';
 import './confirm';
 import './content-select';

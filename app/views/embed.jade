@@ -10,10 +10,6 @@ block header
 		link(href="#{config.embedDebugCssPlugin}", rel="stylesheet")
 
 block footer
-	if config.embedScriptPlugin && !isDebug
-		script(src="#{config.embedScriptPlugin}")
-	if config.embedDebugScriptPlugin && isDebug
-		script(src="#{config.embedDebugScriptPlugin}")
 	script(src="/js/embed.js?v=#{version}")
 
 block body

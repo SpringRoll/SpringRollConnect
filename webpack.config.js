@@ -1,5 +1,6 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { resolve } = require('path');
+const { ProvidePlugin } = require('webpack');
 module.exports = () => ({
   entry: {
     main: './src/index.js',
@@ -10,9 +11,12 @@ module.exports = () => ({
     path: resolve(__dirname, 'app/public/js')
   },
   plugins: [
+    new ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      '$.mobile': 'jquery-mobile'
+    }),
     new MiniCssExtractPlugin({
-      // Options similar to the same options in webpackOptions.output
-      // both options are optional
       filename: `../css/[name].css`,
       chunkFilename: '[id].css'
     })
@@ -20,7 +24,7 @@ module.exports = () => ({
   module: {
     rules: [
       {
-        test: /\.less$/,
+        test: /\.(css|less)$/,
         use: [
           { loader: MiniCssExtractPlugin.loader },
           'css-loader',
