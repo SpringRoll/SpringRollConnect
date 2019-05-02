@@ -7,17 +7,22 @@ import {
   PausePlugin,
   UserDataPlugin
 } from 'springroll-container';
+import '../libs/jquery.mobile.custom';
+import '../plugins/jquery-menuToggle';
 
 const container = new Container('#appContainer');
 const frame = $('#frame');
 const captionsToggle = $('#captionsToggle');
 const soundToggle = $('#soundToggle');
+const title = $('#appTitle');
 captionsToggle.hide();
 soundToggle.hide();
 
+const captions = new CaptionsPlugin('#captionsButton');
+
 container.uses(new UserDataPlugin());
 container.uses(new HelpPlugin('#helpButton'));
-container.uses(new CaptionsPlugin('#captionsButton'));
+container.uses(captions);
 container.uses(new PausePlugin('#pauseButton, #resumeButton'));
 container.uses(
   new SoundPlugin({
@@ -31,25 +36,38 @@ container.uses(
 function pauseOverlay({ data }) {
   data.paused ? frame.addClass('paused') : frame.removeClass('paused');
 }
+
+function onLoadComplete() {
+  frame.removeClass('loading');
+  title.text(container.release.game.title);
+}
+
+function onCaptionStyles({ currentTarget }) {
+  const { name, value } = currentTarget;
+  captions.setCaptionsStyles(name, value);
+}
+
+$('#captionsStyles select').change(onCaptionStyles.bind(this));
+
 container.client.on('paused', pauseOverlay);
 container.client.on('resumed', pauseOverlay);
-container.client.on('loaded', () => frame.removeClass('loading'));
+container.client.on('loadDone', onLoadComplete);
+container.client.on('loaded', onLoadComplete);
 container.client.on('features', ({ data }) => {
   if (data.captions) {
+    captionsToggle.removeClass('disabled');
     captionsToggle.show();
   }
   if (data.sound) {
+    soundToggle.removeClass('disabled');
     soundToggle.show();
   }
+  $('button[data-toggle-div]')['menuToggle']();
 });
 
 container.setupPlugins();
 
-$('form').submit(function(e) {
-  return false;
-});
-
-$('.drop-down');
+$('form').submit(() => false);
 
 const parseQuery = queryString => {
   var params = {};
@@ -95,6 +113,7 @@ const start = () => {
     // Show the title
     if (params.title) {
       frame.addClass('show-title');
+
       delete params.title;
     }
 
