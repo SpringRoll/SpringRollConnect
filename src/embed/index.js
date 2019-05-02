@@ -29,7 +29,11 @@ container.uses(
     voButton: '#voButton',
     soundButton: '#soundButton',
     sfxButton: '#sfxButton',
-    musicButton: '#musicButton'
+    musicButton: '#musicButton',
+    voSlider: '#voiceRange',
+    musicSlider: '#musicRange',
+    sfxSlider: '#sfxRange',
+    soundSlider: '#mainVolume'
   })
 );
 
@@ -62,6 +66,23 @@ container.client.on('features', ({ data }) => {
     soundToggle.removeClass('disabled');
     soundToggle.show();
   }
+
+  if (data.soundVolume) {
+    $('#divVolumeRange').removeClass('--disabled');
+  }
+
+  if (data.voVolume) {
+    $('#divVoiceRange').removeClass('--disabled');
+  }
+
+  if (data.musicVolume) {
+    $('#divMusicRange').removeClass('--disabled');
+  }
+
+  if (data.sfxVolume) {
+    $('#divSfxRange').removeClass('--disabled');
+  }
+
   $('button[data-toggle-div]')['menuToggle']();
 });
 
