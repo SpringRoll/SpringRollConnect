@@ -5,7 +5,7 @@ const { resolve } = require('path');
 const { ProvidePlugin } = require('webpack');
 module.exports = () => ({
   optimization: {
-    minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})]
+    minimizer: [new TerserJSPlugin(), new OptimizeCSSAssetsPlugin()]
   },
   entry: {
     main: './src/index.js',
@@ -30,11 +30,7 @@ module.exports = () => ({
     rules: [
       {
         test: /\.(css|less)$/,
-        use: [
-          { loader: MiniCssExtractPlugin.loader },
-          'css-loader',
-          'less-loader'
-        ]
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'less-loader']
       },
       {
         test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
