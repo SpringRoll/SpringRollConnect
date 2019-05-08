@@ -73,7 +73,7 @@
     "passport": "^0.2.1",
     "passport-local": "^1.0.0",
     "semver": "^5.0.1",
-    "springroll-container": "git+https://github.com/SpringRoll/SpringRollContainer.git#master",
+    "springroll-container": "git+https://github.com/SpringRoll/SpringRollContainer.git",
     "uuid": "^3.2.1"
   },
   "scripts": {

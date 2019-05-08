@@ -14376,8 +14376,8 @@
       }
     },
     "springroll-container": {
-      "version": "git+https://github.com/SpringRoll/SpringRollContainer.git#681bd59fd27e6fa07d7d6b47591b2c54e84fdb5f",
-      "from": "git+https://github.com/SpringRoll/SpringRollContainer.git#master",
+      "version": "git+https://github.com/SpringRoll/SpringRollContainer.git#7883fbe0043590d072f51d33f3b073065e508ccf",
+      "from": "git+https://github.com/SpringRoll/SpringRollContainer.git",
       "requires": {
         "@babel/polyfill": "^7.4.3",
         "bellhop-iframe": "^2.4.2",
