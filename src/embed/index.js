@@ -170,10 +170,7 @@ const start = () => {
       query: queryArgs.length ? '?' + queryArgs.join('&') : ''
     })
     .catch(err => err.json())
-    .then(({ error }) => {
-      console.log(error);
-      alert(error);
-    });
+    .then(({ error }) => alert(error));
 };
 
 start();
