@@ -163,11 +163,17 @@ const start = () => {
     }
   }
 
-  container.openRemote(api, {
-    singlePlay,
-    playOptions,
-    query: queryArgs.length ? '?' + queryArgs.join('&') : ''
-  });
+  container
+    .openRemote(api, {
+      singlePlay,
+      playOptions,
+      query: queryArgs.length ? '?' + queryArgs.join('&') : ''
+    })
+    .catch(err => err.json())
+    .then(({ error }) => {
+      console.log(error);
+      alert(error);
+    });
 };
 
 start();
