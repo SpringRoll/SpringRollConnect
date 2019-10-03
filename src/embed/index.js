@@ -10,7 +10,6 @@ import {
 import '../libs/jquery.mobile.custom';
 import '../plugins/jquery-menuToggle';
 
-const container = new Container('#appContainer');
 const frame = $('#frame');
 const captionsToggle = $('#captionsToggle');
 const soundToggle = $('#soundToggle');
@@ -20,12 +19,14 @@ soundToggle.hide();
 
 const captions = new CaptionsPlugin('#captionsButton');
 
-container.uses(new UserDataPlugin());
-container.uses(new HelpPlugin('#helpButton'));
-container.uses(captions);
-container.uses(new PausePlugin('#pauseButton, #resumeButton'));
-container.uses(
-  new SoundPlugin({
+const container = new Container({
+  iFrameSelector: '#appContainer',
+  plugins: [
+    new UserDataPlugin(),
+    new HelpPlugin('#helpButton'),
+    captions,
+    new PausePlugin('#pauseButton, #resumeButton'),
+    new SoundPlugin({
     voButton: '#voButton',
     soundButton: '#soundButton',
     sfxButton: '#sfxButton',
@@ -35,7 +36,7 @@ container.uses(
     sfxSlider: '#sfxRange',
     soundSlider: '#mainVolume'
   })
-);
+]});
 
 function pauseOverlay({ data }) {
   data.paused ? frame.addClass('paused') : frame.removeClass('paused');
