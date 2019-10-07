@@ -9,13 +9,6 @@ block header
 	if config.embedDebugCssPlugin && isDebug
 		link(href="#{config.embedDebugCssPlugin}", rel="stylesheet")
 
-block footer
-	if config.embedScriptPlugin && !isDebug
-		script(src="#{config.embedScriptPlugin}")
-	if config.embedDebugScriptPlugin && isDebug
-		script(src="#{config.embedDebugScriptPlugin}")
-	script(src="/js/embed.js?v=#{version}")
-
 block body
 	body
 		#frame.loading
@@ -40,21 +33,33 @@ block body
 							| &times;
 						| Audio Settings
 					.form-group: .col-xs-12
+						div#divMainVolume.volume-slider.--disabled
+							label(for="mainVolume") Volume
+							input#mainVolume.form-control-range.disabled(type="range")
 						button#sfxButton.btn.btn-primary.btn-block.muted.disabled
 							span.icon.icon-sfx.on
 							span.icon.icon-sfx-off.off
 							span.label.on Sound FX On
 							span.label.off Sound FX Off
+						div#divSfxRange.volume-slider.--disabled
+							label(for="sfxRange") SFX Volume
+							input#sfxRange.form-control-range.disabled(type="range")
 						button#musicButton.btn.btn-primary.btn-block.muted.disabled
 							span.icon.icon-music.on
 							span.icon.icon-music-off.off
 							span.label.on Music On
 							span.label.off Music Off
+						div#divMusicRange.volume-slider.--disabled
+							label(for="musicRange") Music Volume
+							input#musicRange.form-control-range.disabled(type="range")
 						button#voButton.btn.btn-primary.btn-block.muted.disabled
 							span.icon.icon-vo.on
 							span.icon.icon-vo-off.off
 							span.label.on Voice-Over On
 							span.label.off Voice-Over Off
+						div#divVoiceRange.volume-slider.--disabled
+							label(for="voiceRange") Voice-Over Volume
+							input#voiceRange.form-control-range(type="range")
 				button#captionsButton.btn.btn-primary.main.muted.disabled(data-placement='bottom', data-toggle='tooltip', title='Toggle Captions')
 					span.icon.icon-captions.on
 					span.icon.icon-captions-off.off
@@ -134,3 +139,6 @@ block body
 					span.icon.icon-play.off
 			.appWrapper
 				iframe#appContainer(allow="fullscreen; microphone; camera; vr; animations; accelerometer; gyroscope; midi; speaker;", frameborder='0', scrolling='no')
+
+	block footer
+	script(src="/js/embed.js?v=#{version}")

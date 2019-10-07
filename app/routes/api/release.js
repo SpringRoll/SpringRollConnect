@@ -100,7 +100,8 @@ router.post('/:slug', function(req, res) {
             return done(err, game);
           }
 
-          game.releases.push(release._id);
+          //game.releases.push(release._id);
+          game.releases = game.releases.concat([release._id]);
           game.updated = Date.now();
           game.save(function(err) {
             done(err, game);
@@ -116,7 +117,8 @@ router.post('/:slug', function(req, res) {
           if (releases.length > maxDevReleases) {
             let toSave = [];
             while (toSave.length < maxDevReleases) {
-              toSave.push(releases.pop());
+              //toSave.push(releases.pop());
+              toSave = toSave.concat([releases.pop()]);
             }
             releases.forEach(function(release) {
               Release.removeById(release._id, function() {});

@@ -5,7 +5,8 @@ import {
   login,
   isLoginPage,
   makeRelease,
-  makeRandomString
+  makeRandomString,
+  sleep
 } from '../helpers';
 import { expect } from 'chai';
 import { until, By, error, WebElement } from 'selenium-webdriver';
@@ -55,7 +56,6 @@ export const publicUserTest = async () => {
 
 export const viewTest = async () => {
   const pageOneElements = await browser.findElements(By.css('.release.dev'));
-
   expect(pageOneElements.length).to.equal(10);
 
   await browser.findElement(By.css('a[href="?page=2"]')).click();
@@ -86,7 +86,6 @@ export const changeTest = async pass => {
     const oldText = await formButton.getText();
 
     await formButton.click();
-
     const radio = await browser.findElement(
       By.css(
         '.dropdown-menu.statusChange-menu > li:not(.active) > a > input[type="radio"]'
@@ -143,7 +142,7 @@ export const editTest = async pass => {
 
   await browser
     .wait(until.elementLocated(By.id('version')), 500)
-    .sendKeys('1.1.0');
+    .sendKeys('1.1.0'); //seems to be not working??
   await browser
     .findElement(By.css(`button[name="action"][value="PATCH"]`))
     .click();
