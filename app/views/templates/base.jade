@@ -1,7 +1,7 @@
 doctype html
 html
 	head
-		title 
+		title
 			block title
 			|  SpringRoll Connect v#{version}
 
@@ -14,9 +14,9 @@ html
 
 		block header
 
+		script(src="/js/libraries.js?v=#{version}")
+		script(src="/js/main.js?v=#{version}")
+
+		block footer
 	block body
 
-	script(src="/js/libraries.js?v=#{version}")
-	script(src="/js/main.js?v=#{version}")
-
-	block footer

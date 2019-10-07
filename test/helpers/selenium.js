@@ -16,11 +16,11 @@ export let browser = undefined;
 export class Selenium {
   static async init() {
     browser = await new webdriver.Builder()
-      .forBrowser('chrome', '71.0.3578.98')
+      .forBrowser('chrome')
       .setChromeOptions(
         new Options().addArguments(
           '--no-sandbox',
-          '--headless',
+          //'--headless',
           //Some Elements are hidden at smaller browser sizes
           'window-size=1240,720'
         )
