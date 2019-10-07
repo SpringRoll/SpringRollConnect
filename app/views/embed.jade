@@ -9,9 +9,6 @@ block header
 	if config.embedDebugCssPlugin && isDebug
 		link(href="#{config.embedDebugCssPlugin}", rel="stylesheet")
 
-block footer
-	script(src="/js/embed.js?v=#{version}")
-
 block body
 	body
 		#frame.loading
@@ -142,3 +139,6 @@ block body
 					span.icon.icon-play.off
 			.appWrapper
 				iframe#appContainer(allow="fullscreen; microphone; camera; vr; animations; accelerometer; gyroscope; midi; speaker;", frameborder='0', scrolling='no')
+
+	block footer
+	script(src="/js/embed.js?v=#{version}")

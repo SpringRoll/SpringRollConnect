@@ -18,25 +18,25 @@ captionsToggle.hide();
 soundToggle.hide();
 
 const captions = new CaptionsPlugin('#captionsButton');
-
 const container = new Container({
-  iFrameSelector: '#appContainer',
+  iframeSelector: '#appContainer',
   plugins: [
     new UserDataPlugin(),
     new HelpPlugin('#helpButton'),
     captions,
     new PausePlugin('#pauseButton, #resumeButton'),
     new SoundPlugin({
-    voButton: '#voButton',
-    soundButton: '#soundButton',
-    sfxButton: '#sfxButton',
-    musicButton: '#musicButton',
-    voSlider: '#voiceRange',
-    musicSlider: '#musicRange',
-    sfxSlider: '#sfxRange',
-    soundSlider: '#mainVolume'
-  })
-]});
+      voButton: '#voButton',
+      soundButton: '#soundButton',
+      sfxButton: '#sfxButton',
+      musicButton: '#musicButton',
+      voSlider: '#voiceRange',
+      musicSlider: '#musicRange',
+      sfxSlider: '#sfxRange',
+      soundSlider: '#mainVolume'
+    })
+  ]
+});
 
 function pauseOverlay({ data }) {
   data.paused ? frame.addClass('paused') : frame.removeClass('paused');
