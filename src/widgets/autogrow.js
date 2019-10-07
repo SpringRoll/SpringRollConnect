@@ -1,1 +1,1 @@
-$('textarea.autogrow').autoGrow();
+$('textarea.autogrow')['autoGrow']();
