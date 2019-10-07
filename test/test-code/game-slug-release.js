@@ -56,7 +56,6 @@ export const publicUserTest = async () => {
 
 export const viewTest = async () => {
   const pageOneElements = await browser.findElements(By.css('.release.dev'));
-  console.log('post page one');
   expect(pageOneElements.length).to.equal(10);
 
   await browser.findElement(By.css('a[href="?page=2"]')).click();
@@ -87,7 +86,6 @@ export const changeTest = async pass => {
     const oldText = await formButton.getText();
 
     await formButton.click();
-
     const radio = await browser.findElement(
       By.css(
         '.dropdown-menu.statusChange-menu > li:not(.active) > a > input[type="radio"]'
