@@ -260,7 +260,7 @@ eval("/* WEBPACK VAR INJECTION */(function($) {// Auto fill the uri slug on inpu
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("/* WEBPACK VAR INJECTION */(function($) {// Submit on change\n$('.auto-submit').on('tap', function() {\n  console.log('called');\n  $(this)\n    .closest('form')\n    .submit();\n});\n\nconsole.log($('.auto-submit'));\nconsole.log(document.querySelectorAll('.auto-submit'));\n\n/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ \"./node_modules/jquery/dist/jquery.js\")))\n\n//# sourceURL=webpack:///./src/widgets/auto-submit.js?");
+eval("/* WEBPACK VAR INJECTION */(function($) {// Submit on change\n$('.auto-submit').on('tap', function() {\n  console.log('called');\n  $(this)\n    .closest('form')\n    .submit();\n});\n\n/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ \"./node_modules/jquery/dist/jquery.js\")))\n\n//# sourceURL=webpack:///./src/widgets/auto-submit.js?");
 
 /***/ }),
 
