@@ -13,23 +13,19 @@ const Group = require('./app/models/group');
 const uuid = require('uuid/v1');
 const Release = require('./app/models/release');
 
-function makeRandomString(length){
+function makeRandomString(length) {
   let random = '';
-  for (i=0; i < length; i++ ){
-    random += (Math.random()*10).toString().substring(0,1);
+  for (let i = 0; i < length; i++) {
+    random += (Math.random() * 10).toString().substring(0, 1);
   }
   return random;
 }
 
-async function makeDummyData(){
+async function makeDummyData() {
   let admin = await makeAdmin();
   let game = await makeGame();
   let groups = await makeGroups();
-  return Promise.all([
-    admin,
-    game,
-    groups
-  ]);
+  return Promise.all([admin, game, groups]);
 }
 
 async function makeAdmin() {
@@ -55,7 +51,7 @@ async function makeAdmin() {
   return admin.save();
 }
 
-async function makeGame(){
+async function makeGame() {
   console.log('Creating example game with releases...');
   //set your values as desired
   let gameParams = {
@@ -72,15 +68,16 @@ async function makeGame(){
   game.releases = [];
   game.groups = [];
   game.save();
-  let levels = ["dev", "qa", "prod"];
+  let levels = ['dev', 'qa', 'prod'];
   levels.forEach(level => {
     let newRelease = addReleases(game.id, level);
-    game.releases.push(newRelease);
+    //game.releases.push(newRelease);
+    game.releases.concat([newRelease]);
   });
-  return game.save()
+  return game.save();
 }
 
-function addReleases(gameId, releaseLevel){
+function addReleases(gameId, releaseLevel) {
   console.log('Adding release with level: ' + releaseLevel);
   let commitHash = makeRandomString(40);
   let releaseParams = {
@@ -89,14 +86,14 @@ function addReleases(gameId, releaseLevel){
     // branch: 'origin/my-branch',
     commitId: commitHash,
     created: Date.now(),
-    updated: Date.now(),
-  }
+    updated: Date.now()
+  };
   let release = new Release(releaseParams);
   release.save();
   return release;
 }
 
-async function makeGroups(){
+async function makeGroups() {
   console.log('Creating example groups...');
   let groupA = new Group({
     name: 'GroupA',
@@ -107,28 +104,28 @@ async function makeGroups(){
     isUserGroup: false,
     games: []
   });
-  return groupA.save()
-  .then(() => {
-    return addUsers(groupA);
-  })
-  .then(() => {
-    let groupB = new Group({
-      name: 'GroupB',
-      privilege: 0,
-      slug: 'groupSlugB',
-      token: 'groupBToken',
-      tokenExpires: null,
-      isUserGroup: false,
-      games: []
-    });
-    return groupB.save()
+  return groupA
+    .save()
     .then(() => {
-      return addUsers(groupB);
+      return addUsers(groupA);
+    })
+    .then(() => {
+      let groupB = new Group({
+        name: 'GroupB',
+        privilege: 0,
+        slug: 'groupSlugB',
+        token: 'groupBToken',
+        tokenExpires: null,
+        isUserGroup: false,
+        games: []
+      });
+      return groupB.save().then(() => {
+        return addUsers(groupB);
+      });
     });
-  });
 }
 
-async function addUsers(incGroup){
+async function addUsers(incGroup) {
   console.log('Creating creating non-admin user for group...');
   let password = makeRandomString(16);
   let userHash = 'user' + makeRandomString(4);
@@ -141,7 +138,7 @@ async function addUsers(incGroup){
     isUserGroup: true
   });
   newUserGroup.save();
-  console.log('Made user specific group, now making user...')
+  console.log('Made user specific group, now making user...');
   let newUser = new User({
     username: userHash,
     password: password,
@@ -153,11 +150,11 @@ async function addUsers(incGroup){
 }
 
 makeDummyData()
-.then(()=>{
-  console.log('Dummy data loaded!');
-  process.exit(0);
-})
-.catch(err => {
-  console.log(err);
-  process.exit(-1);
-});
+  .then(() => {
+    console.log('Dummy data loaded!');
+    process.exit(0);
+  })
+  .catch(err => {
+    console.log(err);
+    process.exit(-1);
+  });
