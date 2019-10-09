@@ -71,8 +71,7 @@ async function makeGame() {
   let levels = ['dev', 'qa', 'prod'];
   levels.forEach(level => {
     let newRelease = addReleases(game.id, level);
-    //game.releases.push(newRelease);
-    game.releases.concat([newRelease]);
+    game.releases.push(newRelease);
   });
   return game.save();
 }
