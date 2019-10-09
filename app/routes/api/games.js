@@ -79,21 +79,25 @@ router.get('/', function(req, res) {
 
       games = games.reduce((filteredGames, game) => {
         //removes any game that doesn't have a release of the specified type
-        if (game.releases.length > 0) {
+        if (game.releases.length > 0 || !req.query.status) {
           //update the url
-          game.releases.forEach(function(release) {
+          game.releases.forEach(release => {
             release.url =
               game.location +
               '/' +
               release.commitId +
               '/' +
-              (req.query.debug == 'true' ? 'debug' : 'release') +
-              (req.query.archive == 'true' ? '.zip' : '/index.html');
+              (req.query.debug === 'true' ? 'debug' : 'release') +
+              (req.query.archive === 'true' ? '.zip' : '/index.html');
           });
           filteredGames.push(game);
         }
         return filteredGames;
       }, []);
+
+      if (games.length <= 0) {
+        return response.call(res, 'No games');
+      }
 
       response.call(res, err, games);
     }
