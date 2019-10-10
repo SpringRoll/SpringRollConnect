@@ -11,6 +11,8 @@ import {
 } from '../helpers';
 import { By, until, WebElement } from 'selenium-webdriver';
 import { expect } from 'chai';
+import { exec } from 'child_process';
+import { promisify } from 'util';
 export const publicTest = async url => {
   await browser.get(url);
   await isLoginPage();
@@ -91,4 +93,21 @@ export const searchTest = async () => {
     .catch(err => err);
 
   expect(element).to.be.instanceOf(WebElement);
+};
+
+export const versionToCommitTest = async () => {
+  await browser.get(MAIN_URL);
+
+  const asyncExec = promisify(exec);
+  const button = await browser.findElement(By.css('.navbar-brand .version'));
+  const version = require('../../package.json').version;
+  const { stdout, stderr } = await asyncExec(`git rev-list -n1 ${version}`);
+  const commit = stdout.slice(0, 7);
+
+  let text = await button.getText();
+  expect(text).to.equal(`v${version}`);
+
+  button.click();
+  text = await button.getText();
+  expect(text).to.equal(`${commit}`);
 };
