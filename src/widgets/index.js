@@ -16,3 +16,4 @@ import './search';
 import './select-all';
 import './tooltip';
 import './unique';
+import './version-to-commit';
