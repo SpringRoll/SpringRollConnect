@@ -13,7 +13,7 @@ block body
 					a.navbar-brand(href='/')
 						img.logo.logo-sm(src="/images/logo.png")
 						| SpringRoll Connect
-					a.navbar-brand(href='#')
+					span.navbar-brand
 						small.version.hidden-xs(data-ver="v#{version}" data-commit="#{commitID}") v#{version}
 				.navbar-collapse.collapse
 					if user && user.privilege >= privilege.subscriber

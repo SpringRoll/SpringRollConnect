@@ -39,12 +39,13 @@ app.set('json spaces', spaces);
 // Set the version
 app.set('version', require('../package.json').version);
 
-exec(`git rev-list -n1 ${app.get('version')}`, (err, stdout, stderr) => {
+const log = require('./helpers/logger');
+exec(`git rev-list -n1 HEAD`, (err, stdout, stderr) => {
   if (err) {
-    console.log(err);
+    log.error(err);
   } else {
-    console.log('stdout', stdout);
-    console.log('stderr', stderr);
+    log.info(stdout);
+    log.error(stderr);
     app.set('commitID', stdout);
   }
 });

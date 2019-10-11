@@ -101,7 +101,7 @@ export const versionToCommitTest = async () => {
   const asyncExec = promisify(exec);
   const button = await browser.findElement(By.css('.navbar-brand .version'));
   const version = require('../../package.json').version;
-  const { stdout, stderr } = await asyncExec(`git rev-list -n1 ${version}`);
+  const { stdout, stderr } = await asyncExec(`git rev-list -n1 HEAD`);
   const commit = stdout.slice(0, 7);
 
   let text = await button.getText();
