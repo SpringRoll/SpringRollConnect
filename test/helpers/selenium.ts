@@ -3,7 +3,7 @@ import { Builder } from 'selenium-webdriver';
 const Options = require('selenium-webdriver/chrome').Options;
 
 export const browser = new Builder()
-  .forBrowser('chrome', '71.0.3578.98')
+  .forBrowser('chrome')
   .setChromeOptions(
     new Options().addArguments(
       '--no-sandbox',

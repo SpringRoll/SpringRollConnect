@@ -25,7 +25,7 @@ interface getGameArgs {
   where?: any;
 }
 
-@Entity()
+@Entity({ name: 'springroll_user' })
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -52,9 +52,9 @@ export class User {
 
   @ValidateNested({ each: true })
   @ManyToMany(type => Group, group => group.users, {
-    eager: true,
-    cascadeInsert: true,
-    cascadeUpdate: true
+    eager: true
+    // cascadeInsert: true,
+    //cascadeUpdate: true
   })
   @JoinTable({ name: 'user_groups' })
   groups: Array<Group>;
