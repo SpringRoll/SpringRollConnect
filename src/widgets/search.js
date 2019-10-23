@@ -1,2 +1,2 @@
 // Search functionality
-$("[data-search]").search();
+$('[data-search]')['search']();

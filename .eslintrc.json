@@ -1,7 +1,8 @@
 {
   "env": {
     "es6": true,
-    "node": true
+    "node": true,
+    "browser": true
   },
   "globals": {
     "browser": true,
@@ -14,7 +15,9 @@
     "after": true,
     "describe": true,
     "it": true,
-    "beforeEach": true
+    "beforeEach": true,
+    "$": true,
+    "jQuery": true
   },
   "parserOptions": {
     "ecmaVersion": 2018,
