@@ -29,7 +29,6 @@ export function addGames(
   res: Response,
   { permission, game }: addGamesBody
 ) {
-  console.log(permission, game);
   return Promise.all([
     getRepository(Group).findOne({ slug: req.params.slug }),
     getRepository(Game).find({
@@ -37,7 +36,6 @@ export function addGames(
     })
   ])
     .then(([group, games]) => {
-      console.log(group, games);
       const repository = getRepository(GroupPermission);
       permission = Number(permission);
 

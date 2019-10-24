@@ -120,11 +120,12 @@ export const addGame = async config => {
 
   await gameSearch.sendKeys('empty game 2');
 
+  await sleep(500);
   await browser
     .wait(until.elementLocated(By.css('#gameSearchDisplay > ul > li > button')))
     .click();
 
-  await sleep(1000);
+  await sleep(500);
 
   await browser.findElement(By.css('button[value="addGames"]')).click();
 
@@ -150,7 +151,7 @@ export const removeGame = async config => {
 
   await addGame(config);
 
-  await sleep(1000);
+  await sleep(500);
 
   await browser
     .findElement(By.css('div.col-md-1.text-right > form > button'))
