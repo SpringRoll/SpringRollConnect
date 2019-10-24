@@ -13,7 +13,7 @@ router.get('/', function(req: Request, res: Response) {
 
 router.post('/', async function(req: Request, res: Response) {
   const userRepo = getRepository(User);
-  const user = userRepo.merge(req.user, req.body);
+  const user = userRepo.merge(<User>req.user, req.body);
 
   validate(user)
     .catch(errors =>
@@ -23,7 +23,9 @@ router.post('/', async function(req: Request, res: Response) {
       })
     )
     .then(() =>
-      userRepo.update(req.user.id, req.body).catch(err => Promise.reject(err))
+      userRepo
+        .update((<User>req.user).id, req.body)
+        .catch(err => Promise.reject(err))
     )
     .catch(({ message }) => {
       let msg = 'An error occurred while updating';

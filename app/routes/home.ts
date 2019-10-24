@@ -1,5 +1,5 @@
 import { getRepository } from 'typeorm';
-import { Release } from '../db';
+import { Release, User } from '../db';
 import { Request, Response, Router } from 'express';
 import { pagination } from '../helpers';
 import { user } from '../helpers';
@@ -54,14 +54,14 @@ router.get('/:local(page)?/:number([1-9][0-9]?*)?', function(
     .then(([games, count]) =>
       res.render('home', {
         games: games,
-        groups: req.user.groups,
+        groups: (<User>req.user).groups,
         pagination: pagination(count, req.params.number)
       })
     )
     .catch(err =>
       res.render('home', {
         games: [],
-        groups: req.user.groups
+        groups: (<User>req.user).groups
       })
     );
 });

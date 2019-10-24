@@ -54,7 +54,7 @@ export const addUser = async config => {
 
   await userSearch.sendKeys('reader');
   // Pause here as the dom is rapidly changing and can cause a selenium error
-  await sleep(100);
+  await sleep(1000);
   await browser
     .wait(until.elementLocated(By.css('#userSearchDisplay > ul > li > button')))
     .click();
@@ -120,11 +120,11 @@ export const addGame = async config => {
 
   await gameSearch.sendKeys('empty game 2');
 
-  await sleep(100);
-
   await browser
     .wait(until.elementLocated(By.css('#gameSearchDisplay > ul > li > button')))
     .click();
+
+  await sleep(1000);
 
   await browser.findElement(By.css('button[value="addGames"]')).click();
 
@@ -149,6 +149,8 @@ export const removeGame = async config => {
   }
 
   await addGame(config);
+
+  await sleep(1000);
 
   await browser
     .findElement(By.css('div.col-md-1.text-right > form > button'))

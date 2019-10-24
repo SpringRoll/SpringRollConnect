@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { Release, mapCapabilities, Game } from '../../db';
+import { Release, mapCapabilities, Game, User } from '../../db';
 import { getRepository } from 'typeorm';
 import { user } from '../../helpers';
 import { validate } from 'class-validator';
@@ -51,7 +51,7 @@ router.patch('/:commit_id', async (req, res) => {
       const updatedRelease = repository.create(<object>{
         ...release,
         ...req.body,
-        updatedById: req.user.id,
+        updatedById: (<User>req.user).id,
         updated: new Date()
       });
       sanitize(updatedRelease);

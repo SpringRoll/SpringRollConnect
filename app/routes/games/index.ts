@@ -2,7 +2,13 @@ import { pagination, isAdmin, user, permissions } from '../../helpers';
 import { Router } from 'express';
 import { Request, Response } from 'express';
 import { getRepository, In } from 'typeorm';
-import { Game, Release, mapCapabilities, GroupPermission } from '../../db';
+import {
+  Game,
+  Release,
+  mapCapabilities,
+  GroupPermission,
+  User
+} from '../../db';
 import { validate } from 'class-validator';
 
 const router = Router();
@@ -57,7 +63,7 @@ router.get(
               where: { uuid: In(gameIds) },
               select: ['thumbnail', 'title', 'slug'],
               relations: ['releases'],
-              skip: 1 < req.params.number ? (req.params.number - 1) * 24 : 0,
+              skip: 1 < +req.params.number ? (+req.params.number - 1) * 24 : 0,
               order:
                 req.params.order === 'alphabetical'
                   ? { title: 'ASC' }
@@ -163,7 +169,7 @@ router.post('/:slug/releases', (req, res) => {
       const release = releaseRepository.create({
         ...req.body,
         gameUuid: game.uuid,
-        updatedById: req.user.id,
+        updatedById: (<User>req.user).id,
         capabilities: mapCapabilities(req.body.capabilities)
       });
 

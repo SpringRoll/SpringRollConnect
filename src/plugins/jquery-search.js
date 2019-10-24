@@ -80,6 +80,10 @@
           }
           list.html(items);
           list.find('.search-item').on('tap', onSearchClicked);
+          //added because the mousedown event on button was firing before a result could be selected.
+          list.find('.search-item').on('mousedown', function(e) {
+            e.preventDefault();
+          });
         }
       };
       input

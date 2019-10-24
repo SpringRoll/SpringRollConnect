@@ -46,7 +46,9 @@ router.get('/', (req, res) => {
       })
     )
     .then(data => res.send({ success: true, data }))
-    .catch(err => (console.log(err), res.send({ success: false, data: [] })));
+    .catch(err => {
+      console.log(err), res.send({ success: false, data: [] });
+    });
 });
 
 module.exports = router;

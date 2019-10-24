@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { getRepository } from 'typeorm';
-import { Group, GroupPermission } from '../../db';
+import { Group, GroupPermission, User as DBUser } from '../../db';
 import { user as User, permissions, isAdmin } from '../../helpers';
 import * as groupMethods from './groupMethods';
 
@@ -16,8 +16,8 @@ router.get('/:slug', function(req, res) {
       if (!group) {
         return res.status(404).render('404');
       } else if (
-        !req.user.isAdmin &&
-        !users.find(({ id }) => req.user.id === id)
+        !(<DBUser>req.user).isAdmin &&
+        !users.find(({ id }) => (<DBUser>req.user).id === id)
       ) {
         return res.status(401).render('401');
       }

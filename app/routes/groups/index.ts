@@ -8,7 +8,7 @@ module.exports = Router().get('/:local(page)?/:number([0-9]+)?', (req, res) =>
     .findAndCount({
       cache: true,
       order: { name: 'ASC' },
-      skip: 1 < req.params.number ? (req.params.number - 1) * 24 : 0,
+      skip: 1 < +req.params.number ? (+req.params.number - 1) * 24 : 0,
       take: 24,
       where: { isUserGroup: false }
     })

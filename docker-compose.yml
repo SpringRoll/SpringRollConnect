@@ -1,16 +1,6 @@
 version: '3'
 
 services:
-  # springroll-connect:
-  #   image: springroll-container:2.0
-  #   depends_on:
-  #     - postgres
-  #   volumes:
-  #     - ./app:/app/app
-  #   expose:
-  #     - 3000
-  #   ports:
-  #     - 3000:3000
   postgres:
     image: postgres:11.1
     expose:

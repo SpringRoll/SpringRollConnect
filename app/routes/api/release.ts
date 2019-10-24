@@ -102,7 +102,9 @@ router.post('/:slug', (req, res) => {
 router.get('/:slugOrBundleId', function(req, res) {
   if (req.query.status && 'prod' !== req.query.status) {
     if (!req.query.token) {
-      return res.status(404).send({ success: false, data: null });
+      return res
+        .status(404)
+        .send({ success: false, data: 'Access Token Missing' });
     }
     return getRepository(Group)
       .findOne({ where: { token: req.query.token } })
@@ -125,7 +127,7 @@ router.get('/:slugOrBundleId', function(req, res) {
           .then(({ game }) =>
             res.send({ success: true, data: mapResponse(game) })
           )
-          .catch(err => res.status(404).send({ success: false, data: null }))
+          .catch(err => res.status(404).send({ success: false, data: err }))
       );
   }
 
@@ -139,7 +141,9 @@ router.get('/:slugOrBundleId', function(req, res) {
     .orderBy('release.created', 'DESC')
     .getOne()
     .then(game => res.send({ success: true, data: mapResponse(game) }))
-    .catch(() => res.status(404).send({ success: false, data: null }));
+    .catch(err =>
+      res.status(404).send({ success: false, data: 'No Release Available' })
+    );
 });
 
 module.exports = router;

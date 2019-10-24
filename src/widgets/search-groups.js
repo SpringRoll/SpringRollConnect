@@ -11,7 +11,7 @@
     groups.append(
       groupTemplate
         .trim()
-        .replace('%id%', group._id)
+        .replace('%id%', group.id)
         .replace('%name%', group.name)
         // @ts-ignore
         .replace('%permission%', permission)

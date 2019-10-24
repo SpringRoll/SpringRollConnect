@@ -6,7 +6,7 @@
     users.append(
       userTemplate
         .trim()
-        .replace('%id%', user._id)
+        .replace('%id%', user.id)
         .replace('%name%', user.name)
     );
   });

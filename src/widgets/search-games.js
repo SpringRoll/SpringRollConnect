@@ -6,7 +6,7 @@
     games.append(
       gameTemplate
         .trim()
-        .replace('%id%', game._id)
+        .replace('%id%', game.slug)
         .replace('%title%', game.title)
     );
   });

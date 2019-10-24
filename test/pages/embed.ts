@@ -1,4 +1,10 @@
-import { login, browser, GAME_ONE_URL, GAME_TWO_EMBED_URL } from '../helpers';
+import {
+  login,
+  browser,
+  GAME_ONE_URL,
+  GAME_TWO_EMBED_URL,
+  sleep
+} from '../helpers';
 import { until, By } from 'selenium-webdriver';
 import { expect } from 'chai';
 
@@ -22,7 +28,7 @@ describe('Embed Pages', () => {
 
     const text = await alert.getText();
     await alert.accept();
-    expect(text).to.equal('Invalid arguments');
+    expect(text).to.equal('No Release Available');
   });
 
   it('should allow valid tokens to view dev releases of a game', async () => {
