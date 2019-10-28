@@ -65,6 +65,9 @@ form.search .search-item:hover {
 form.search .active .search-item {
   color: #fff !important;
 }
+span.navbar-brand {
+  cursor: pointer;
+}
 .navbar-brand .version {
   background: #333;
   color: #666;

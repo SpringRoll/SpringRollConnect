@@ -2,6 +2,8 @@
 // Include libraries
 import { BootstrapPassport } from './helpers/passport';
 import * as express from 'express';
+import { exec } from 'child_process';
+import { log } from './helpers/logger';
 const bodyParser = require('body-parser');
 
 // Create sever
@@ -27,6 +29,16 @@ app.set('json spaces', spaces);
 
 // Set the version
 app.set('version', require('../package.json').version);
+
+exec('git rev-list -n1 HEAD', (err, stdout, stderr) => {
+  if (err) {
+    log.error(err);
+  } else {
+    log.info('stdout', stdout);
+    log.error('stderr', stderr);
+    app.set('commitID', stdout);
+  }
+});
 
 // Rendering engine for mark-up
 app.set('views', __dirname + '/views');

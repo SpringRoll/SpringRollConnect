@@ -14,6 +14,7 @@ module.exports = function(app) {
     // res.locals.privilege = privilege;
     res.locals.moment = require('moment');
     res.locals.version = app.get('version');
+    res.locals.commitID = app.get('commitID');
     res.locals.marked = function(str) {
       return marky(str);
     };

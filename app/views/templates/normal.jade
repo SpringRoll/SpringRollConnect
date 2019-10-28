@@ -13,7 +13,8 @@ block body
 					a.navbar-brand(href='/')
 						img.logo.logo-sm(src="/images/logo.png")
 						| SpringRoll Connect
-						small.version.hidden-xs v#{version}
+					span.navbar-brand
+						small.version.hidden-xs(data-ver="v#{version}" data-commit="#{commitID}") v#{version}
 				.navbar-collapse.collapse
 					if user && user.isReader
 						form.navbar-form.search.hidden-sm.hidden-xs

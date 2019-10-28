@@ -5,7 +5,8 @@ import {
   passwordTest,
   gamesTest,
   groupsTest,
-  searchTest
+  searchTest,
+  versionToCommitTest
 } from '../test-code/other';
 import {
   MAIN_URL,
@@ -20,6 +21,7 @@ const VIEW_GROUPS = '/[home] see the groups ("Teams") they are a member of.';
 const VIEW_DOCS = '/docs access the documentation page.';
 const VIEW_PROFILE = '/profile access this page.';
 const VIEW_PASSWORD = '/password access this page.';
+const VIEW_COMMIT_ID = 'reveal the commit ID of the current version.';
 
 const USE_SEARCH = 'use the search bar to find a game.';
 
@@ -53,6 +55,7 @@ describe('As a edit capable user', () => {
 
 describe('As a admin user', () => {
   beforeEach(async () => await login('admin'));
+  it(`I can ${VIEW_COMMIT_ID}`, versionToCommitTest);
   it(`I can ${VIEW_GAMES}`, gamesTest);
   it(`I can ${VIEW_GROUPS}`, groupsTest);
   it(`I can ${VIEW_DOCS}`, docTest);

@@ -23,7 +23,7 @@ router.get('/', (req, res) => {
             ? getRepository(Game).find({
                 where: { uuid: In(uuids) },
                 order: { updated: 'DESC' },
-                relations: ['releases']
+                relations: ['releases', 'groups']
               })
             : []
         )
@@ -31,6 +31,7 @@ router.get('/', (req, res) => {
         .createQueryBuilder('game')
         .leftJoinAndSelect('game.releases', 'release')
         .where(`release.status = 'prod'`)
+        .limit(1)
         .orderBy('game.updated', 'DESC')
         .getMany()
   )
