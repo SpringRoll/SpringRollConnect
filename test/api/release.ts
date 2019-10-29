@@ -4,7 +4,10 @@ const TOKEN = '8ae7aa9e471c7b9d3fdb04f7e80dca5fce59a386';
 const addRelease = async (commitId, token = undefined) => {
   const gameSlug = await fetch('http://localhost:3000/api/games')
     .then(r => r.json())
-    .then(({ data }) => data[0].slug);
+    .then(({ data }) => {
+      //ensure that Empty Game is returned, not Empty Game 2
+      return data[0].slug === 'empty-game' ? data[0].slug : data[1].slug;
+    });
 
   // make a new commit id for the new release
 
@@ -32,7 +35,10 @@ describe('api/release', () => {
         r => r.json()
       );
 
-      const gameSlug = gameResponse.data[0].slug;
+      const gameSlug =
+        gameResponse.data[0].slug === 'empty-game'
+          ? gameResponse.data[0].slug
+          : gameResponse.data[1].slug;
 
       const { success, data } = await fetch(
         `http://localhost:3000/api/release/${gameSlug}`
@@ -45,7 +51,10 @@ describe('api/release', () => {
     it('should return the dev releases for a game if a valid token is provided.', async () => {
       const gameSlug = await fetch('http://localhost:3000/api/games')
         .then(r => r.json())
-        .then(({ data }) => data[0].slug);
+        .then(({ data }) => {
+          //ensure that Empty Game is returned, not Empty Game 2
+          return data[0].slug === 'empty-game' ? data[0].slug : data[1].slug;
+        });
 
       const { success, data } = await fetch(
         `http://localhost:3000/api/release/${gameSlug}?token=${TOKEN}&status=dev`

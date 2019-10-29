@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { Release, Group, Game } from '../../db';
-import { getRepository, In } from 'typeorm';
+import { getRepository, In, QueryBuilder } from 'typeorm';
 
 const router = Router();
 
@@ -20,6 +20,19 @@ router.get('/', (req, res) => {
   // The status is inclusive of status levels greater than the current
   // for instance, QA status means the latest QA, Stage or Prod release
   statuses = statuses.slice(statuses.indexOf(status));
+
+  let tokenlessQueryBuilder = getRepository(Game)
+    .createQueryBuilder('game')
+    .leftJoinAndSelect('game.releases', 'release', `release.status = 'prod'`)
+    .orderBy('game.updated', 'DESC');
+
+  //If status is defined as prod then only grab games with a prod release.
+  if (req.query.status === 'prod') {
+    tokenlessQueryBuilder = getRepository(Game)
+      .createQueryBuilder('game')
+      .innerJoinAndSelect('game.releases', 'release', `release.status = 'prod'`)
+      .orderBy('game.updated', 'DESC');
+  }
 
   (req.query.token
     ? getRepository(Group)
@@ -46,15 +59,7 @@ router.get('/', (req, res) => {
               //   })
               []
         )
-    : getRepository(Game)
-        .createQueryBuilder('game')
-        .leftJoinAndSelect(
-          'game.releases',
-          'release',
-          `release.status = 'prod'`
-        )
-        .orderBy('game.updated', 'DESC')
-        .getMany()
+    : tokenlessQueryBuilder.getMany()
   )
     .then(games =>
       games.map(game => {
