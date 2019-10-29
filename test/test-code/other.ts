@@ -61,6 +61,7 @@ export const gamesTest = async () => {
 export const searchTest = async () => {
   await browser.get(MAIN_URL);
 
+  await sleep(100);
   await browser.findElement(By.id('allGameSearch')).sendKeys(GAME_ONE_NAME);
   await sleep(100);
   const item = await browser.wait(
