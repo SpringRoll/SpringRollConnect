@@ -14,29 +14,58 @@ router.use(function(req, res, next) {
 });
 
 router.get('/', (req, res) => {
+  let statuses = ['dev', 'qa', 'stage', 'prod'];
+  const status = req.query.status || 'prod';
+
+  // The status is inclusive of status levels greater than the current
+  // for instance, QA status means the latest QA, Stage or Prod release
+  statuses = statuses.slice(statuses.indexOf(status));
+
   (req.query.token
     ? getRepository(Group)
         .findOne({ token: req.query.token })
         .then(group => group.getPermittedGameIds())
         .then(uuids =>
           0 < uuids.length
-            ? getRepository(Game).find({
-                where: { uuid: In(uuids) },
-                order: { updated: 'DESC' },
-                relations: ['releases', 'groups']
-              })
-            : []
+            ? getRepository(Game)
+                .createQueryBuilder('game')
+                .where('uuid IN (:...uuids)', { uuids: uuids })
+                .leftJoinAndSelect(
+                  'game.releases',
+                  'release',
+                  'release.status IN (:...statuses)',
+                  { statuses: statuses }
+                )
+                .leftJoinAndSelect('game.groups', 'groups')
+                .orderBy('game.updated', 'DESC')
+                .getMany()
+            : // getRepository(Game).find({
+              //     where: { uuid: In(uuids) },
+              //     order: { updated: 'DESC' },
+              //     relations: ['releases', 'groups']
+              //   })
+              []
         )
     : getRepository(Game)
         .createQueryBuilder('game')
-        .leftJoinAndSelect('game.releases', 'release')
-        .where(`release.status = 'prod'`)
-        .limit(1)
+        .leftJoinAndSelect(
+          'game.releases',
+          'release',
+          `release.status = 'prod'`
+        )
         .orderBy('game.updated', 'DESC')
         .getMany()
   )
     .then(games =>
       games.map(game => {
+        //ensures that the releases are sorted by date (descending)
+        game.releases.sort((a, b) => {
+          return b.updated - a.updated;
+        });
+        //removes all but the latest prod release (to mimic old API behavior)
+        game.releases =
+          game.releases.length > 1 ? game.releases.slice(0, 1) : game.releases;
+
         game.releases = game.releases.map(release => {
           release.url = `${game.location}/${release.commitId}/${
             'true' == req.query.debug ? 'debug' : 'release'
