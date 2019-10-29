@@ -33,7 +33,6 @@ router.get('/:commit_id', async (req, res) =>
         success: req.flash('success'),
         error: req.flash('error')
       });
-      console.log(release.game);
     })
 );
 
