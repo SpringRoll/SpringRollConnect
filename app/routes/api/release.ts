@@ -28,6 +28,7 @@ const mapResponse = ({
 }: Game) => ({
   capabilities,
   commitId: releases[0].commitId,
+  status: releases[0].status,
   game: {
     title,
     slug,
