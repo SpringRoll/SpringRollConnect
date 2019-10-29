@@ -41,16 +41,18 @@ router.get('/:slugBundleID', function(req, res) {
         ]
       })
       .then(({ uuid }) => {
-        const query = {
-          ...release,
-          gameUuid: uuid,
-          status: 'prod',
+        const query = <object>{
+          where: {
+            status: 'prod',
+            ...release,
+            gameUuid: uuid
+          },
           order: { updated: 'DESC' }
         };
         const releaseRepository = getRepository(Release);
-        return req.query.multi
-          ? releaseRepository.find(query)
-          : <any>releaseRepository.findOne(query);
+        return req.query.single
+          ? <any>releaseRepository.findOne(query)
+          : releaseRepository.find(query);
       });
 
   const getPrivateReleases = () =>
@@ -71,13 +73,14 @@ router.get('/:slugBundleID', function(req, res) {
       .then(({ game }) => {
         const query = <object>{
           where: { ...release, gameUuid: game.uuid },
-          order: { updated: 'DESC' }
+          order: { updated: 'DESC' },
+          relations: ['game']
         };
         const releaseRepository = getRepository(Release);
 
-        return req.query.multi
-          ? releaseRepository.find(query)
-          : <any>releaseRepository.findOne(query);
+        return req.query.single
+          ? <any>releaseRepository.findOne(query)
+          : releaseRepository.find(query);
       });
 
   if (req.query.status) {
