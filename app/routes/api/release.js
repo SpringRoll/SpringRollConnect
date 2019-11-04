@@ -16,6 +16,8 @@ router.use(function(req, res, next) {
 });
 
 router.post('/:slug', function(req, res) {
+  console.log('Inside /api/release/slug');
+  console.log(req.body);
   req
     .checkBody('status', 'Status must be one of: "dev", "qa", "stage", "prod"')
     .isStatus();
@@ -51,9 +53,11 @@ router.post('/:slug', function(req, res) {
   async.waterfall(
     [
       function(done) {
+        console.log('getting game');
         Game.getBySlugOrBundleId(req.params.slug, done).select('-thumbnail');
       },
       function(game, done) {
+        console.log({game});
         game.hasPermission(req.body.token, done);
       },
       function(game, done) {
@@ -67,10 +71,12 @@ router.post('/:slug', function(req, res) {
         });
       },
       async function(game, release, done) {
+        console.log('passed commit uniqueness check');
         // If we already have a release
         // lets just modify the updated timestamp
         // and leave everything else the same
         if (release) {
+          console.log('went if release');
           release.updated = Date.now();
           release.save(function(err) {
             done(err, game);
@@ -94,26 +100,34 @@ router.post('/:slug', function(req, res) {
           );
           await game.save();
         }
+        console.log('values going into newRelease');
+        console.log({values});
         var newRelease = new Release(values);
         newRelease.save(function(err, release) {
           if (err) {
             return done(err, game);
           }
+          console.log('inside newRelease.save');
 
           game.releases.push(release._id);
           game.updated = Date.now();
+          console.log('release array post push');
+          console.log(game.releases);
           game.save(function(err) {
+            console.log('inside post release push game save');
             done(err, game);
           });
         });
       },
       function(game, done) {
+        console.log('getting release for max check');
         Release.getByIdsAndStatus(game.releases, 'dev', function(
           err,
           releases
         ) {
           var maxDevReleases = CONFIGURATION.maxDevReleases;
           if (releases.length > maxDevReleases) {
+            console.log('went max devReleases....');
             let toSave = [];
             while (toSave.length < maxDevReleases) {
               toSave.push(releases.pop());
@@ -127,7 +141,10 @@ router.post('/:slug', function(req, res) {
       }
     ],
     function(err, result) {
+      console.log('in result block');
       if (err) {
+        console.log('went err');
+        console.log({err});
         log.error('Unable to add the release for token ' + req.body.token);
         log.error(err);
 
@@ -141,6 +158,7 @@ router.post('/:slug', function(req, res) {
         }
         return;
       }
+      console.log({result});
 
       if (req.body.redirect) {
         res.redirect(req.body.redirect);
