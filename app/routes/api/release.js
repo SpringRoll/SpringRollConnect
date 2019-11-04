@@ -77,6 +77,7 @@ router.post('/:slug', function(req, res) {
         // and leave everything else the same
         if (release) {
           console.log('went if release');
+          console.log(release);
           release.updated = Date.now();
           release.save(function(err) {
             done(err, game);
