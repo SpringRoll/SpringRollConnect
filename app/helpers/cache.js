@@ -4,7 +4,7 @@
  */
 module.exports = function(req, res, next) {
   if (req.query.status !== 'dev') {
-    res.set('Cache-Control', 'max-age=60');
+    res.set('Cache-Control', 'public, max-age=60');
   }
 
   next();
