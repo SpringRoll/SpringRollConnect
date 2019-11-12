@@ -3,6 +3,7 @@ var router = require('express').Router(),
   Release = require('../../models/release'),
   Group = require('../../models/group'),
   Game = require('../../models/game'),
+  cache = require('../../helpers/cache'),
   response = require('../../helpers/response');
 
 router.use(function(req, res, next) {
@@ -14,7 +15,7 @@ router.use(function(req, res, next) {
   next();
 });
 
-router.get('/', function(req, res) {
+router.get('/', cache, function(req, res) {
   req
     .checkQuery('status')
     .optional()
