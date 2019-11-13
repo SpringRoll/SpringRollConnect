@@ -47,7 +47,7 @@ describe('Embed Pages', () => {
 
     const text = await alert.getText();
     await alert.accept();
-    expect(text).to.equal('Invalid API request');
+    expect(text).to.equal('Invalid arguments');
   });
 
   it('should allow valid tokens to view dev releases of a game', async () => {

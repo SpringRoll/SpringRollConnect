@@ -1,0 +1,14 @@
+import 'jquery';
+import './libs/jquery.mobile.custom';
+import 'bootstrap/js/affix';
+import 'bootstrap/js/alert';
+import 'bootstrap/js/button';
+import 'bootstrap/js/collapse';
+import 'bootstrap/js/dropdown';
+import 'bootstrap/js/modal';
+import 'bootstrap/js/tooltip';
+import 'bootstrap/js/popover';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'jquery-autogrow-textarea';
+import './plugins/jquery-search';
+import './widgets';

@@ -1,6 +1,7 @@
 import { browser } from './selenium';
 import { LOGOUT_URL, MAIN_URL } from './urls';
 import { until, By } from 'selenium-webdriver';
+import { sleep } from '../helpers';
 
 export async function logout() {
   await browser.get(LOGOUT_URL);
@@ -30,8 +31,9 @@ export async function login({ username, password }) {
     passwordInput.sendKeys(password)
   ]);
 
-  const form = await browser.findElement({ tagName: 'form' });
-  await form.submit();
+  const submit = await browser.findElement(By.css('[type="submit"]'));
+
+  await submit.click();
   await browser.get(MAIN_URL);
   await browser.wait(until.elementsLocated(By.css('a[href="/logout"]')));
 }
