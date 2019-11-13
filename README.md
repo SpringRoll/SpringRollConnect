@@ -17,7 +17,7 @@ SpringRoll Connect is a content management system built using [NodeJS](https://n
 - `host: localhost`
 - `user: postgres`
 - `port: 5342`.
-  Everything else can be left blank.
+- Everything else can be left blank.
 
 5. These settings are listed in the `.env` if you did want to modify them.
 6. Once you have created the empty DB run `npm run db:init` this will populate the database with test data.
