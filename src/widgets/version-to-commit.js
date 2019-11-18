@@ -3,10 +3,14 @@ window.addEventListener('load', () => {
     '.navbar-brand .version'
   );
 
+  if (versionAndCommitButton === null) {
+    return;
+  }
+
   const version = versionAndCommitButton.dataset.ver;
   const commitID = versionAndCommitButton.dataset.commit;
 
-  if (!version || !commitID || !versionAndCommitButton) {
+  if (!version || !commitID) {
     return;
   }
 
