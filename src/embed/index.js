@@ -170,8 +170,9 @@ const start = () => {
       playOptions,
       query: queryArgs.length ? '?' + queryArgs.join('&') : ''
     })
-    .catch(err => err.json())
-    .then(({ error }) => alert(error));
+    .catch(err => {
+      err.json().then(({ error }) => alert(error));
+    })
 };
 
 start();

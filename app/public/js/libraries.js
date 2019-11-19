@@ -448,7 +448,7 @@ eval("/* WEBPACK VAR INJECTION */(function($) {// Search for unique field\n$('.f
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("window.addEventListener('load', () => {\n  const versionAndCommitButton = document.querySelector(\n    '.navbar-brand .version'\n  );\n\n  const version = versionAndCommitButton.dataset.ver;\n  let commitID = versionAndCommitButton.dataset.commit;\n\n  if (version && commitID) {\n    commitID = commitID.slice(0, 7);\n    versionAndCommitButton.addEventListener('click', function() {\n      if (versionAndCommitButton.textContent === version) {\n        versionAndCommitButton.textContent = commitID;\n      } else {\n        versionAndCommitButton.textContent = version;\n      }\n    });\n  }\n});\n\n\n//# sourceURL=webpack:///./src/widgets/version-to-commit.js?");
+eval("window.addEventListener('load', () => {\n  const versionAndCommitButton = document.querySelector(\n    '.navbar-brand .version'\n  );\n\n  if (versionAndCommitButton === null) {\n    return;\n  }\n\n  const version = versionAndCommitButton.dataset.ver;\n  const commitID = versionAndCommitButton.dataset.commit;\n\n  if (!version || !commitID) {\n    return;\n  }\n\n  versionAndCommitButton.addEventListener('click', function() {\n    if (versionAndCommitButton.textContent === version) {\n      versionAndCommitButton.textContent = commitID.slice(0, 7);\n    } else {\n      versionAndCommitButton.textContent = version;\n    }\n  });\n});\n\n\n//# sourceURL=webpack:///./src/widgets/version-to-commit.js?");
 
 /***/ })
 
