@@ -12,26 +12,27 @@ SpringRoll Connect is a content management system built using [NodeJS](https://n
 1. Install the latest version of [Docker](https://www.docker.com/)
 2. Copy `sample.env` to `.env`. You can modify these values, but for development you shouldn't have to
 3. Run `npm run dev` which should build the PostgreSQL db server
-4. You will have to manually create a PostgreSQL database, the default configuration settings are:
+4. You will have to manually create a PostgreSQL database.
+   1. Create a new PostgreSQL connection to the server via your preferred tool (e.g. [TablePlus](https://tableplus.com/)) using the following default settings (also found in the `.env` file):
+      - `host: localhost`
+      - `user: postgres`
+      - `port: 5342`.
+      - Everything else can be left blank.
+      - **Ex**: In TablePlus you would go to the Connection menu, click `New...`, select PostgreSQL, and enter the above settings.
+    3. Once you have created the new connection, and connected to the server, create a new empty database called `connect`. In TablePlus you would click the Database Icon, then click the `+` symbol to create a new database.
 
-- `host: localhost`
-- `user: postgres`
-- `port: 5342`.
-- Everything else can be left blank.
-
-5. These settings are listed in the `.env` if you did want to modify them.
-6. Once you have created the empty DB run `npm run db:init` this will populate the database with test data.
+5. Once you have created the empty DB run `npm run db:init` this will populate the database with test data.
 
 - Note: if you have any errors here ensure that your `.env` values match up with the connection values in the DB.
 
-7. Run `npm start` which should start the application server
-8. The website should then be available at `localhost:3000`.
-9. The login credentials are always the role that you wish to sign in as (e.g. `user:admin` 1pass:admin`)
+6. Run `npm start` which should start the application server
+7. The website should then be available at `localhost:3000`.
+8. The login credentials are always the role that you wish to sign in as (e.g. `user:admin` `pass:admin`)
 
 ## Developing & Testing
 
 - Once you have the database initialized you can start both the docker cotainer and the server itself with `npm run dev:full` for developing.
-- If you want to run tests start **only** the DB (`npm run dev`) and use one of the testing commands found in `package.json`.
+- If you want to run tests start **only** the DB (`npm run dev`) and use one of the testing commands found in `package.json`. (e.g. `npm run test:loop`)
 
 ## License
 
