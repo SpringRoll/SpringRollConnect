@@ -320,6 +320,12 @@ body {
   height: 100%;
   z-index: 0;
 }
+#soundContexts button {
+  margin-bottom: 0.5em;
+}
+#soundContexts button:last-child {
+  margin-bottom: 0;
+}
 .volume-slider {
   margin: 1rem 0;
 }
