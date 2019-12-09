@@ -45,6 +45,7 @@ function pauseOverlay({ data }) {
 function onLoadComplete() {
   frame.removeClass('loading');
   title.text(container.release.game.title);
+  document.querySelector('#pauseButton').classList.remove('disabled');
 }
 
 function onCaptionStyles({ currentTarget }) {
