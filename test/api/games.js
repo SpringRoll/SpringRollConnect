@@ -87,5 +87,15 @@ describe('api/games', () => {
 
       expect(response.status).to.equal(422);
     });
+
+    it('should return a 403 if dev games are requested without a token', async function() {
+      const response = await fetch(`${API_GAMES_URL}?status=dev`);
+      expect(response.status).to.equal(403);
+    });
+
+    it('should return a 403 if the provided token is a not a real token', async function() {
+      const response = await fetch(`${API_GAMES_URL}?status=dev&token=1234567890123456789012345678901234567890`);
+      expect(response.status).to.equal(403);
+    });
   });
 });
