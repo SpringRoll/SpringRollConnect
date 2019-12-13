@@ -26,7 +26,15 @@ router.get('/', cache, function(req, res) {
     .isToken();
 
   if (req.validationErrors()) {
-    return response.call(res, 'Invalid Arguments');
+    let message = '';
+    req.validationErrors().forEach(error => {
+      message += `${error.msg}: ${error.param}. `;
+    });
+
+    return res.status(422).send({
+      success: false,
+      error: message
+    });
   }
 
   var status = req.query.status || 'prod';

@@ -81,5 +81,11 @@ describe('api/games', () => {
 
       expect(response.headers.get('Cache-Control')).to.equal(null);
     });
+
+    it('should return a 422 if the provided input is invalid', async function() {
+      const response = await fetch(`${API_GAMES_URL}?token=invalid&status=invalid`);
+
+      expect(response.status).to.equal(422);
+    });
   });
 });
