@@ -78,9 +78,13 @@ describe('api/release', () => {
       const game = await dataMakers.makeGame('dev');
       const response = await fetch(`http://localhost:3000/api/release/${game.slug}?status=dev`);
       const json = await response.json();
-      console.log('JSON RESPONSE:', json);
 
       expect(response.status).to.equal(403);
+    });
+
+    it('should respond with a 422 if the request had invalid fields', async function() {
+      const response = await fetch('http://localhost:3000/api/release/doesntmatter?status=NOPE&token=tooshort');
+      expect(response.status).to.equal(422);
     });
   });
 

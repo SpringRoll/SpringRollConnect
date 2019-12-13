@@ -176,8 +176,17 @@ router.get('/:slugOrBundleId', cache, function(req, res) {
     .isSemver();
 
   if (req.validationErrors()) {
-    return response.call(res, 'Invalid arguments');
+    let message = '';
+    req.validationErrors().forEach(error => {
+      message += `${error.msg}: ${error.param}. `;
+    });
+
+    return res.status(422).send({
+      success: false,
+      error: message
+    });
   }
+
   Release.getByGame(
     req.params.slugOrBundleId,
     {
