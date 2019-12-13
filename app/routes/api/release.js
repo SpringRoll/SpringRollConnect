@@ -183,7 +183,7 @@ router.get('/:slugOrBundleId', cache, function(req, res) {
 
     return res.status(422).send({
       success: false,
-      error: message
+      error: message.trim()
     });
   }
 
