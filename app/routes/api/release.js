@@ -174,6 +174,7 @@ router.get('/:slugOrBundleId', cache, function(req, res) {
     .checkQuery('version')
     .optional()
     .isSemver();
+
   if (req.validationErrors()) {
     return response.call(res, 'Invalid arguments');
   }
@@ -187,7 +188,30 @@ router.get('/:slugOrBundleId', cache, function(req, res) {
       token: req.query.token,
       debug: req.query.debug
     },
-    response.bind(res)
+    function(err, release) {
+      if (err === null && release !== null) {
+        // if there's no error and a release was found
+        return res.send({ success: true, data: release });
+      } else if (err === null && release === null) {
+        // no release was found, so it's a 404
+        log.warn(`No release found for slug "${req.params.slugOrBundleId}"`);
+        return res.status(404).send({ success: false, data: null });
+      }
+
+      if (err === 'Invalid game slug') {
+        // If the slug doesn't exist, it's a 404
+        log.warn(`Invalid game slug "${req.params.slugOrBundleId}"`);
+        return res.status(404).send({ success: false, error: err });
+      } else if (err === 'Token is required') {
+        // If the request was for a dev game without a token, it's a 403
+        log.warn(`Request for game "${req.params.slugOrBundleId}" without token`);
+        return res.status(403).send({ success: false, error: err });
+      } else {
+        // Otherwise, we don't know what it is so it's probably a 500
+        log.warn(err);
+        return res.status(500).send({ success: false, data: null });
+      }
+    }
   );
 });
 
