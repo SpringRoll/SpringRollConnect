@@ -3,6 +3,7 @@ var router = require('express').Router(),
   Game = require('../../models/game'),
   Group = require('../../models/group'),
   Release = require('../../models/release'),
+  cache = require('../../helpers/cache'),
   response = require('../../helpers/response'),
   log = require('../../helpers/logger');
 
@@ -156,7 +157,7 @@ router.post('/:slug', function(req, res) {
   );
 });
 
-router.get('/:slugOrBundleId', function(req, res) {
+router.get('/:slugOrBundleId', cache, function(req, res) {
   req
     .checkQuery('token')
     .optional()

@@ -1,5 +1,6 @@
 const expect = require('chai').expect;
 const mongoose = require('mongoose');
+import fetch from 'node-fetch';
 const request = require('superagent');
 const dataMakers = require('../helpers/data');
 const Game = require('../../app/models/game');
@@ -48,6 +49,18 @@ describe('api/release', () => {
 
       expect(releaseResponse.body.success).to.equal(true);
       expect(releaseResponse.body.data.game.slug).to.equal(gameSlug);
+    });
+
+    it('should provide caching headers for non dev games', async function() {
+      const game = await dataMakers.makeGame('prod');
+      const response = await fetch(`http://localhost:3000/api/release/${game.slug}`);
+      expect(response.headers.get('Cache-Control')).to.not.equal(null);
+    });
+
+    it('should not provide caching headers for dev games', async function() {
+      const game = await dataMakers.makeGame('dev');
+      const response = await fetch(`http://localhost:3000/api/release/${game.slug}?status=dev`);
+      expect(response.headers.get('Cache-Control')).to.equal(null);
     });
   });
 
