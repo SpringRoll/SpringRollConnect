@@ -5,8 +5,12 @@
       {
         "useBuiltIns": "entry",
         "targets": {
-          "node": true
-        }
+          "node": true,
+          "ie": 11,
+          "android": 4,
+          "ios": 8
+        },
+        "modules": false
       }
     ]
   ],
