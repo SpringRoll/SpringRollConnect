@@ -3,17 +3,22 @@ window.addEventListener('load', () => {
     '.navbar-brand .version'
   );
 
-  const version = versionAndCommitButton.dataset.ver;
-  let commitID = versionAndCommitButton.dataset.commit;
-
-  if (version && commitID) {
-    commitID = commitID.slice(0, 7);
-    versionAndCommitButton.addEventListener('click', function() {
-      if (versionAndCommitButton.textContent === version) {
-        versionAndCommitButton.textContent = commitID;
-      } else {
-        versionAndCommitButton.textContent = version;
-      }
-    });
+  if (versionAndCommitButton === null) {
+    return;
   }
+
+  const version = versionAndCommitButton.dataset.ver;
+  const commitID = versionAndCommitButton.dataset.commit;
+
+  if (!version || !commitID) {
+    return;
+  }
+
+  versionAndCommitButton.addEventListener('click', function() {
+    if (versionAndCommitButton.textContent === version) {
+      versionAndCommitButton.textContent = commitID.slice(0, 7);
+    } else {
+      versionAndCommitButton.textContent = version;
+    }
+  });
 });
