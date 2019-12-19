@@ -1,5 +1,5 @@
 {
-  "version": "1.8.0",
+  "version": "1.8.1",
   "private": true,
   "devDependencies": {
     "@babel/cli": "^7.2.3",
@@ -10,6 +10,7 @@
     "@babel/preset-env": "^7.3.1",
     "@babel/register": "^7.0.0",
     "@babel/runtime": "^7.3.1",
+    "babel-loader": "^8.0.6",
     "bootstrap-sass": "^3.4.1",
     "chai": "^4.2.0",
     "chromedriver": "^77.0.0",
