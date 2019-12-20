@@ -1,5 +1,5 @@
 {
-  "version": "1.8.0",
+  "version": "1.8.1",
   "lockfileVersion": 1,
   "requires": true,
   "dependencies": {
@@ -14780,8 +14780,8 @@
       }
     },
     "springroll-container": {
-      "version": "git+https://github.com/SpringRoll/SpringRollContainer.git#be2395abd4081b1e38b4021487ea23bce0b45bcd",
-      "from": "git+https://github.com/SpringRoll/SpringRollContainer.git",
+      "version": "github:SpringRoll/SpringRollContainer#f1ee781a4b36fc376db5067576955746ae4878c3",
+      "from": "github:SpringRoll/SpringRollContainer#f1ee781a",
       "requires": {
         "@babel/polyfill": "^7.4.3",
         "bellhop-iframe": "^3.0.0",
@@ -14790,30 +14790,30 @@
       },
       "dependencies": {
         "@babel/polyfill": {
-          "version": "7.6.0",
-          "resolved": "https://registry.npmjs.org/@babel/polyfill/-/polyfill-7.6.0.tgz",
-          "integrity": "sha512-q5BZJI0n/B10VaQQvln1IlDK3BTBJFbADx7tv+oXDPIDZuTo37H5Adb9jhlXm/fEN4Y7/64qD9mnrJJG7rmaTw==",
+          "version": "7.7.0",
+          "resolved": "https://registry.npmjs.org/@babel/polyfill/-/polyfill-7.7.0.tgz",
+          "integrity": "sha512-/TS23MVvo34dFmf8mwCisCbWGrfhbiWZSwBo6HkADTBhUa2Q/jWltyY/tpofz/b6/RIhqaqQcquptCirqIhOaQ==",
           "requires": {
             "core-js": "^2.6.5",
             "regenerator-runtime": "^0.13.2"
           },
           "dependencies": {
             "core-js": {
-              "version": "2.6.10",
-              "resolved": "https://registry.npmjs.org/core-js/-/core-js-2.6.10.tgz",
-              "integrity": "sha512-I39t74+4t+zau64EN1fE5v2W31Adtc/REhzWN+gWRRXg6WH5qAsZm62DHpQ1+Yhe4047T55jvzz7MUqF/dBBlA=="
+              "version": "2.6.11",
+              "resolved": "https://registry.npmjs.org/core-js/-/core-js-2.6.11.tgz",
+              "integrity": "sha512-5wjnpaT/3dV+XB4borEsnAYQchn00XSgTAWKDkEqv+K8KevjbzmofK6hfJ9TZIlpj2N0xQpazy7PiRQiWHqzWg=="
             }
           }
         },
         "bellhop-iframe": {
-          "version": "3.0.0",
-          "resolved": "https://registry.npmjs.org/bellhop-iframe/-/bellhop-iframe-3.0.0.tgz",
-          "integrity": "sha512-4MuFcv5I5NEG5gV5Ux++35sRkQE9toFlBIHJl6nMatXIC2w2fDONILLcQzPMZBMgj9mq6kOpFSa4KIvrPglhGA=="
+          "version": "3.1.0",
+          "resolved": "https://registry.npmjs.org/bellhop-iframe/-/bellhop-iframe-3.1.0.tgz",
+          "integrity": "sha512-PJYSqy7pllj60QvN9tKUgrM2m/5PF9mYzTpEI2haZ1KHaqo7VF+rhe1GTkmzTmM2DElrV7dQeE7NzsR8ZAgJzA=="
         },
         "core-js": {
-          "version": "3.3.5",
-          "resolved": "https://registry.npmjs.org/core-js/-/core-js-3.3.5.tgz",
-          "integrity": "sha512-0J3K+Par/ZydhKg8pEiTcK/9d65/nqJOzY62uMkjeBmt05fDOt/khUVjDdh8TpeIuGQDy1yLDDCjiWN/8pFIuw=="
+          "version": "3.6.0",
+          "resolved": "https://registry.npmjs.org/core-js/-/core-js-3.6.0.tgz",
+          "integrity": "sha512-AHPTNKzyB+YwgDWoSOCaid9PUSEF6781vsfiK8qUz62zRR448/XgK2NtCbpiUGizbep8Lrpt0Du19PpGGZvw3Q=="
         }
       }
     },
