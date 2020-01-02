@@ -54,7 +54,7 @@ export class Group {
   privilege: number;
 
   @IsBase64()
-  @Column({ type: 'bytea', nullable: true, default: null, select: false })
+  @Column({ type: 'bytea', nullable: true, default: null })
   logo?: string;
 
   @ManyToMany(type => User, user => user.groups)

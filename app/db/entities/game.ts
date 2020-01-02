@@ -73,6 +73,6 @@ export class Game {
   groups: GroupPermission[];
 
   @IsBase64()
-  @Column({ type: 'bytea', nullable: true, select: false })
+  @Column({ type: 'bytea', nullable: true })
   thumbnail: string;
 }
