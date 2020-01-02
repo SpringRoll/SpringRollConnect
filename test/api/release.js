@@ -62,6 +62,30 @@ describe('api/release', () => {
       const response = await fetch(`http://localhost:3000/api/release/${game.slug}?status=dev`);
       expect(response.headers.get('Cache-Control')).to.equal(null);
     });
+
+    it('should respond with a 404 if a request is made for a slug that does not exist', async function() {
+      const response = await fetch(`http://localhost:3000/api/release/dont-exists`);
+      expect(response.status).to.equal(404);
+    });
+
+    it('should respond with a 404 if a request is made for a game that does not have a prod release', async function() {
+      const game = await dataMakers.makeGame('dev');
+      const response = await fetch(`http://localhost:3000/api/release/${game.slug}`);
+      expect(response.status).to.equal(404);
+    });
+
+    it('should respond with a 403 if a request is made for a dev release without a token', async function() {
+      const game = await dataMakers.makeGame('dev');
+      const response = await fetch(`http://localhost:3000/api/release/${game.slug}?status=dev`);
+      const json = await response.json();
+
+      expect(response.status).to.equal(403);
+    });
+
+    it('should respond with a 422 if the request had invalid fields', async function() {
+      const response = await fetch('http://localhost:3000/api/release/doesntmatter?status=NOPE&token=tooshort');
+      expect(response.status).to.equal(422);
+    });
   });
 
   describe('POST', () => {
