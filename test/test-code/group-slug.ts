@@ -200,7 +200,12 @@ export const refreshToken = async config => {
     .findElement(By.css('input[readonly]'))
     .getAttribute('value');
 
+  const newExpiry = await browser
+    .findElement(By.className("input-group-addon"))
+    .getText();
+
   expect(newToken).to.not.equal(oldToken);
+  expect(newExpiry.trim()).to.equal("Expires in a year");
 };
 
 export const edit = async config => {
