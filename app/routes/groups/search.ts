@@ -14,12 +14,6 @@ module.exports = Router().post('/', (req, res) => {
           }
         })
   } else {
-    getRepository(Group)
-        .createQueryBuilder('group')
-        .where('LOWER(group.name) LIKE :search', {
-          search: `%${req.body.search.toLowerCase()}%`
-        })
-        .getMany()
-        .then(groups => res.send(groups))
+    res.send(false);
   }
 });
