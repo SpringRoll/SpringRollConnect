@@ -50,13 +50,13 @@ export const PASSWORD_URL = `${MAIN_URL}/password`;
 
 export const API_GAMES_URL = `${API_URL}/games`;
 
-export const ADMINS_GROUP_URL = `${GROUPS_URL}/group/${ADMINS_GROUP_SLUG}`;
+export const ADMINS_GROUP_URL = `${GROUPS_URL}/${ADMINS_GROUP_SLUG}`;
 
-export const EDITORS_GROUP_URL = `${GROUPS_URL}/group/${EDITORS_GROUP_SLUG}`;
+export const EDITORS_GROUP_URL = `${GROUPS_URL}/${EDITORS_GROUP_SLUG}`;
 
-export const READERS_GROUP_URL = `${GROUPS_URL}/group/${READERS_GROUP_SLUG}`;
+export const READERS_GROUP_URL = `${GROUPS_URL}/${READERS_GROUP_SLUG}`;
 
-export const EMPTY_GROUP_URL = `${GROUPS_URL}/group/${EMPTY_GROUP_SLUG}`;
+export const EMPTY_GROUP_URL = `${GROUPS_URL}/${EMPTY_GROUP_SLUG}`;
 
 export const GAME_TWO_EMBED_URL = `${MAIN_URL}/embed/${GAME_TWO_SLUG}`;
 

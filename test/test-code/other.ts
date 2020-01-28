@@ -43,7 +43,7 @@ export const passwordTest = async () => {
 export const groupsTest = async () => {
   await browser.get(MAIN_URL);
   const text = await browser
-    .findElement(By.css(`a[href="/groups/group/${READERS_GROUP_SLUG}"]`))
+    .findElement(By.css(`a[href="/groups/${READERS_GROUP_SLUG}"]`))
     .getText();
 
   expect(text).to.equal(READERS_GROUP_NAME);

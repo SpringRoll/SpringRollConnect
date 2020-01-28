@@ -47,7 +47,7 @@ export const addGroup = async () => {
 
   const element = await browser
     .wait(
-      until.elementLocated(By.css('a[href="/groups/group/foobarfoo-bar"]')),
+      until.elementLocated(By.css('a[href="/groups/foobarfoo-bar"]')),
       250
     )
     .catch(err => err);

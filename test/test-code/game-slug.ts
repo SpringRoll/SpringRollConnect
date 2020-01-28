@@ -158,7 +158,7 @@ async function addGroup() {
 
 async function modifyGroup() {
   let element = await browser.wait(
-    until.elementLocated(By.css('[href="/groups/group/readers"]')),
+    until.elementLocated(By.css('[href="/groups/readers"]')),
     500
   );
 

@@ -10,12 +10,12 @@ describe(`${PAGE} as a public user`, () => {
 
 describe(`${PAGE} as a read-only user`, () => {
   beforeEach(async () => login('reader'));
-  it(`I can't access the page`, async () => await view(false));
+  it(`I can access the page`, async () => await view(true));
 });
 
 describe(`${PAGE} as a edit capable user`, () => {
   beforeEach(async () => login('editor'));
-  it(`I can't access the page`, async () => await view(false));
+  it(`I can access the page`, async () => await view(true));
 });
 
 describe(`${PAGE} as a admin user`, () => {

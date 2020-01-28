@@ -21,7 +21,7 @@ export const viewGroup = async ({ inGroup = false, privilege = 0 }) => {
 
   const css =
     inGroup || 2 === privilege
-      ? 'form[action*="/groups/group/"]'
+      ? 'form[action*="/groups"]'
       : 'div.alert.alert-warning';
 
   const found = await browser

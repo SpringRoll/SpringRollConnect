@@ -28,7 +28,6 @@ router.get('/:local(page)?/:number([0-9]+)?', (req, res) =>
 );
 
 router.get('/:slug', function(req, res) {
-  console.log('INSIDE GET/slug');
   getRepository(Group)
     .findOne({ where: { slug: req.params.slug }, relations: ['users'] })
     .then(({ id, users, ...group }) => {
