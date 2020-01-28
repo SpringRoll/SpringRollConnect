@@ -30,7 +30,7 @@ append gameContent
 									if entry.group.isUserGroup
 										span=entry.group.name
 									else
-										a(href="/groups/group/#{entry.group.slug}")=entry.group.name
+										a(href="/groups/#{entry.group.slug}")=entry.group.name
 									form.pull-right(action=url method="post")
 										input(type="hidden" name="group" value=entry.group.id)
 										button.close(data-toggle="confirm" type="submit" name="action" value="removeGroup") &times;

@@ -47,7 +47,7 @@ append content
 			.list-group
 				for group in groups
 					if !group.isUserGroup
-						a.list-group-item(href="/groups/group/#{group.slug}")
+						a.list-group-item(href="/groups/#{group.slug}")
 							if group.logo && group.logo.length
 								img.logo.logo-lg(src="data:image/png;base64,#{group.logo}")
 							| #{group.name}

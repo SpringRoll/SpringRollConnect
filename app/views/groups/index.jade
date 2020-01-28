@@ -19,7 +19,7 @@ append content
 				.row
 					for group in groups
 						.col-md-3.col-sm-4.col-xs-6
-							a.group(href="/groups/group/#{group.slug}")
+							a.group(href="/groups/#{group.slug}")
 								if group.logo && group.logo.length
 									img.logo.logo-lg(src="data:image/png;base64,#{group.logo}")
 								| #{group.name}
