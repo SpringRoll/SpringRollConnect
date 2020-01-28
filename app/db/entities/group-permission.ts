@@ -24,7 +24,7 @@ export class GroupPermission {
   groupID: number;
 
   @ValidateNested()
-  @ManyToOne(type => Group, group => group.id, { eager: true })
+  @ManyToOne(type => Group, group => group.id, { eager: true, onDelete: "CASCADE" } )
   @JoinColumn({ name: 'groupID' })
   group: Group;
 
@@ -32,7 +32,7 @@ export class GroupPermission {
   gameID: string;
 
   @ValidateNested()
-  @ManyToOne(type => Game, game => game.groups, { eager: true })
+  @ManyToOne(type => Game, game => game.groups, { eager: true, onDelete: "CASCADE" })
   @JoinColumn({ name: 'gameID' })
   game: Game;
 }
