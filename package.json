@@ -110,7 +110,7 @@
     "dev:full": "docker-compose -f docker-compose.yml up --build -d && npm run start",
     "install-missing-types": "types-installer",
     "migration": "ts-node ./app/migration/index.ts",
-    "test": "ts-mocha --timeout 5000 test/index.ts",
+    "test": "ts-mocha --timeout 60000 test/index.ts",
     "build": "docker build -t 'springroll-container:2.0' -f DockerFile .",
     "db:init": "ts-node ./scripts/dbInit.ts",
     "frontend:build": "webpack --mode development",
