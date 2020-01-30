@@ -200,7 +200,14 @@ export const refreshToken = async config => {
     .findElement(By.css('input[readonly]'))
     .getAttribute('value');
 
+  // confirm reasonable date set as expiry date post refresh
+  const expiryMessageQuery = await browser
+    .findElements(By.className('input-group-addon'));
+  await Promise.all(expiryMessageQuery);
+  const expiryMessage = await expiryMessageQuery[1].getText();
+
   expect(newToken).to.not.equal(oldToken);
+  expect(expiryMessage).to.equal('Expires in a year');
 };
 
 export const edit = async config => {

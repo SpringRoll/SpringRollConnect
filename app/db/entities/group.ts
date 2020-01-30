@@ -60,9 +60,11 @@ export class Group {
   @ManyToMany(type => User, user => user.groups)
   users: Array<User>;
 
-  async refreshToken(tokenExpires: false | Date = false) {
-    if (tokenExpires) {
-      this.tokenExpires = tokenExpires;
+  async refreshToken() {
+    if (this.tokenExpires) {
+      let newExpiryDate = new Date();
+      newExpiryDate.setFullYear(newExpiryDate.getFullYear() + 1);
+      this.tokenExpires = newExpiryDate;
     }
 
     this.token = Group.generateToken();

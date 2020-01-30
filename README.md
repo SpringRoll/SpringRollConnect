@@ -16,7 +16,7 @@ SpringRoll Connect is a content management system built using [NodeJS](https://n
    1. Create a new PostgreSQL connection to the server via your preferred tool (e.g. [TablePlus](https://tableplus.com/)) using the following default settings (also found in the `.env` file):
       - `host: localhost`
       - `user: postgres`
-      - `port: 5342`.
+      - `port: 5432`.
       - Everything else can be left blank.
       - **Ex**: In TablePlus you would go to the Connection menu, click `New...`, select PostgreSQL, and enter the above settings.
     3. Once you have created the new connection, and connected to the server, create a new empty database called `connect`. In TablePlus you would click the Database Icon, then click the `+` symbol to create a new database.
