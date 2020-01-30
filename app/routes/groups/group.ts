@@ -47,8 +47,6 @@ router.post('/:slug', isAdmin, function(req, res) {
   if ('function' === typeof groupMethods[action]) {
     return groupMethods[action](req, res, req.body);
   }
-
-  res.redirect(req.originalUrl);
 });
 
 module.exports = router;
