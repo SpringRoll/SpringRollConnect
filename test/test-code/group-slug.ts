@@ -200,7 +200,14 @@ export const refreshToken = async config => {
     .findElement(By.css('input[readonly]'))
     .getAttribute('value');
 
+  // confirm reasonable date set as expiry date post refresh
+  const expiryMessageQuery = await browser
+    .findElements(By.className('input-group-addon'));
+  await Promise.all(expiryMessageQuery);
+  const expiryMessage = await expiryMessageQuery[1].getText();
+
   expect(newToken).to.not.equal(oldToken);
+  expect(expiryMessage).to.equal('Expires in a year');
 };
 
 export const edit = async config => {
@@ -217,15 +224,23 @@ export const edit = async config => {
 
   await browser.findElement(By.css('button[data-target="#editGroup"]')).click();
 
-  const input = await browser.findElement(By.id('name'));
-  await browser.wait(until.elementIsVisible(input));
+  const inputName = await browser.findElement(By.id('name'));
+  const inputSlug = await browser.findElement(By.id('slug'));
+  await browser.wait(until.elementIsVisible(inputName));
+  await browser.wait(until.elementIsVisible(inputSlug));
 
-  await input.sendKeys('2');
+  await inputName.sendKeys('2');
+  await inputSlug.sendKeys('2');
   await browser.findElement(By.css('button[value="updateGroup"]')).click();
 
-  await browser.wait(until.stalenessOf(input));
+  await browser.wait(until.stalenessOf(inputName));
+  await browser.wait(until.stalenessOf(inputSlug));
 
   const title = await browser.findElement(By.tagName('h2')).getText();
+  const route = await browser.getCurrentUrl();
+  const routeParts = route.split('/');
+  const slug = routeParts[routeParts.length-1];
 
   expect(title).to.equal('empty2');
+  expect(slug).to.equal('empty2');
 };

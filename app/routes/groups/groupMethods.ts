@@ -80,7 +80,7 @@ export function deleteGroup(req: Request, res: Response, { slug }: Group) {
 export function updateGroup(req: Request, res: Response) {
   const repository = getRepository(Group);
 
-  return repository.findOne({ slug: req.body.slug }).then(group => {
+  return repository.findOne({ slug: req.params.slug }).then(group => {
     const { logo, tokenExpires, privilege, ...update } = req.body;
 
     group = repository.merge(group, update, {
@@ -95,6 +95,13 @@ export function updateGroup(req: Request, res: Response) {
       )
       .catch(err => console.log(err))
       .then(() => repository.save(group))
-      .finally(() => res.redirect(req.originalUrl));
+      .finally(() => {
+        if(group.slug !== req.params.slug){
+          const newUrl = req.originalUrl.substring(0, req.originalUrl.lastIndexOf('/')) + `/${group.slug}`
+          res.redirect(newUrl);
+        } else {
+          res.redirect(req.originalUrl);
+        }
+      });
   });
 }
