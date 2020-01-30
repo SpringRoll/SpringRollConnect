@@ -12,7 +12,9 @@ router.post('/', function(req, res) {
     req.body.logo = undefined;
   }
   if ('true' == req.body.tokenExpires) {
-    req.body.tokenExpires = new Date();
+    let newExpiryDate = new Date();
+    newExpiryDate.setFullYear(newExpiryDate.getFullYear() + 1);
+    req.body.tokenExpires = newExpiryDate;
   }
   if (req.body.users) {
     if (!Array.isArray(req.body.users)) {

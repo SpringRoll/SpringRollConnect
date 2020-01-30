@@ -1,0 +1,41 @@
+name: build
+
+on: 
+  pull_request:
+  push:
+    branches:
+      - master
+  
+jobs:
+  Test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: harmon758/postgresql-action@v1
+      with:
+        postgresql version: '11'
+        postgresql db: 'connect'
+        postgresql user: 'postgres'
+
+    - name: Node.js 10.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10.x
+
+    - uses: actions/checkout@v1
+
+    - name: Copy env
+      run: cp ./sample.env ./.env
+
+    - name: Install
+      run: |
+        npm ci 
+        npm install chromedriver@latest
+
+    - name: Setup db
+      run: |
+        npm run db:init
+
+    - name: Test
+      run: |
+        npm run test
