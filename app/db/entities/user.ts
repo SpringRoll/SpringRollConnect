@@ -50,7 +50,8 @@ export class User {
   @ValidateNested({ each: true })
   @ManyToMany(type => Group, group => group.users, {
     eager: true,
-    cascade: true
+    cascade: true,
+    onDelete: "CASCADE"
   })
   @JoinTable({ name: 'user_groups' })
   groups: Array<Group>;
