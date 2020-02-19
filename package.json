@@ -13,7 +13,7 @@
     "babel-loader": "^8.0.6",
     "bootstrap-sass": "^3.4.1",
     "chai": "^4.2.0",
-    "chromedriver": "^77.0.0",
+    "chromedriver": "^79.0.0",
     "concurrently": "^4.1.0",
     "css-loader": "^2.1.1",
     "exports-loader": "^0.7.0",
@@ -74,7 +74,7 @@
     "passport": "^0.2.1",
     "passport-local": "^1.0.0",
     "semver": "^5.0.1",
-    "springroll-container": "git+https://github.com/SpringRoll/SpringRollContainer.git",
+    "springroll-container": "github:SpringRoll/SpringRollContainer#develop",
     "uuid": "^3.2.1"
   },
   "scripts": {

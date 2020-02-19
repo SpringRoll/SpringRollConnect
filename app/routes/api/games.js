@@ -4,6 +4,7 @@ var router = require('express').Router(),
   Group = require('../../models/group'),
   Game = require('../../models/game'),
   cache = require('../../helpers/cache'),
+  log = require('../../helpers/logger'),
   response = require('../../helpers/response');
 
 router.use(function(req, res, next) {
@@ -26,7 +27,15 @@ router.get('/', cache, function(req, res) {
     .isToken();
 
   if (req.validationErrors()) {
-    return response.call(res, 'Invalid Arguments');
+    let message = '';
+    req.validationErrors().forEach(error => {
+      message += `${error.msg}: ${error.param}. `;
+    });
+
+    return res.status(422).send({
+      success: false,
+      error: message.trim()
+    });
   }
 
   var status = req.query.status || 'prod';
@@ -72,10 +81,19 @@ router.get('/', cache, function(req, res) {
       }
     ],
     function(err, games) {
-      if (err) {
-        return response.call(res, err);
-      } else if (games.length === 0) {
-        return response.call(res, 'No games');
+      if (err === 'No token' || err === 'Invalid token') {
+        log.warn(err + ' request for api/games');
+        return res.status(403).send({
+          success: false,
+          error: err
+        });
+      } else if (err) {
+        log.warn(err);
+
+        return res.status(400).send({
+          success: false,
+          error: err
+        });
       }
 
       games = games.reduce((filteredGames, game) => {
@@ -96,11 +114,10 @@ router.get('/', cache, function(req, res) {
         return filteredGames;
       }, []);
 
-      if (games.length <= 0) {
-        return response.call(res, 'No games');
-      }
-
-      response.call(res, err, games);
+      return res.send({
+        success: true,
+        data: games
+      });
     }
   );
 });
