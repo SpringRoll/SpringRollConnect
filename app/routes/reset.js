@@ -55,7 +55,7 @@ router.post('/:token', function(req, res)
 		{
 			var mailOptions = {
 				to: user.email,
-				from: 'passwordreset@demo.com',
+				from: process.env.SMTP_FROM_USER || 'passwordreset@demo.com',
 				subject: 'Your password has been changed',
 				text: 'Hello,\n\n' +
 					'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
