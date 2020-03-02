@@ -1,5 +1,5 @@
 {
-  "version": "1.8.1",
+  "version": "1.9.0",
   "private": true,
   "devDependencies": {
     "@babel/cli": "^7.2.3",
@@ -70,7 +70,7 @@
     "mongoose-type-email": "^1.0.5",
     "mongoose-types": "^1.0.3",
     "mongoose-unique-validator": "^0.4.1",
-    "nodemailer": "^1.3.2",
+    "nodemailer": "^6.4.3",
     "passport": "^0.2.1",
     "passport-local": "^1.0.0",
     "semver": "^5.0.1",
