@@ -1,4 +1,6 @@
 const async = require('async'),
+  http = require('http'),
+  https = require('https'),
   log = require('../../helpers/logger'),
   Game = require('../../models/game'),
   User = require('../../models/user');
