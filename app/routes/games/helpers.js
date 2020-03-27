@@ -36,6 +36,62 @@ function validateRequest(req){
 }
 
 /**
+ * Convert bytes into a human readable format
+ * source: https://stackoverflow.com/a/20732091/10236401
+ * thanks andrew!
+ * 
+ * @param  {integer} size file size that we want to convert
+ * @return {string}       file size in human readable format
+ */
+function humanFileSize(size) {
+	const i = Math.floor( Math.log(size) / Math.log(1024) );
+  
+	return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+}
+
+/**
+ * Read the "content-length" header of the game resource to determine
+ * the byte size
+ * 
+ * @param  {string} host the host where the resource is stored (s3)
+ * @param  {string} commitId commit id of the game release we want to check
+ * @return {string}      human readable game file size
+ */
+function gameSize(host, gameSlug, commitId) {
+  return new Promise(function (resolve, reject) {
+    // set defaults
+    let port = 80;
+    let client = http;
+    // check for https
+    if (host.indexOf("https") === -1) {
+      // update settings
+      port = 443;
+      client = https;
+    }
+    
+    // remove prefix from host
+    host = host.replace(/https:\/\/|http:\/\//, "");
+    // remove game slug
+    host = host.replace(`/${gameSlug}`, "");
+    const options = {
+      method: "HEAD",
+      host,
+      port,
+      path: `/${gameSlug}/${commitId}/release.zip`,
+    };
+
+    const req = client.request(options, function (res, err) {
+    	if (err) return reject(err);
+
+    	resolve(humanFileSize(res.headers["content-length"]));
+    });
+    // make request
+    req.end();
+  });
+}
+
+
+/**
  * Abstraction to render a page, takes care of all
  * of the access control and populate the page with
  * standard parameters
