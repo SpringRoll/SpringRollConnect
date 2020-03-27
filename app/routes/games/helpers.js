@@ -83,7 +83,8 @@ function releaseSize(host, gameSlug, commitId) {
     const req = client.request(options, function (res, err) {
     	if (err) return reject(err);
 
-    	resolve(humanFileSize(res.headers["content-length"]));
+      const contentLength = res.headers["content-length"] || 0;
+    	resolve(humanFileSize(contentLength));
     });
     // make request
     req.end();
