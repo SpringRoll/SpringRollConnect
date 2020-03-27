@@ -57,7 +57,7 @@ function humanFileSize(size) {
  * @param  {string} commitId commit id of the game release we want to check
  * @return {string}      human readable game file size
  */
-function gameSize(host, gameSlug, commitId) {
+function releaseSize(host, gameSlug, commitId) {
   return new Promise(function (resolve, reject) {
     // set defaults
     let port = 80;
@@ -124,7 +124,7 @@ function renderPage(req, res, template, populate=null)
 				game.getAccess(req.user, done);
 			}
 		],
-		function(err, game, access)
+		async function(err, game, access)
 		{
 			if (err)
 			{
@@ -146,6 +146,13 @@ function renderPage(req, res, template, populate=null)
 						? pages
 						: Number(req.query.page)
 					: 1;
+
+			// iterate game releases to add file sizes
+			for (let k = 0; k < game.releases.length; k++) {
+				const commitId = game.releases[k].commitId;
+				const humanFileSize = await releaseSize(game.location, game.slug, commitId)
+			  game.releases[k].fileSize = humanFileSize;
+			}
 
 			res.render(template, {
 			game: game,
