@@ -150,8 +150,12 @@ function renderPage(req, res, template, populate=null)
 
 			// iterate game releases to add file sizes
 			for (let k = 0; k < game.releases.length; k++) {
-				const commitId = game.releases[k].commitId;
-				const humanFileSize = await releaseSize(game.location, game.slug, commitId)
+        let humanFileSize = game.releases[k].releaseUncompressedSize;
+        // check for null then do a remote call
+        if (humanFileSize === null) {
+          const commitId = game.releases[k].commitId;
+          humanFileSize = await releaseSize(game.location, game.slug, commitId);
+        }
 			  game.releases[k].fileSize = humanFileSize;
 			}
 
