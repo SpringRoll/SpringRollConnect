@@ -238,7 +238,7 @@ ReleaseSchema.statics.getByGame = function(slug, options, callback) {
       '/' +
       r.commitId +
       '/' +
-      (JSON.parse(options.debug) ? 'debug' : 'release') +
+      ((JSON.parse(options.debug) === true) ? 'debug' : 'release') +
       (options.archive ? '.zip' : '/index.html');
   }
 
