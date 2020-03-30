@@ -54,6 +54,7 @@ function humanFileSize(size) {
  * the byte size
  * 
  * @param  {string} host the host where the resource is stored (s3)
+ * @param  {string} gameSlug slug of game that we want to check
  * @param  {string} commitId commit id of the game release we want to check
  * @return {string}      human readable game file size
  */
