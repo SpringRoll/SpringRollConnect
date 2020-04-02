@@ -107,11 +107,14 @@ function renderPage(req, res, template, populate=null)
 
 			// iterate game releases to add file sizes
 			for (let k = 0; k < game.releases.length; k++) {
-        const compressedSize = parseInt(game.releases[k].releaseCompressedSize || 0);
-        // check for null then do a remote call
-        if (compressedSize > 0) {
-          game.releases[k].releaseCompressedSize = niceFileSize(compressedSize);
-        }
+				const compressedSize = parseInt(game.releases[k].releaseCompressedSize || 0);
+				if (compressedSize > 0) {
+					game.releases[k].releaseCompressedSize = niceFileSize(compressedSize);
+				}
+				const uncompressedSize = parseInt(game.releases[k].releaseUncompressedSize || 0);
+				if (uncompressedSize > 0) {
+					game.releases[k].releaseUncompressedSize = niceFileSize(uncompressedSize);
+				}
 			}
 
 			res.render(template, {
