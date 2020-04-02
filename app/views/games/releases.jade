@@ -96,9 +96,10 @@ append gameContent
 											a(href="#{game.repository}/browse?at=refs/heads/#{release.branch.replace('origin/', '')}" data-toggle="tooltip" title="View Branch")=' '+release.branch
 
 								.help-block.updated
-									span Size: &nbsp;
-									span=release.fileSize
-									br
+									if release.releaseCompressedSize
+										span Compressed Size: &nbsp;
+										span.file-size=release.releaseCompressedSize
+										br
 									span Updated &nbsp;
 									span=moment(release.updated).fromNow()
 									if release.updatedBy

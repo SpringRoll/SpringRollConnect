@@ -43,55 +43,11 @@ function validateRequest(req){
  * @param  {integer} size file size that we want to convert
  * @return {string}       file size in human readable format
  */
-function humanFileSize(size) {
+function niceFileSize(size) {
 	const i = Math.floor( Math.log(size) / Math.log(1024) );
   
 	return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
 }
-
-/**
- * Read the "content-length" header of the game resource to determine
- * the byte size
- * 
- * @param  {string} host the host where the resource is stored (s3)
- * @param  {string} gameSlug slug of game that we want to check
- * @param  {string} commitId commit id of the game release we want to check
- * @return {string}      human readable game file size
- */
-function releaseSize(host, gameSlug, commitId) {
-  return new Promise(function (resolve, reject) {
-    // set defaults
-    let port = 80;
-    let client = http;
-    // check for https
-    if (host.indexOf("https") === -1) {
-      // update settings
-      port = 443;
-      client = https;
-    }
-    
-    // remove prefix from host
-    host = host.replace(/https:\/\/|http:\/\//, "");
-    // remove game slug
-    host = host.replace(`/${gameSlug}`, "");
-    const options = {
-      method: "HEAD",
-      host,
-      port,
-      path: `/${gameSlug}/${commitId}/release.zip`,
-    };
-
-    const req = client.request(options, function (res, err) {
-    	if (err) return reject(err);
-
-      const contentLength = res.headers["content-length"] || 0;
-    	resolve(humanFileSize(contentLength));
-    });
-    // make request
-    req.end();
-  });
-}
-
 
 /**
  * Abstraction to render a page, takes care of all
@@ -151,13 +107,11 @@ function renderPage(req, res, template, populate=null)
 
 			// iterate game releases to add file sizes
 			for (let k = 0; k < game.releases.length; k++) {
-        let humanFileSize = game.releases[k].releaseUncompressedSize;
+        const compressedSize = parseInt(game.releases[k].releaseCompressedSize || 0);
         // check for null then do a remote call
-        if (humanFileSize === null) {
-          const commitId = game.releases[k].commitId;
-          humanFileSize = await releaseSize(game.location, game.slug, commitId);
+        if (compressedSize > 0) {
+          game.releases[k].releaseCompressedSize = niceFileSize(compressedSize);
         }
-			  game.releases[k].fileSize = humanFileSize;
 			}
 
 			res.render(template, {
