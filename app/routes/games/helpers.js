@@ -1,9 +1,9 @@
 const async = require('async'),
-  http = require('http'),
-  https = require('https'),
-  log = require('../../helpers/logger'),
-  Game = require('../../models/game'),
-  User = require('../../models/user');
+	http = require('http'),
+	https = require('https'),
+	log = require('../../helpers/logger'),
+	Game = require('../../models/game'),
+	User = require('../../models/user');
 
 /**
  * Abstraction to handle the page errors
@@ -24,14 +24,14 @@ function handleError(req, res, errors)
 }
 
 function validateRequest(req){
-  req.checkBody('title', 'Title is required').notEmpty();
+	req.checkBody('title', 'Title is required').notEmpty();
 	req.checkBody('bundleId', 'Bundle ID is required').isBundleId();
 	req.checkBody('slug', 'Slug is required').isSlug();
 	req.checkBody('repository', 'Repository needs to be a URL').isURL();
 	req.checkBody('location', 'Location needs to be a URL').isURL();
 	req.checkBody('description').optional();
-  req.checkBody('thumbnail').optional();
-  var errors = req.validationErrors();
+	req.checkBody('thumbnail').optional();
+	var errors = req.validationErrors();
 	return errors ? errors : false;
 }
 
@@ -45,7 +45,7 @@ function validateRequest(req){
  */
 function niceFileSize(size) {
 	const i = Math.floor( Math.log(size) / Math.log(1024) );
-  
+	
 	return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
 }
 
@@ -65,14 +65,14 @@ function renderPage(req, res, template, populate=null)
 		[
 			function(done)
 			{
-        var game = Game.getBySlug(req.params.slug, done);
-        if (populate){
-          game.populate({
+				var game = Game.getBySlug(req.params.slug, done);
+				if (populate){
+					game.populate({
 						path: populate,
 						options: { sort: { 'updated': -1 } }
 					});
 				};
-      },
+			},
 			function(game, done)
 			{
 				if (!game){
