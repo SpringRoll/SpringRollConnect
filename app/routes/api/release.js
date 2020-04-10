@@ -215,6 +215,10 @@ router.get('/:slugOrBundleId', cache, function(req, res) {
         // If the request was for a dev game without a token, it's a 403
         log.warn(`Request for game "${req.params.slugOrBundleId}" without token`);
         return res.status(403).send({ success: false, error: err });
+      } else if (err.toLowerCase() === 'unauthorized token') {
+        // The request has provided a token but does not have access to this game
+        log.warn(`Unauthorized request for game "${req.params.slugOrBundleId}" using token "${req.query.token}"`);
+        return res.status(403).send({ success: false, error: err });
       } else {
         // Otherwise, we don't know what it is so it's probably a 500
         log.warn(err);
