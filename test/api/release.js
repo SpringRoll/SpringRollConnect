@@ -96,7 +96,7 @@ describe('api/release', () => {
       return [...properties.keys()].filter(item => typeof obj[item] === 'function')
     }
 
-    it('should respond with a 403 when user does not have permissions to view game', async function() {
+    it('should respond with a 403 when user does not have permission to view the game', async function() {
       // create test objects
       const game = await dataMakers.makeGame('dev');
       const release = await dataMakers.makeRelease(game._id, 'dev');
