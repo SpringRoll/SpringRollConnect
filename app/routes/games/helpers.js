@@ -1,7 +1,9 @@
 const async = require('async'),
-  log = require('../../helpers/logger'),
-  Game = require('../../models/game'),
-  User = require('../../models/user');
+	http = require('http'),
+	https = require('https'),
+	log = require('../../helpers/logger'),
+	Game = require('../../models/game'),
+	User = require('../../models/user');
 
 /**
  * Abstraction to handle the page errors
@@ -22,15 +24,29 @@ function handleError(req, res, errors)
 }
 
 function validateRequest(req){
-  req.checkBody('title', 'Title is required').notEmpty();
+	req.checkBody('title', 'Title is required').notEmpty();
 	req.checkBody('bundleId', 'Bundle ID is required').isBundleId();
 	req.checkBody('slug', 'Slug is required').isSlug();
 	req.checkBody('repository', 'Repository needs to be a URL').isURL();
 	req.checkBody('location', 'Location needs to be a URL').isURL();
 	req.checkBody('description').optional();
-  req.checkBody('thumbnail').optional();
-  var errors = req.validationErrors();
+	req.checkBody('thumbnail').optional();
+	var errors = req.validationErrors();
 	return errors ? errors : false;
+}
+
+/**
+ * Convert bytes into a human readable format
+ * source: https://stackoverflow.com/a/20732091/10236401
+ * thanks andrew!
+ * 
+ * @param  {integer} size file size that we want to convert
+ * @return {string}       file size in human readable format
+ */
+function niceFileSize(size) {
+	const i = Math.floor( Math.log(size) / Math.log(1024) );
+	
+	return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
 }
 
 /**
@@ -49,14 +65,14 @@ function renderPage(req, res, template, populate=null)
 		[
 			function(done)
 			{
-        var game = Game.getBySlug(req.params.slug, done);
-        if (populate){
-          game.populate({
+				var game = Game.getBySlug(req.params.slug, done);
+				if (populate){
+					game.populate({
 						path: populate,
 						options: { sort: { 'updated': -1 } }
 					});
 				};
-      },
+			},
 			function(game, done)
 			{
 				if (!game){
@@ -66,7 +82,7 @@ function renderPage(req, res, template, populate=null)
 				game.getAccess(req.user, done);
 			}
 		],
-		function(err, game, access)
+		async function(err, game, access)
 		{
 			if (err)
 			{
@@ -88,6 +104,18 @@ function renderPage(req, res, template, populate=null)
 						? pages
 						: Number(req.query.page)
 					: 1;
+
+			// iterate game releases to add file sizes
+			for (let k = 0; k < game.releases.length; k++) {
+				const compressedSize = parseInt(game.releases[k].releaseCompressedSize || 0);
+				if (compressedSize > 0) {
+					game.releases[k].releaseCompressedSize = niceFileSize(compressedSize);
+				}
+				const uncompressedSize = parseInt(game.releases[k].releaseUncompressedSize || 0);
+				if (uncompressedSize > 0) {
+					game.releases[k].releaseUncompressedSize = niceFileSize(uncompressedSize);
+				}
+			}
 
 			res.render(template, {
 			game: game,
