@@ -87,15 +87,6 @@ describe('api/release', () => {
       expect(response.status).to.equal(422);
     });
 
-    const getMethods = (obj) => {
-      let properties = new Set()
-      let currentObj = obj
-      do {
-        Object.getOwnPropertyNames(currentObj).map(item => properties.add(item))
-      } while ((currentObj = Object.getPrototypeOf(currentObj)))
-      return [...properties.keys()].filter(item => typeof obj[item] === 'function')
-    }
-
     it('should respond with a 403 when user does not have permission to view the game', async function() {
       // create test objects
       const game = await dataMakers.makeGame('dev');
