@@ -78,12 +78,19 @@ async function makeGame() {
 
 function addReleases(gameId, releaseLevel) {
   console.log('Adding release with level: ' + releaseLevel);
+
+  // make the release sizes somewhere between 1 and 100 mb
+  const releaseCompressedSize = Math.floor(1024 * 1024 + (Math.random() * 100 * 1024 * 1024));
+  const releaseUncompressedSize = Math.floor(1024 * 1024 + (Math.random() * 100 * 1024 * 1024));
+
   let commitHash = makeRandomString(40);
   let releaseParams = {
     game: gameId,
     status: releaseLevel,
     // branch: 'origin/my-branch',
     commitId: commitHash,
+    releaseCompressedSize,
+    releaseUncompressedSize,
     created: Date.now(),
     updated: Date.now()
   };
