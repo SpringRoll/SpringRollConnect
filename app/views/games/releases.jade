@@ -98,11 +98,11 @@ append gameContent
 								.help-block.updated
 									if release.releaseCompressedSize
 										span Compressed Size: &nbsp;
-										span.file-size=release.releaseCompressedSize
+										span.file-size=((release.releaseCompressedSize / 1024 / 1024).toFixed(2) + ' MB')
 										br
 									if release.releaseUncompressedSize
 										span Uncompressed Size: &nbsp;
-										span.file-size=release.releaseUncompressedSize
+										span.file-size=((release.releaseUncompressedSize / 1024 / 1024).toFixed(2) + ' MB')
 										br
 									span Updated &nbsp;
 									span=moment(release.updated).fromNow()
