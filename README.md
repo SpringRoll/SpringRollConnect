@@ -20,6 +20,6 @@ SpringRoll Connect is a content management system built using [NodeJS](https://n
 
 ## License
 
-Copyright (c) 2018 [SpringRoll](https://github.com/SpringRoll)
+Copyright (c) 2020 [SpringRoll](https://github.com/SpringRoll)
 
 Released under the MIT License.

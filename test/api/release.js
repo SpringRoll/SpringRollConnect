@@ -86,6 +86,22 @@ describe('api/release', () => {
       const response = await fetch('http://localhost:3000/api/release/doesntmatter?status=NOPE&token=tooshort');
       expect(response.status).to.equal(422);
     });
+
+    it('should respond with a 403 when user does not have permission to view the game', async function() {
+      // create test objects
+      const game = await dataMakers.makeGame('dev');
+      const release = await dataMakers.makeRelease(game._id, 'dev');
+      const user = await dataMakers.makeUser(0);
+      const token = await dataMakers.getUserToken(user);
+      // query api
+      const response = await fetch(`http://localhost:3000/api/release/${game.slug}?commitId=${release.commitId}&token=${token}&debug=true`);
+      const body = JSON.parse(await response.text());
+
+      // test status
+      expect(response.status).to.equal(403);
+      // test error message
+      expect(body.error.toLowerCase()).to.equal('unauthorized token');
+    });
   });
 
   describe('POST', () => {

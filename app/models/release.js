@@ -233,12 +233,14 @@ ReleaseSchema.statics.getByGame = function(slug, options, callback) {
   );
 
   function addUrl(r) {
+    let isDebug = options.debug !== undefined && JSON.parse(options.debug) === true;
+
     r.url =
       r.game.location +
       '/' +
       r.commitId +
       '/' +
-      (options.debug ? 'debug' : 'release') +
+      (isDebug ? 'debug' : 'release') +
       (options.archive ? '.zip' : '/index.html');
   }
 
