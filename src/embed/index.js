@@ -88,8 +88,6 @@ container.client.on('features', ({ data }) => {
   $('button[data-toggle-div]')['menuToggle']();
 });
 
-container.setupPlugins();
-
 $('form').submit(() => false);
 
 const parseQuery = queryString => {
@@ -173,7 +171,7 @@ const start = () => {
     })
     .catch(err => {
       alert(err.message);
-    })
+    });
 };
 
 start();
