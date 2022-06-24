@@ -29,7 +29,7 @@
     "less-loader": "^4.1.0",
     "mini-css-extract-plugin": "^0.6.0",
     "mocha": "^5.2.0",
-    "node-fetch": "^2.3.0",
+    "node-fetch": "^2.6.7",
     "node-sass": "^4.12.0",
     "nyc": "^13.1.0",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
