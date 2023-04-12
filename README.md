@@ -1,3 +1,5 @@
+## This repo is no longer maintained by PBS KIDS and there will be no additional updates.
+
 # SpringRoll Connect [![Build Status](https://travis-ci.org/SpringRoll/SpringRollConnect.svg)](https://travis-ci.org/SpringRoll/SpringRollConnect) [![Dependency Status](https://david-dm.org/SpringRoll/SpringRollConnect.svg)](https://david-dm.org/SpringRoll/SpringRollConnect) [![GitHub version](https://badge.fury.io/gh/SpringRoll%2FSpringRollConnect.svg)](http://badge.fury.io/gh/SpringRoll%2FSpringRollConnect)
 
 SpringRoll Connect is a content management system built using [NodeJS](https://nodejs.org/), [Express](http://expressjs.com/) and [MongoDB](https://www.mongodb.org/). This app allows the easy deployment of SpringRoll apps and games.
